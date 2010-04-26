@@ -1,0 +1,58 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<macromedia-extension
+	 name="Kafe Component"
+	 version="1.2.4"
+	 type="suite"
+	 requires-restart="true">
+
+	<defaultLanguage>en_US</defaultLanguage>
+
+	<author name="Kevin Cao" />
+
+	<products>
+		<product name="Flash" version="9" primary="true" />
+		<product name="Flash" version="10" primary="true" />
+	</products>
+
+	<description>
+	<![CDATA[
+	Kafe Component For Adobe Flash<br>
+Version 1.2.4<br>
+<br>
+Author: Kevin Cao<br>
+* blog: http://kevincao.com<br>
+<br>
+	]]>
+	</description>
+
+	<ui-access>
+	<![CDATA[
+	Window > Components
+	Window > Common Libraries > KafeTemplate
+	Command > Kafe
+	]]>
+	</ui-access>
+
+	<license-agreement>
+	<![CDATA[
+	
+	]]>
+	</license-agreement>
+
+	<files>
+		<file source="bin/swc/AniButton.swc" destination="$flash/Components/Kafe" />
+		<file source="bin/swc/EasyButton.swc" destination="$flash/Components/Kafe" />
+		<file source="bin/swc/KafeButton.swc" destination="$flash/Components/Kafe" />
+		<file source="bin/swc/GaiaButton.swc" destination="$flash/Components/KafeGaia" />
+		<file source="bin/swc/GaiaEasyButton.swc" destination="$flash/Components/KafeGaia" />
+		<file source="fla/KafeUI.fla" destination="$flash/Components/" />
+		
+		<file source="jsfl/AniButton Easy Mode Setup.jsfl" destination="$flash/Commands/Kafe" />
+		<file source="jsfl/AniButton Setup.jsfl" destination="$flash/Commands/Kafe" />
+		<file source="jsfl/EasyButton Setup.jsfl" destination="$flash/Commands/Kafe" />
+		<file source="jsfl/KafeButton Setup.jsfl" destination="$flash/Commands/Kafe" />
+		
+		<file source="fla/template/KafeTemplate.fla" destination="$flash/Libraries" />		
+	</files>
+
+</macromedia-extension>
