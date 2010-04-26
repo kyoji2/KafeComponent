@@ -1,0 +1,30 @@
+KafeComponent
+
+Kafe:
+
+* KafeButton
+* EasyButton
+* AniButton
+* GaiaButton (KafeButton for Gaia)
+* GaiaEasyButton (EasyButton for Gaia)
+
+KafeUI:
+
+* KafeScrollPane
+* EaseScrollPane
+* HoverPane
+
+Extras:
+
+* jsfl commands for quickly setting up
+* KafeTemplate.fla
+
+
+- AUTHOR:
+
+Kevin Cao ( http://kevincao.com )
+
+
+- CHANGELOG:
+
+v1.2.4:	imported from svn, hello git!
