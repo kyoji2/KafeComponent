@@ -27,11 +27,6 @@ package com.kevincao.kafeui
 			super();
 		}
 
-		override protected function init() : void
-		{
-			super.init();
-		}
-
 		override public function draw() : void
 		{
 			super.draw();

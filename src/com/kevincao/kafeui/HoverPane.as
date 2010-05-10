@@ -67,9 +67,9 @@ package com.kevincao.kafeui
 			super();
 		}
 
-		override protected function init() : void
+		override protected function addChildren() : void
 		{
-			super.init();
+			super.addChildren();
 			
 			canvas = new Sprite();
 			addChild(canvas);

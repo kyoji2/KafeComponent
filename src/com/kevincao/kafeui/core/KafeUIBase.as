@@ -73,6 +73,7 @@ package com.kevincao.kafeui.core
 		public function KafeUIBase()
 		{
 			init();
+			addChildren();
 			invalidate();
 		}
 
@@ -86,6 +87,10 @@ package com.kevincao.kafeui.core
 			x = Math.round(x);
 			y = Math.round(y);
 			if(numChildren) removeChildAt(0);
+		}
+		
+		protected function addChildren() : void 
+		{
 		}
 
 		protected function invalidate() : void

@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <macromedia-extension
 	 name="Kafe Component"
-	 version="1.2.4"
+	 version="1.2.5"
 	 type="suite"
 	 requires-restart="true">
 
@@ -17,7 +17,7 @@
 	<description>
 	<![CDATA[
 	Kafe Component For Adobe Flash<br>
-Version 1.2.4<br>
+Version 1.2.5<br>
 <br>
 Author: Kevin Cao<br>
 * blog: http://kevincao.com<br>
@@ -43,8 +43,10 @@ Author: Kevin Cao<br>
 		<file source="bin/swc/AniButton.swc" destination="$flash/Components/Kafe" />
 		<file source="bin/swc/EasyButton.swc" destination="$flash/Components/Kafe" />
 		<file source="bin/swc/KafeButton.swc" destination="$flash/Components/Kafe" />
+		<file source="bin/swc/KafeRadioButton.swc" destination="$flash/Components/Kafe" />
 		<file source="bin/swc/GaiaButton.swc" destination="$flash/Components/KafeGaia" />
 		<file source="bin/swc/GaiaEasyButton.swc" destination="$flash/Components/KafeGaia" />
+		<file source="bin/swc/GaiaRadioButton.swc" destination="$flash/Components/KafeGaia" />
 		<file source="fla/KafeUI.fla" destination="$flash/Components/" />
 		
 		<file source="jsfl/AniButton Easy Mode Setup.jsfl" destination="$flash/Commands/Kafe" />

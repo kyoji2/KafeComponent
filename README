@@ -5,8 +5,10 @@ Kafe:
 * KafeButton
 * EasyButton
 * AniButton
+* KafeRadioButton
 * GaiaButton (KafeButton for Gaia)
 * GaiaEasyButton (EasyButton for Gaia)
+* GaiaRadioButton (KafeRadioButton for Gaia)
 
 KafeUI:
 
@@ -27,4 +29,6 @@ Kevin Cao ( http://kevincao.com )
 
 - CHANGELOG:
 
+v1.2.5: add KafeRadioButton & GaiaRadioButton
+		add addChildren() in KafeUIBase
 v1.2.4:	imported from svn, hello git!
