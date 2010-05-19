@@ -29,6 +29,8 @@ Kevin Cao ( http://kevincao.com )
 
 - CHANGELOG:
 
+v1.2.6:	add KafeHelper
+		fix some issues in components' destroy() method
 v1.2.5: add KafeRadioButton & GaiaRadioButton
 		add addChildren() in KafeUIBase
 v1.2.4:	imported from svn, hello git!

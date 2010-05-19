@@ -100,9 +100,12 @@ package com.kevincao.kafeui
 			canvas.scrollRect = new Rectangle(0, 0, width, height);
 			canvas.addChild(sourceInstance);
 			
-			if(width < sourceInstance.width || height < sourceInstance.height) {
+			if(width < sourceInstance.width || height < sourceInstance.height) 
+			{
 				setupEventListeners(true);
-			} else {
+			} 
+			else 
+			{
 				setupEventListeners(false);
 			}
 		}
@@ -112,16 +115,19 @@ package com.kevincao.kafeui
 			var mx : Number = width - sourceInstance.width;
 			var my : Number = height - sourceInstance.height;
 			
-			if(isRollOver) {
+			if(isRollOver) 
+			{
 				tx = map(mouseX, width * edgeRange, width * (1 - edgeRange), 0, mx);				ty = map(mouseY, height * edgeRange, height * (1 - edgeRange), 0, my);
 			}
 			
-			if(mx < 0) {
+			if(mx < 0) 
+			{
 				sourceInstance.x += (tx - sourceInstance.x) * ease;
 				sourceInstance.x = constrain(sourceInstance.x, 0, mx);
 			}
 			
-			if(my < 0) {
+			if(my < 0) 
+			{
 				sourceInstance.y += (ty - sourceInstance.y) * ease;
 				sourceInstance.y = constrain(sourceInstance.y, 0, my);
 			}
@@ -129,11 +135,14 @@ package com.kevincao.kafeui
 
 		private function setupEventListeners(b : Boolean = true) : void
 		{
-			if(b) {
+			if(b) 
+			{
 				canvas.addEventListener(MouseEvent.ROLL_OVER, rollOverHandler, false, 0, true);
 				canvas.addEventListener(MouseEvent.ROLL_OUT, rollOutHandler, false, 0, true);
 				canvas.addEventListener(Event.ENTER_FRAME, tick, false, 0, true);
-			} else {
+			} 
+			else 
+			{
 				canvas.removeEventListener(MouseEvent.ROLL_OVER, rollOverHandler);
 				canvas.removeEventListener(MouseEvent.ROLL_OUT, rollOutHandler);
 				canvas.removeEventListener(Event.ENTER_FRAME, tick);
@@ -150,8 +159,10 @@ package com.kevincao.kafeui
 			return toMin + (toMax - toMin) * (value - fromMin) / (fromMax - fromMin);
 		}
 
-		public function destroy() : void
+		override public function destroy() : void
 		{
+			_source = null;
+			sourceInstance = null;
 			setupEventListeners(false);
 		}
 	}

@@ -63,7 +63,7 @@ package com.kevincao.kafe
 			_groupName = value;
 		}
 
-		/*
+		/**
 		 * toggle always be false
 		 */
 		override public function set toggle(value : Boolean) : void
@@ -71,7 +71,7 @@ package com.kevincao.kafe
 			_toggle = false;
 		}
 		
-		/*
+		/**
 		 * 
 		 */
 		override public function set selected(value : Boolean) : void

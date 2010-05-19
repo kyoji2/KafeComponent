@@ -1,7 +1,6 @@
 package com.kevincao.kafeui 
 {
 	import com.kevincao.kafe.events.ScrollEvent;
-	import com.kevincao.kafeui.KafeScrollPane;
 
 	import flash.events.Event;
 
@@ -35,9 +34,12 @@ package com.kevincao.kafeui
 			sourceInstance.x = hScrollBar ? tx : 0;
 			sourceInstance.y = vScrollBar ? ty : 0;
 			tx = ty = 0;
-			if(sourceInstance.height - height > 0 || sourceInstance.width - width > 0) {
+			if(sourceInstance.height - height > 0 || sourceInstance.width - width > 0) 
+			{
 				addEventListener(Event.ENTER_FRAME, tick, false, 0, true);
-			} else {
+			} 
+			else 
+			{
 				removeEventListener(Event.ENTER_FRAME, tick);
 			}
 		}
@@ -46,17 +48,24 @@ package com.kevincao.kafeui
 		{
 			var dx : Number = tx - sourceInstance.x;
 			var dy : Number = ty - sourceInstance.y;
-			if(Math.abs(dx) < 0.1) {
+			if(Math.abs(dx) < 0.1) 
+			{
 				sourceInstance.x = tx;
-			} else {
+			} 
+			else 
+			{
 				sourceInstance.x += (tx - sourceInstance.x) * ease;
 			}
-			if(Math.abs(dy) < 0.1) {
+			if(Math.abs(dy) < 0.1) 
+			{
 				sourceInstance.y = ty;
-			} else {
+			} 
+			else 
+			{
 				sourceInstance.y += (ty - sourceInstance.y) * ease;
 			}
-			if(_roundProp) {
+			if(_roundProp) 
+			{
 				sourceInstance.x = Math.round(sourceInstance.x);				sourceInstance.y = Math.round(sourceInstance.y);
 			}
 		}

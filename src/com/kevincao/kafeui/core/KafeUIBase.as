@@ -5,7 +5,6 @@ package com.kevincao.kafeui.core
 	import flash.display.DisplayObject;
 	import flash.display.Sprite;
 	import flash.events.Event;
-	import flash.text.TextField;
 	import flash.utils.getDefinitionByName;
 
 	/**
@@ -21,8 +20,6 @@ package com.kevincao.kafeui.core
 
 		protected var _width : Number = 0;
 		protected var _height : Number = 0;
-
-		protected var previewInfo : TextField;
 
 		override public function set width(w : Number) : void
 		{
@@ -88,7 +85,7 @@ package com.kevincao.kafeui.core
 			y = Math.round(y);
 			if(numChildren) removeChildAt(0);
 		}
-		
+
 		protected function addChildren() : void 
 		{
 		}
@@ -107,9 +104,11 @@ package com.kevincao.kafeui.core
 		protected function getDisplayObjectInstance(key : Object) : DisplayObject 
 		{
 			var classDef : Object = null;
-			if (key is Class) { 
+			if (key is Class) 
+			{ 
 				return (new key()) as DisplayObject; 
-			} else if (key is DisplayObject) {
+			} else if (key is DisplayObject) 
+			{
 				(key as DisplayObject).x = 0;
 				(key as DisplayObject).y = 0;
 				return key as DisplayObject;
@@ -129,7 +128,8 @@ package com.kevincao.kafeui.core
 				}
 			}
 			
-			if (classDef == null) {
+			if (classDef == null) 
+			{
 				return null;
 			}
 			return (new classDef()) as DisplayObject;
@@ -164,6 +164,13 @@ package com.kevincao.kafeui.core
 		public function draw() : void
 		{
 			dispatchEvent(new KafeEvent(KafeEvent.DRAW));
+		}
+
+		/**
+		 * Abstract destroy function.
+		 */
+		public function destroy() : void 
+		{
 		}
 	}
 }

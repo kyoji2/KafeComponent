@@ -119,7 +119,8 @@ package com.kevincao.kafeui
 			initCanvas();
 			canvas.addChild(sourceInstance);
 			
-			if(_vertical == ALWAYS || (_vertical == AUTO && sourceInstance.height - height > 0)) {
+			if(_vertical == ALWAYS || (_vertical == AUTO && sourceInstance.height - height > 0)) 
+			{
 				vScrollBar = new VScrollBar(getScrollBarSkin(_scrollBar));
 				vScrollBar.size = height;
 				vScrollBar.x = width;
@@ -131,7 +132,8 @@ package com.kevincao.kafeui
 				addChild(vScrollBar.skin);
 			}
 			
-			if(_horizontal == ALWAYS || (_horizontal == AUTO && sourceInstance.width - width > 0)) {
+			if(_horizontal == ALWAYS || (_horizontal == AUTO && sourceInstance.width - width > 0)) 
+			{
 				hScrollBar = new VScrollBar(getScrollBarSkin(_scrollBar));
 				hScrollBar.size = width;
 				hScrollBar.y = height;
@@ -150,19 +152,29 @@ package com.kevincao.kafeui
 
 		protected function destroyAssets() : void 
 		{
-			if(canvas) {
-				removeChild(canvas);
-				if(canvas.numChildren) canvas.removeChildAt(0);
+			if(canvas) 
+			{
+				if(canvas.parent) 
+				{
+					canvas.parent.removeChild(canvas);
+				}
+				if(canvas.numChildren) 
+				{
+					canvas.removeChildAt(0);
+				}
+				canvas = null;
 			}
 			
-			if(vScrollBar) {
+			if(vScrollBar) 
+			{
 				removeChild(vScrollBar.skin);
 				vScrollBar.removeEventListener(ScrollEvent.SCROLL, vScrollHandler);
 				removeEventListener(MouseEvent.MOUSE_WHEEL, mouseWheelHandler);
 				vScrollBar.destroy();
 				vScrollBar = null;
 			}
-			if(hScrollBar) {
+			if(hScrollBar) 
+			{
 				removeChild(hScrollBar.skin);
 				hScrollBar.removeEventListener(ScrollEvent.SCROLL, hScrollHandler);
 				hScrollBar.destroy();
@@ -198,17 +210,21 @@ package com.kevincao.kafeui
 
 		protected function getScrollBarSkin(key : Object) : MovieClip 
 		{
-			if(key is DisplayObject) {
+			if(key is DisplayObject) 
+			{
 				var c : Class = Class(getDefinitionByName(getQualifiedClassName(key)));
 				return MovieClip(new c());
-			} else {
+			} 
+			else 
+			{
 				return MovieClip(super.getDisplayObjectInstance(key));
 			}
 		}
 
-		public function destroy() : void 
+		override public function destroy() : void 
 		{
 			destroyAssets();
+			
 			_scrollBar = null;
 			_source = null;
 			sourceInstance = null;
