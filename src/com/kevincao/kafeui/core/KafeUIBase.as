@@ -5,7 +5,12 @@ package com.kevincao.kafeui.core
 	import flash.display.DisplayObject;
 	import flash.display.Sprite;
 	import flash.events.Event;
+	import flash.utils.Dictionary;
 	import flash.utils.getDefinitionByName;
+
+	[Event(name="draw", type="com.kevincao.kafe.events.KafeEvent")]
+
+	[Event(name="resize", type="com.kevincao.kafe.events.KafeEvent")]
 
 	/**
 	 * KafeUI
@@ -21,11 +26,12 @@ package com.kevincao.kafeui.core
 		protected var _width : Number = 0;
 		protected var _height : Number = 0;
 
+		protected var invalidateDic : Dictionary;
+
 		override public function set width(w : Number) : void
 		{
 			_width = w;
-			invalidate();
-			dispatchEvent(new KafeEvent(KafeEvent.RESIZE));
+			invalidateSize();
 		}
 
 		override public function get width() : Number
@@ -39,8 +45,7 @@ package com.kevincao.kafeui.core
 		override public function set height(h : Number) : void
 		{
 			_height = h;
-			invalidate();
-			dispatchEvent(new KafeEvent(KafeEvent.RESIZE));
+			invalidateSize();
 		}
 
 		override public function get height() : Number
@@ -70,29 +75,100 @@ package com.kevincao.kafeui.core
 		public function KafeUIBase()
 		{
 			init();
-			addChildren();
-			invalidate();
+			invalidateAll();
 		}
 
 		protected function init() : void
 		{
-			width = avatarWidth = Math.round(super.width);
-			height = avatarHeight = Math.round(super.height);
-			if(width == 0) width = 200;			if(height == 0) height = 200;
+			invalidateDic = new Dictionary(true);
+			_width = avatarWidth = Math.round(super.width);
+			_height = avatarHeight = Math.round(super.height);
+			// default size
+			if(_width == 0) _width = 200;			if(_height == 0) _height = 200;
 			scaleX = scaleY = 1;
 			rotation = 0;
 			x = Math.round(x);
 			y = Math.round(y);
-			if(numChildren) removeChildAt(0);
+			// remove avatar
+			if(numChildren) removeChildAt(0);			
 		}
-
+		
+		/**
+		 * override
+		 */
 		protected function addChildren() : void 
 		{
+		}
+		
+		/**
+		 * override
+		 */
+		protected function removeChildren() : void 
+		{
+		}
+
+		protected function validateChildren() : void 
+		{
+			removeChildren();
+			addChildren();
+			delete invalidateDic["children"];
+			dispatchEvent(new KafeEvent(KafeEvent.CREATE));
+		}
+
+		protected function validateSize() : void 
+		{
+			delete invalidateDic["size"];
+			dispatchEvent(new KafeEvent(KafeEvent.RESIZE));
+		}
+
+		protected function validateProp() : void 
+		{
+			delete invalidateDic["prop"];
+			dispatchEvent(new KafeEvent(KafeEvent.CHANGE));
+		}
+
+		protected function invalidateChildren() : void
+		{
+			if(!invalidateDic["children"]) 
+			{
+				invalidateDic["children"] = validateChildren;
+				invalidate();
+			}
+		}
+
+		protected function invalidateSize() : void
+		{
+			if(!invalidateDic["size"]) 
+			{
+				invalidateDic["size"] = validateSize;
+				invalidate();
+			}
+		}
+
+		protected function invalidateProp() : void
+		{
+			if(!invalidateDic["prop"]) 
+			{
+				invalidateDic["prop"] = validateProp;
+				invalidate();
+			}
+		}
+
+		protected function invalidateAll() : void 
+		{
+			invalidateChildren();
+			invalidateProp();
+			invalidateSize();
+			invalidate();
 		}
 
 		protected function invalidate() : void
 		{
-			addEventListener(Event.ENTER_FRAME, onInvalidate);
+			// assuming we need only one listener
+			if(!hasEventListener(Event.ENTER_FRAME)) 
+			{
+				addEventListener(Event.ENTER_FRAME, onInvalidate);
+			}
 		}
 
 		protected function onInvalidate(event : Event) : void
@@ -100,7 +176,60 @@ package com.kevincao.kafeui.core
 			removeEventListener(Event.ENTER_FRAME, onInvalidate);
 			draw();
 		}
+		
+		
+		//----------------------------------
+		//  public functions
+		//----------------------------------
+		
 
+		/**
+		 * Moves the component to the specified position.
+		 * @param xpos the x position to move the component
+		 * @param ypos the y position to move the component
+		 */
+		public function move(xpos : Number, ypos : Number) : void
+		{
+			x = Math.round(xpos);
+			y = Math.round(ypos);
+		}
+
+		/**
+		 * Sets the size of the component.
+		 * @param w The width of the component.
+		 * @param h The height of the component.
+		 */
+		public function setSize(w : Number, h : Number) : void
+		{
+			_width = w;
+			_height = h;
+			invalidateSize();
+		}
+
+		/**
+		 * Abstract draw function.
+		 */
+		public function draw() : void
+		{
+			for (var key : String in invalidateDic) 
+			{
+				invalidateDic[key].call();
+			}
+			dispatchEvent(new KafeEvent(KafeEvent.DRAW));
+		}
+
+		/**
+		 * Abstract destroy function.
+		 */
+		public function destroy() : void 
+		{
+			invalidateDic = null;
+		}
+		
+		//----------------------------------
+		//  helpers
+		//----------------------------------
+		
 		protected function getDisplayObjectInstance(key : Object) : DisplayObject 
 		{
 			var classDef : Object = null;
@@ -133,44 +262,6 @@ package com.kevincao.kafeui.core
 				return null;
 			}
 			return (new classDef()) as DisplayObject;
-		}
-
-		/**
-		 * Moves the component to the specified position.
-		 * @param xpos the x position to move the component
-		 * @param ypos the y position to move the component
-		 */
-		public function move(xpos : Number, ypos : Number) : void
-		{
-			x = Math.round(xpos);
-			y = Math.round(ypos);
-		}
-
-		/**
-		 * Sets the size of the component.
-		 * @param w The width of the component.
-		 * @param h The height of the component.
-		 */
-		public function setSize(w : Number, h : Number) : void
-		{
-			_width = w;
-			_height = h;
-			invalidate();
-		}
-
-		/**
-		 * Abstract draw function.
-		 */
-		public function draw() : void
-		{
-			dispatchEvent(new KafeEvent(KafeEvent.DRAW));
-		}
-
-		/**
-		 * Abstract destroy function.
-		 */
-		public function destroy() : void 
-		{
 		}
 	}
 }

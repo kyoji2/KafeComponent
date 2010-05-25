@@ -11,11 +11,11 @@ package com.kevincao.kafe.utils
 	public class KafeHelper 
 	{
 		/**
-		 * helper to destroy component
+		 * find kafe component in movieclip
 		 * 
 		 * @param mc:	movieclip that contain component
 		 */
-		public static function destroyComponent(mc : MovieClip) : void 
+		public static function getComponent(mc : MovieClip) : CompBase 
 		{
 			var numChildren : int = mc.numChildren;
 			for (var i : int = 0;i < numChildren;i++) 
@@ -23,10 +23,24 @@ package com.kevincao.kafe.utils
 				var child : DisplayObject = mc.getChildAt(i);
 				if (child is CompBase) 
 				{
-					CompBase(child).destroy();
 					// assume that we have only one component
-					return;
+					return CompBase(child);
 				}
+			}
+			return null;
+		}
+
+		/**
+		 * helper to destroy component
+		 * 
+		 * @param mc:	movieclip that contain component
+		 */
+		public static function destroyComponent(mc : MovieClip) : void 
+		{
+			var comp : CompBase = getComponent(mc);
+			if(comp) 
+			{
+				comp.destroy();
 			}
 		}
 	}

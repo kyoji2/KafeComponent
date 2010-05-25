@@ -23,18 +23,29 @@ package com.kevincao.kafeui
 		 */
 		public function EaseScrollPane() 
 		{
-			super();
 		}
 
-		override public function draw() : void
+		override protected function addChildren() : void 
 		{
-			super.draw();
+			super.addChildren();
 			
-			if(source == null || source == "") return;
-			sourceInstance.x = hScrollBar ? tx : 0;
-			sourceInstance.y = vScrollBar ? ty : 0;
+			trace('EaseScrollPane: addChildren ' + (sourceInstance));
+			
+			if(sourceInstance) 
+			{
+				sourceInstance.x = hScrollBar ? tx : 0;
+				sourceInstance.y = vScrollBar ? ty : 0;
+			}
 			tx = ty = 0;
-			if(sourceInstance.height - height > 0 || sourceInstance.width - width > 0) 
+		}
+
+		override protected function validateSize() : void 
+		{
+			super.validateSize();
+			
+			trace('EaseScrollPane: validateSize ' + (sourceInstance));
+			
+			if(sourceInstance && (sourceInstance.height - height > 0 || sourceInstance.width - width > 0)) 
 			{
 				addEventListener(Event.ENTER_FRAME, tick, false, 0, true);
 			} 
@@ -43,6 +54,10 @@ package com.kevincao.kafeui
 				removeEventListener(Event.ENTER_FRAME, tick);
 			}
 		}
+
+		//----------------------------------
+		//  helpers
+		//----------------------------------
 
 		private function tick(event : Event) : void
 		{

@@ -1,7 +1,9 @@
 package com.kevincao.kafeui 
 {
+	import com.kevincao.kafe.ScrollBarBase;
 	import com.kevincao.kafe.VScrollBar;
 	import com.kevincao.kafe.events.ScrollEvent;
+	import com.kevincao.kafe.utils.NumberHelper;
 	import com.kevincao.kafeui.core.KafeUIBase;
 
 	import flash.display.DisplayObject;
@@ -33,6 +35,8 @@ package com.kevincao.kafeui
 		protected var _horizontal : String = AUTO;
 		protected var _vertical : String = AUTO;
 		protected var _roundProp : Boolean = true;
+		protected var _hScrollPosition : Number;
+		protected var _vScrollPosition : Number;
 
 		[Inspectable(defaultValue="ScrollBarSkin", type="String")]
 
@@ -45,7 +49,7 @@ package com.kevincao.kafeui
 		{
 			if(_scrollBar == value) return;
 			_scrollBar = value;
-			invalidate();
+			invalidateAll();
 		}
 
 		[Inspectable(defaultValue="", type="String")]
@@ -59,7 +63,7 @@ package com.kevincao.kafeui
 		{
 			if(_source == value) return;
 			_source = value;
-			invalidate();
+			invalidateAll();
 		}
 
 		[Inspectable(defaultValue="auto", type="List", enumeration="auto,always,hide")]
@@ -72,7 +76,7 @@ package com.kevincao.kafeui
 		public function set horizontal(value : String) : void 
 		{
 			_horizontal = value;
-			invalidate();
+			invalidateAll();
 		}
 
 		[Inspectable(defaultValue="auto", type="List", enumeration="auto,always,hide")]
@@ -85,7 +89,7 @@ package com.kevincao.kafeui
 		public function set vertical(value : String) : void 
 		{
 			_vertical = value;
-			invalidate();
+			invalidateAll();
 		}
 
 		[Inspectable(defaultValue=true)]
@@ -100,6 +104,64 @@ package com.kevincao.kafeui
 			_roundProp = value;
 		}
 
+		[Inspectable(defaultValue="0", type="Number")]
+
+		/**
+		 * 
+		 * @return	0~1
+		 */
+		public function get vScrollPosition() : Number
+		{
+			if(vScrollBar) 
+			{
+				return NumberHelper.normalize(vScrollBar.scrollPosition, vScrollBar.minScrollPosition, vScrollBar.maxScrollPosition);
+			}
+			return 0;
+		}
+
+		/**
+		 * 
+		 * @param value:	0~1
+		 */
+		public function set vScrollPosition(value : Number) : void
+		{
+//			if(vScrollBar && vScrollBar.enabled) 
+//			{
+//				vScrollBar.setScrollPosition(NumberHelper.interpolate(value, vScrollBar.minScrollPosition, vScrollBar.maxScrollPosition));
+//			}
+			_vScrollPosition = value;
+			invalidateProp();
+		}
+
+		[Inspectable(defaultValue="0", type="Number")]
+
+		/**
+		 * 
+		 * @return	0~1
+		 */
+		public function get hScrollPosition() : Number
+		{
+			if(hScrollBar) 
+			{
+				return NumberHelper.normalize(hScrollBar.scrollPosition, hScrollBar.minScrollPosition, hScrollBar.maxScrollPosition);
+			}
+			return 0;
+		}
+
+		/**
+		 * 
+		 * @param value:	0~1
+		 */
+		public function set hScrollPosition(value : Number) : void
+		{
+//			if(hScrollBar && hScrollBar.enabled) 
+//			{
+//				hScrollBar.setScrollPosition(NumberHelper.interpolate(value, hScrollBar.minScrollPosition, hScrollBar.maxScrollPosition));
+//			}
+			_hScrollPosition = value;
+			invalidateProp();
+		}
+
 		/**
 		 * 
 		 */
@@ -108,49 +170,46 @@ package com.kevincao.kafeui
 			super();
 		}
 
-		override public function draw() : void
+		override protected function addChildren() : void 
 		{
-			destroyAssets();
-			
 			if(_source == null || _source == "") return;
+			
+			canvas = new Sprite();
+			canvas.scrollRect = new Rectangle(0, 0, width, height);
+			canvas.graphics.beginFill(0, 0);
+			canvas.graphics.drawRect(0, 0, width, height);
+			canvas.graphics.endFill();
+			addChild(canvas);
+			
 			sourceInstance = getDisplayObjectInstance(_source);
 			sourceInstance.x = sourceInstance.y = 0;
-			
-			initCanvas();
 			canvas.addChild(sourceInstance);
 			
-			if(_vertical == ALWAYS || (_vertical == AUTO && sourceInstance.height - height > 0)) 
+			if(_vertical == ALWAYS || _vertical == AUTO) 
 			{
 				vScrollBar = new VScrollBar(getScrollBarSkin(_scrollBar));
-				vScrollBar.size = height;
-				vScrollBar.x = width;
-				vScrollBar.setScrollProperties(height, 0, sourceInstance.height - height);
-				vScrollBar.lineScrollSize = height * 0.1;
-				vScrollBar.addEventListener(ScrollEvent.SCROLL, vScrollHandler, false, 0, true);
-				vScrollBar.setScrollPosition(0);
-				addEventListener(MouseEvent.MOUSE_WHEEL, mouseWheelHandler, false, 0, true);
+				
 				addChild(vScrollBar.skin);
 			}
 			
-			if(_horizontal == ALWAYS || (_horizontal == AUTO && sourceInstance.width - width > 0)) 
+			if(_horizontal == ALWAYS || _horizontal == AUTO) 
 			{
 				hScrollBar = new VScrollBar(getScrollBarSkin(_scrollBar));
-				hScrollBar.size = width;
-				hScrollBar.y = height;
-				//rotate
+				
+				// rotate 90
 				hScrollBar.rotation = 90;
 				hScrollBar.scaleY = -1;
-				hScrollBar.setScrollProperties(width, 0, sourceInstance.width - width);
-				hScrollBar.lineScrollSize = width * 0.1;
-				hScrollBar.addEventListener(ScrollEvent.SCROLL, hScrollHandler, false, 0, true);
-				hScrollBar.setScrollPosition(0);
+				
 				addChild(hScrollBar.skin);
 			}
 			
-			super.draw();
+			_vScrollPosition = 0;
+			_hScrollPosition = 0;
+			
+//			trace("KafeScrollPane: " + this);
 		}
 
-		protected function destroyAssets() : void 
+		override protected function removeChildren() : void 
 		{
 			if(canvas) 
 			{
@@ -158,41 +217,94 @@ package com.kevincao.kafeui
 				{
 					canvas.parent.removeChild(canvas);
 				}
-				if(canvas.numChildren) 
+				if(sourceInstance) 
 				{
-					canvas.removeChildAt(0);
+					canvas.removeChild(sourceInstance);
 				}
-				canvas = null;
 			}
 			
 			if(vScrollBar) 
 			{
 				removeChild(vScrollBar.skin);
-				vScrollBar.removeEventListener(ScrollEvent.SCROLL, vScrollHandler);
+				destroyScrollBar(vScrollBar);
 				removeEventListener(MouseEvent.MOUSE_WHEEL, mouseWheelHandler);
-				vScrollBar.destroy();
-				vScrollBar = null;
 			}
 			if(hScrollBar) 
 			{
 				removeChild(hScrollBar.skin);
-				hScrollBar.removeEventListener(ScrollEvent.SCROLL, hScrollHandler);
-				hScrollBar.destroy();
-				hScrollBar = null;
+				destroyScrollBar(hScrollBar);
 			}
 		}
 
-		protected function initCanvas() : void 
+		override protected function validateSize() : void 
 		{
-			canvas = new Sprite();
-			canvas.scrollRect = new Rectangle(0, 0, width, height);
-			canvas.graphics.beginFill(0, 0);
-			canvas.graphics.drawRect(0, 0, width, height);
-			canvas.graphics.endFill();
-			addChild(canvas);
+			if(vScrollBar) 
+			{
+				vScrollBar.visible = true;
+				vScrollBar.size = height;
+				vScrollBar.x = width;
+				vScrollBar.setScrollProperties(height, 0, sourceInstance.height - height);
+				vScrollBar.lineScrollSize = height * 0.1;
+				
+				if(vScrollBar.enabled) 
+				{
+					vScrollBar.addEventListener(ScrollEvent.SCROLL, vScrollHandler, false, 0, true);
+					addEventListener(MouseEvent.MOUSE_WHEEL, mouseWheelHandler, false, 0, true);
+					
+					//TODO : caculate new scroll position
+					vScrollBar.setScrollPosition(vScrollBar.scrollPosition);
+				}
+				else 
+				{
+					vScrollBar.removeEventListener(ScrollEvent.SCROLL, vScrollHandler);
+					removeEventListener(MouseEvent.MOUSE_WHEEL, mouseWheelHandler);					
+					if(_vertical == AUTO) 
+					{
+						vScrollBar.visible = false;
+					}
+				}
+			}
+			
+			if(hScrollBar) 
+			{
+				hScrollBar.visible = true;
+				hScrollBar.size = width;
+				hScrollBar.y = height;
+				hScrollBar.setScrollProperties(width, 0, sourceInstance.width - width);
+				hScrollBar.lineScrollSize = width * 0.1;
+				
+				if(hScrollBar.enabled) 
+				{
+					hScrollBar.addEventListener(ScrollEvent.SCROLL, hScrollHandler, false, 0, true);
+					
+					hScrollBar.setScrollPosition(hScrollBar.scrollPosition);
+				} 
+				else 
+				{
+					hScrollBar.removeEventListener(ScrollEvent.SCROLL, hScrollHandler);
+					if(_horizontal == AUTO) 
+					{
+						hScrollBar.visible = false;
+					}
+				}
+			}
+
+			super.validateSize();
 		}
 
 		
+		override protected function validateProp() : void 
+		{
+			trace('validateProp: ' + this);
+			vScrollBar.setScrollPosition(NumberHelper.interpolate(_vScrollPosition, vScrollBar.minScrollPosition, vScrollBar.maxScrollPosition));
+			hScrollBar.setScrollPosition(NumberHelper.interpolate(_hScrollPosition, hScrollBar.minScrollPosition, hScrollBar.maxScrollPosition));
+			super.validateProp();
+		}
+
+		//----------------------------------
+		//  handlers
+		//----------------------------------
+
 		protected function mouseWheelHandler(event : MouseEvent) : void 
 		{
 			vScrollBar.setScrollPosition(vScrollBar.scrollPosition + (event.delta > 0 ? -1 : 1) * vScrollBar.lineScrollSize);
@@ -208,6 +320,10 @@ package com.kevincao.kafeui
 			sourceInstance.x = _roundProp ? Math.round(-event.position) : -event.position;
 		}
 
+		//----------------------------------
+		//  helpers
+		//----------------------------------
+
 		protected function getScrollBarSkin(key : Object) : MovieClip 
 		{
 			if(key is DisplayObject) 
@@ -221,13 +337,37 @@ package com.kevincao.kafeui
 			}
 		}
 
+		protected function destroyScrollBar(scrollBar : ScrollBarBase) : void 
+		{
+			scrollBar.removeEventListener(ScrollEvent.SCROLL, vScrollHandler);
+			scrollBar.destroy();
+		}
+
+		//----------------------------------
+		//  destroy
+		//----------------------------------
+
 		override public function destroy() : void 
 		{
-			destroyAssets();
+			if(vScrollBar) 
+			{				
+				destroyScrollBar(vScrollBar);
+				removeEventListener(MouseEvent.MOUSE_WHEEL, mouseWheelHandler);
+				vScrollBar = null;
+			}
+			if(hScrollBar) 
+			{
+				destroyScrollBar(hScrollBar);
+				hScrollBar = null;
+			}
 			
 			_scrollBar = null;
 			_source = null;
+			
 			sourceInstance = null;
+			canvas = null;
+			
+			super.destroy();
 		}
 	}
 }

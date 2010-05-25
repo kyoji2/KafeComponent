@@ -10,6 +10,8 @@ package com.kevincao.kafe.events
 		public static const BUTTON_DOWN : String = "buttonDown";
 		public static const DRAW : String = "draw";
 		public static const RESIZE : String = "resize";
+		public static const CHANGE : String = "change";
+		public static const CREATE : String = "create";
 
 		public function KafeEvent(type : String, bubbles : Boolean = false, cancelable : Boolean = false)
 		{

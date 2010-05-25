@@ -6,6 +6,8 @@ package com.kevincao.kafe
 
 	import flash.display.MovieClip;
 	import flash.events.MouseEvent;
+	
+	[Event(name="scroll",type="com.kevincao.kafe.events.ScrollEvent")]
 
 	/**
 	 * @author Kevin Cao
@@ -258,7 +260,7 @@ package com.kevincao.kafe
 				var mouse : Number = _direction == ScrollBarBase.HORIZONTAL ? mouseX : mouseY;
 				var mousePosition : Number = (mouse - track[dir]) / track[prop] * (_maxScrollPosition - _minScrollPosition) + _minScrollPosition;
 
-				var pgScroll : Number = (pageScrollSize == 0) ? pageSize : pageScrollSize;
+				var pgScroll : Number = pageScrollSize;
 				if (_scrollPosition < mousePosition) {
 					if(_scrollPosition + pgScroll > mousePosition) {
 						event.target.endPress();

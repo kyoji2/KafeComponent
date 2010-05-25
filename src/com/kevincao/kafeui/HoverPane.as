@@ -1,5 +1,6 @@
 package com.kevincao.kafeui 
 {
+	import com.kevincao.kafe.utils.NumberHelper;
 	import com.kevincao.kafeui.core.KafeUIBase;
 
 	import flash.display.DisplayObject;
@@ -18,6 +19,7 @@ package com.kevincao.kafeui
 
 		protected var canvas : Sprite;
 		protected var sourceInstance : DisplayObject;
+
 		private var isRollOver : Boolean;
 		private var tx : Number = 0;
 		private var ty : Number = 0;
@@ -42,7 +44,7 @@ package com.kevincao.kafeui
 
 		public function set edgeRange(value : Number) : void
 		{
-			_edgeRange = constrain(value, 0, 0.5);
+			_edgeRange = NumberHelper.constrain(value, 0, 0.5);
 		}
 
 		[Inspectable(defaultValue="", type="String")]
@@ -55,8 +57,9 @@ package com.kevincao.kafeui
 		public function set source(value : Object) : void 
 		{
 			if(_source == value) return;
+			
 			_source = value;
-			invalidate();
+			invalidateAll();
 		}
 
 		/**
@@ -69,11 +72,56 @@ package com.kevincao.kafeui
 
 		override protected function addChildren() : void
 		{
-			super.addChildren();
+			if(source == null || source == "") return;			
+			
+			sourceInstance = getDisplayObjectInstance(_source);
+			sourceInstance.x = tx;
+			sourceInstance.y = ty;
+			tx = ty = 0;
 			
 			canvas = new Sprite();
 			addChild(canvas);
+			canvas.scrollRect = new Rectangle(0, 0, width, height);
+			canvas.addChild(sourceInstance);
 		}
+
+		
+		override protected function removeChildren() : void 
+		{
+			if(canvas) 
+			{
+				if(canvas.parent) 
+				{
+					canvas.parent.removeChild(canvas);
+				}
+				if(sourceInstance) 
+				{
+					canvas.removeChild(sourceInstance);
+				}
+			}
+		}
+
+		
+		override protected function validateSize() : void 
+		{
+			if(sourceInstance) 
+			{
+				if(width < sourceInstance.width || height < sourceInstance.height) 
+				{
+					setupEventListeners(true);
+				} 
+				else 
+				{
+					setupEventListeners(false);
+				}
+			}
+			
+			super.validateSize();
+		}
+
+		//----------------------------------
+		//  handlers
+		//----------------------------------
 
 		private function rollOverHandler(event : MouseEvent) : void
 		{
@@ -85,31 +133,6 @@ package com.kevincao.kafeui
 			isRollOver = false;
 		}
 
-		override public function draw() : void
-		{
-			super.draw();
-			
-			if(source == null || source == "") return;
-			
-			sourceInstance = getDisplayObjectInstance(_source);
-			sourceInstance.x = tx;
-			sourceInstance.y = ty;
-			tx = ty = 0;
-			
-			if(canvas.numChildren) canvas.removeChildAt(0);
-			canvas.scrollRect = new Rectangle(0, 0, width, height);
-			canvas.addChild(sourceInstance);
-			
-			if(width < sourceInstance.width || height < sourceInstance.height) 
-			{
-				setupEventListeners(true);
-			} 
-			else 
-			{
-				setupEventListeners(false);
-			}
-		}
-
 		protected function tick(event : Event) : void 
 		{
 			var mx : Number = width - sourceInstance.width;
@@ -117,19 +140,19 @@ package com.kevincao.kafeui
 			
 			if(isRollOver) 
 			{
-				tx = map(mouseX, width * edgeRange, width * (1 - edgeRange), 0, mx);				ty = map(mouseY, height * edgeRange, height * (1 - edgeRange), 0, my);
+				tx = NumberHelper.map(mouseX, width * edgeRange, width * (1 - edgeRange), 0, mx);				ty = NumberHelper.map(mouseY, height * edgeRange, height * (1 - edgeRange), 0, my);
 			}
 			
 			if(mx < 0) 
 			{
 				sourceInstance.x += (tx - sourceInstance.x) * ease;
-				sourceInstance.x = constrain(sourceInstance.x, 0, mx);
+				sourceInstance.x = NumberHelper.constrain(sourceInstance.x, 0, mx);
 			}
 			
 			if(my < 0) 
 			{
 				sourceInstance.y += (ty - sourceInstance.y) * ease;
-				sourceInstance.y = constrain(sourceInstance.y, 0, my);
+				sourceInstance.y = NumberHelper.constrain(sourceInstance.y, 0, my);
 			}
 		}
 
@@ -149,21 +172,17 @@ package com.kevincao.kafeui
 			}
 		}
 
-		private function constrain(value : Number, firstValue : Number, secondValue : Number) : Number 
-		{
-			return Math.min(Math.max(value, Math.min(firstValue, secondValue)), Math.max(firstValue, secondValue));
-		}
-
-		private function map(value : Number, fromMin : Number, fromMax : Number, toMin : Number, toMax : Number) : Number 
-		{
-			return toMin + (toMax - toMin) * (value - fromMin) / (fromMax - fromMin);
-		}
+		//----------------------------------
+		//  destroy
+		//----------------------------------
 
 		override public function destroy() : void
 		{
+			setupEventListeners(false);
+			canvas = null;
 			_source = null;
 			sourceInstance = null;
-			setupEventListeners(false);
+			super.destroy();
 		}
 	}
 }
