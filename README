@@ -15,6 +15,8 @@ KafeUI:
 * KafeScrollPane
 * EaseScrollPane
 * HoverPane
+* HLoopScrollPane
+* VLoopScrollPane
 
 Extras:
 
@@ -29,6 +31,8 @@ Kevin Cao ( http://kevincao.com )
 
 - CHANGELOG:
 
+v1.3.0: rewrite KafeUI, now support more specific invalidation
+		add HLoopScrollPane and VLoopScrollPane
 v1.2.6:	add KafeHelper
 		fix some issues in components' destroy() method
 v1.2.5: add KafeRadioButton & GaiaRadioButton

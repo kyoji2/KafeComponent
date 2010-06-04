@@ -151,7 +151,7 @@ package com.kevincao.kafe
 		/**
 		 * 
 		 */
-		public function ScrollBarBase(skin : Object, direction : String = VERTICAL) 
+		public function ScrollBarBase(skin : Object, direction : String = "vertical") 
 		{
 			super(skin);
 			
@@ -228,6 +228,7 @@ package com.kevincao.kafe
 					track[dir] = upArrow[prop];
 					track[prop] = Math.max(0, size - (downArrow[prop] + upArrow[prop]));
 				} else {
+					track[dir] = 0;
 					track[prop] = Math.max(0, size);
 				}
 			}

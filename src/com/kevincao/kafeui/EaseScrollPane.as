@@ -1,6 +1,7 @@
 package com.kevincao.kafeui 
 {
 	import com.kevincao.kafe.events.ScrollEvent;
+	import com.kevincao.kafe.utils.NumberHelper;
 
 	import flash.events.Event;
 
@@ -23,19 +24,12 @@ package com.kevincao.kafeui
 		 */
 		public function EaseScrollPane() 
 		{
+			super();
 		}
 
-		override protected function addChildren() : void 
+		override protected function removeChildren() : void 
 		{
-			super.addChildren();
-			
-			trace('EaseScrollPane: addChildren ' + (sourceInstance));
-			
-			if(sourceInstance) 
-			{
-				sourceInstance.x = hScrollBar ? tx : 0;
-				sourceInstance.y = vScrollBar ? ty : 0;
-			}
+			super.removeChildren();
 			tx = ty = 0;
 		}
 
@@ -43,10 +37,7 @@ package com.kevincao.kafeui
 		{
 			super.validateSize();
 			
-			trace('EaseScrollPane: validateSize ' + (sourceInstance));
-			
-			if(sourceInstance && (sourceInstance.height - height > 0 || sourceInstance.width - width > 0)) 
-			{
+			if((vScrollBar && vScrollBar.enabled) || (hScrollBar && hScrollBar.enabled)) 			{
 				addEventListener(Event.ENTER_FRAME, tick, false, 0, true);
 			} 
 			else 
@@ -88,11 +79,13 @@ package com.kevincao.kafeui
 		override protected function vScrollHandler(event : ScrollEvent) : void
 		{
 			ty = -event.position;
+			_vScrollPosition = NumberHelper.normalize(event.position, vScrollBar.minScrollPosition, vScrollBar.maxScrollPosition);
 		}
 
 		override protected function hScrollHandler(event : ScrollEvent) : void
 		{
 			tx = -event.position;
+			_hScrollPosition = NumberHelper.normalize(event.position, hScrollBar.minScrollPosition, hScrollBar.maxScrollPosition);
 		}
 
 		override public function destroy() : void

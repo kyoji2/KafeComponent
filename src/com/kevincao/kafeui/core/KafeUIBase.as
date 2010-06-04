@@ -92,14 +92,14 @@ package com.kevincao.kafeui.core
 			// remove avatar
 			if(numChildren) removeChildAt(0);			
 		}
-		
+
 		/**
 		 * override
 		 */
 		protected function addChildren() : void 
 		{
 		}
-		
+
 		/**
 		 * override
 		 */
@@ -164,11 +164,7 @@ package com.kevincao.kafeui.core
 
 		protected function invalidate() : void
 		{
-			// assuming we need only one listener
-			if(!hasEventListener(Event.ENTER_FRAME)) 
-			{
-				addEventListener(Event.ENTER_FRAME, onInvalidate);
-			}
+			addEventListener(Event.ENTER_FRAME, onInvalidate);
 		}
 
 		protected function onInvalidate(event : Event) : void
@@ -176,7 +172,7 @@ package com.kevincao.kafeui.core
 			removeEventListener(Event.ENTER_FRAME, onInvalidate);
 			draw();
 		}
-		
+
 		
 		//----------------------------------
 		//  public functions
@@ -225,11 +221,11 @@ package com.kevincao.kafeui.core
 		{
 			invalidateDic = null;
 		}
-		
+
 		//----------------------------------
 		//  helpers
 		//----------------------------------
-		
+
 		protected function getDisplayObjectInstance(key : Object) : DisplayObject 
 		{
 			var classDef : Object = null;

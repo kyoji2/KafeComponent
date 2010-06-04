@@ -48,6 +48,7 @@ package com.kevincao.kafeui
 		public function set scrollBar(value : Object) : void 
 		{
 			if(_scrollBar == value) return;
+			
 			_scrollBar = value;
 			invalidateAll();
 		}
@@ -62,6 +63,7 @@ package com.kevincao.kafeui
 		public function set source(value : Object) : void 
 		{
 			if(_source == value) return;
+			
 			_source = value;
 			invalidateAll();
 		}
@@ -112,11 +114,7 @@ package com.kevincao.kafeui
 		 */
 		public function get vScrollPosition() : Number
 		{
-			if(vScrollBar) 
-			{
-				return NumberHelper.normalize(vScrollBar.scrollPosition, vScrollBar.minScrollPosition, vScrollBar.maxScrollPosition);
-			}
-			return 0;
+			return _vScrollPosition;
 		}
 
 		/**
@@ -125,10 +123,6 @@ package com.kevincao.kafeui
 		 */
 		public function set vScrollPosition(value : Number) : void
 		{
-//			if(vScrollBar && vScrollBar.enabled) 
-//			{
-//				vScrollBar.setScrollPosition(NumberHelper.interpolate(value, vScrollBar.minScrollPosition, vScrollBar.maxScrollPosition));
-//			}
 			_vScrollPosition = value;
 			invalidateProp();
 		}
@@ -141,11 +135,7 @@ package com.kevincao.kafeui
 		 */
 		public function get hScrollPosition() : Number
 		{
-			if(hScrollBar) 
-			{
-				return NumberHelper.normalize(hScrollBar.scrollPosition, hScrollBar.minScrollPosition, hScrollBar.maxScrollPosition);
-			}
-			return 0;
+			return _hScrollPosition;
 		}
 
 		/**
@@ -154,10 +144,6 @@ package com.kevincao.kafeui
 		 */
 		public function set hScrollPosition(value : Number) : void
 		{
-//			if(hScrollBar && hScrollBar.enabled) 
-//			{
-//				hScrollBar.setScrollPosition(NumberHelper.interpolate(value, hScrollBar.minScrollPosition, hScrollBar.maxScrollPosition));
-//			}
 			_hScrollPosition = value;
 			invalidateProp();
 		}
@@ -175,10 +161,6 @@ package com.kevincao.kafeui
 			if(_source == null || _source == "") return;
 			
 			canvas = new Sprite();
-			canvas.scrollRect = new Rectangle(0, 0, width, height);
-			canvas.graphics.beginFill(0, 0);
-			canvas.graphics.drawRect(0, 0, width, height);
-			canvas.graphics.endFill();
 			addChild(canvas);
 			
 			sourceInstance = getDisplayObjectInstance(_source);
@@ -201,12 +183,7 @@ package com.kevincao.kafeui
 				hScrollBar.scaleY = -1;
 				
 				addChild(hScrollBar.skin);
-			}
-			
-			_vScrollPosition = 0;
-			_hScrollPosition = 0;
-			
-//			trace("KafeScrollPane: " + this);
+			}			
 		}
 
 		override protected function removeChildren() : void 
@@ -221,6 +198,8 @@ package com.kevincao.kafeui
 				{
 					canvas.removeChild(sourceInstance);
 				}
+				_vScrollPosition = 0;
+				_hScrollPosition = 0;
 			}
 			
 			if(vScrollBar) 
@@ -238,6 +217,12 @@ package com.kevincao.kafeui
 
 		override protected function validateSize() : void 
 		{
+			canvas.scrollRect = new Rectangle(0, 0, width, height);
+			canvas.graphics.clear();
+			canvas.graphics.beginFill(0, 0);
+			canvas.graphics.drawRect(0, 0, width, height);
+			canvas.graphics.endFill();
+			
 			if(vScrollBar) 
 			{
 				vScrollBar.visible = true;
@@ -248,16 +233,16 @@ package com.kevincao.kafeui
 				
 				if(vScrollBar.enabled) 
 				{
+					vScrollBar.setScrollPosition(NumberHelper.interpolate(_vScrollPosition, vScrollBar.minScrollPosition, vScrollBar.maxScrollPosition));
 					vScrollBar.addEventListener(ScrollEvent.SCROLL, vScrollHandler, false, 0, true);
 					addEventListener(MouseEvent.MOUSE_WHEEL, mouseWheelHandler, false, 0, true);
 					
-					//TODO : caculate new scroll position
-					vScrollBar.setScrollPosition(vScrollBar.scrollPosition);
+//					vScrollBar.setScrollPosition(NumberHelper.interpolate(_vScrollPosition, vScrollBar.minScrollPosition, vScrollBar.maxScrollPosition));
 				}
 				else 
 				{
 					vScrollBar.removeEventListener(ScrollEvent.SCROLL, vScrollHandler);
-					removeEventListener(MouseEvent.MOUSE_WHEEL, mouseWheelHandler);					
+					removeEventListener(MouseEvent.MOUSE_WHEEL, mouseWheelHandler);
 					if(_vertical == AUTO) 
 					{
 						vScrollBar.visible = false;
@@ -275,9 +260,10 @@ package com.kevincao.kafeui
 				
 				if(hScrollBar.enabled) 
 				{
+					hScrollBar.setScrollPosition(NumberHelper.interpolate(_hScrollPosition, hScrollBar.minScrollPosition, hScrollBar.maxScrollPosition));
 					hScrollBar.addEventListener(ScrollEvent.SCROLL, hScrollHandler, false, 0, true);
 					
-					hScrollBar.setScrollPosition(hScrollBar.scrollPosition);
+//					hScrollBar.setScrollPosition(NumberHelper.interpolate(_hScrollPosition, hScrollBar.minScrollPosition, hScrollBar.maxScrollPosition));
 				} 
 				else 
 				{
@@ -292,12 +278,16 @@ package com.kevincao.kafeui
 			super.validateSize();
 		}
 
-		
 		override protected function validateProp() : void 
 		{
-			trace('validateProp: ' + this);
-			vScrollBar.setScrollPosition(NumberHelper.interpolate(_vScrollPosition, vScrollBar.minScrollPosition, vScrollBar.maxScrollPosition));
-			hScrollBar.setScrollPosition(NumberHelper.interpolate(_hScrollPosition, hScrollBar.minScrollPosition, hScrollBar.maxScrollPosition));
+			if(vScrollBar)
+			{
+				vScrollBar.setScrollPosition(NumberHelper.interpolate(_vScrollPosition, vScrollBar.minScrollPosition, vScrollBar.maxScrollPosition));
+			}
+			if(hScrollBar)
+			{
+				hScrollBar.setScrollPosition(NumberHelper.interpolate(_hScrollPosition, hScrollBar.minScrollPosition, hScrollBar.maxScrollPosition));
+			}
 			super.validateProp();
 		}
 
@@ -313,11 +303,13 @@ package com.kevincao.kafeui
 		protected function vScrollHandler(event : ScrollEvent) : void
 		{
 			sourceInstance.y = _roundProp ? Math.round(-event.position) : -event.position;
+			_vScrollPosition = NumberHelper.normalize(event.position, vScrollBar.minScrollPosition, vScrollBar.maxScrollPosition);
 		}
 
 		protected function hScrollHandler(event : ScrollEvent) : void
 		{
 			sourceInstance.x = _roundProp ? Math.round(-event.position) : -event.position;
+			_hScrollPosition = NumberHelper.normalize(event.position, hScrollBar.minScrollPosition, hScrollBar.maxScrollPosition);
 		}
 
 		//----------------------------------
@@ -328,7 +320,7 @@ package com.kevincao.kafeui
 		{
 			if(key is DisplayObject) 
 			{
-				var c : Class = Class(getDefinitionByName(getQualifiedClassName(key)));
+//				var c : Class = Class(getDefinitionByName(getQualifiedClassName(key)));				var c : Class = Class(key.constructor);
 				return MovieClip(new c());
 			} 
 			else 

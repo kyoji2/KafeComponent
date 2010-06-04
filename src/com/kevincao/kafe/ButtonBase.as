@@ -44,6 +44,7 @@ package com.kevincao.kafe
 			super.enabled = value;
 			
 			_skin.buttonMode = value;
+			_skin.mouseEnabled = value;
 			
 			// check isRollOver
 			var point : Point = new Point(_skin.mouseX, _skin.mouseY);
