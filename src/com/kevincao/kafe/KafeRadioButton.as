@@ -20,12 +20,13 @@ package com.kevincao.kafe
 
 		protected static function addButton(rb : KafeRadioButton) : void
 		{
-			if(buttons == null) {
+			if(buttons == null) 
+			{
 				buttons = [];
 			}
 			buttons.push(rb);
 		}
-		
+
 		protected static function removeButton(rb : KafeRadioButton) : void 
 		{
 			buttons.splice(buttons.indexOf(rb), 1);
@@ -39,7 +40,8 @@ package com.kevincao.kafe
 		{
 			for(var i : uint = 0;i < buttons.length;i++) 
 			{
-				if(buttons[i] != rb && buttons[i].groupName == rb.groupName) {
+				if(buttons[i] != rb && buttons[i].groupName == rb.groupName) 
+				{
 					buttons[i].selected = false;
 				}
 			}
@@ -70,7 +72,7 @@ package com.kevincao.kafe
 		{
 			_toggle = false;
 		}
-		
+
 		/**
 		 * 
 		 */
@@ -78,11 +80,12 @@ package com.kevincao.kafe
 		{
 			super.selected = value;
 			
-			if(_selected) {
+			if(_selected) 
+			{
 				KafeRadioButton.select(this);
 			}
 		}
-		
+
 		
 		override public function destroy() : void 
 		{

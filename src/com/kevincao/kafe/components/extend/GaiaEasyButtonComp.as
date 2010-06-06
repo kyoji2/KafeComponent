@@ -5,7 +5,7 @@ package com.kevincao.kafe.components.extend
 
 	import flash.display.MovieClip;
 	
-	[IconFile("../../../../../../footage/GaiaEasyButton.png")]
+	[IconFile("GaiaEasyButton.png")]
 
 	/**
 	 * @author Kevin Cao

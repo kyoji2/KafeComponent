@@ -5,7 +5,7 @@ package com.kevincao.kafe.components.extend
 	import com.kevincao.kafe.extend.GaiaRadioButton;
 	import com.kevincao.kafe.components.ButtonBaseComp;
 	
-	[IconFile("../../../../../../footage/GaiaRadioButton.png")]
+	[IconFile("GaiaRadioButton.png")]
 
 	/**
 	 * @author Kevin Cao

@@ -5,7 +5,7 @@ package com.kevincao.kafeui
 
 	import flash.events.Event;
 
-	[IconFile("../../../../footage/EaseScrollPane.png")]
+	[IconFile("EaseScrollPane.png")]
 
 	/**
 	 * @author Kevin Cao

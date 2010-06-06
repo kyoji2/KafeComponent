@@ -14,7 +14,7 @@ package com.kevincao.kafeui
 	import flash.utils.getDefinitionByName;
 	import flash.utils.getQualifiedClassName;
 
-	[IconFile("../../../../footage/KafeScrollPane.png")]
+	[IconFile("KafeScrollPane.png")]
 
 	/**
 	 * @author Kevin Cao
@@ -30,13 +30,13 @@ package com.kevincao.kafeui
 		protected var canvas : Sprite;
 		protected var sourceInstance : DisplayObject;
 
-		protected var _scrollBar : Object;
+		protected var _scrollBar : Object = "ScrollBarSkin";
 		protected var _source : Object;
 		protected var _horizontal : String = AUTO;
 		protected var _vertical : String = AUTO;
 		protected var _roundProp : Boolean = true;
-		protected var _hScrollPosition : Number;
-		protected var _vScrollPosition : Number;
+		protected var _hScrollPosition : Number = 0;
+		protected var _vScrollPosition : Number = 0;
 
 		[Inspectable(defaultValue="ScrollBarSkin", type="String")]
 
@@ -217,11 +217,14 @@ package com.kevincao.kafeui
 
 		override protected function validateSize() : void 
 		{
-			canvas.scrollRect = new Rectangle(0, 0, width, height);
-			canvas.graphics.clear();
-			canvas.graphics.beginFill(0, 0);
-			canvas.graphics.drawRect(0, 0, width, height);
-			canvas.graphics.endFill();
+			if(canvas)
+			{
+				canvas.scrollRect = new Rectangle(0, 0, width, height);
+				canvas.graphics.clear();
+				canvas.graphics.beginFill(0, 0);
+				canvas.graphics.drawRect(0, 0, width, height);
+				canvas.graphics.endFill();
+			}
 			
 			if(vScrollBar) 
 			{

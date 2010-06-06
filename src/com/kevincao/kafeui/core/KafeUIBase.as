@@ -232,7 +232,8 @@ package com.kevincao.kafeui.core
 			if (key is Class) 
 			{ 
 				return (new key()) as DisplayObject; 
-			} else if (key is DisplayObject) 
+			}
+			else if (key is DisplayObject) 
 			{
 				(key as DisplayObject).x = 0;
 				(key as DisplayObject).y = 0;
@@ -242,12 +243,14 @@ package com.kevincao.kafeui.core
 			try 
 			{
 				classDef = getDefinitionByName(key.toString());
-			} catch(e : Error) 
+			}
+			catch(e : Error) 
 			{
 				try 
 				{
 					classDef = loaderInfo.applicationDomain.getDefinition(key.toString()) as Object;
-				} catch (e : Error) 
+				}
+				catch (e : Error) 
 				{
 					// Nothing
 				}

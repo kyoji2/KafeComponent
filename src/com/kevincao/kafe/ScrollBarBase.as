@@ -3,10 +3,11 @@ package com.kevincao.kafe
 	import com.kevincao.kafe.core.KafeBase;
 	import com.kevincao.kafe.events.KafeEvent;
 	import com.kevincao.kafe.events.ScrollEvent;
+	import com.kevincao.kafe.utils.NumberHelper;
 
 	import flash.display.MovieClip;
 	import flash.events.MouseEvent;
-	
+
 	[Event(name="scroll",type="com.kevincao.kafe.events.ScrollEvent")]
 
 	/**
@@ -102,7 +103,8 @@ package com.kevincao.kafe
 
 		public function set pageSize(value : Number) : void 
 		{
-			if (value > 0) {
+			if (value > 0) 
+			{
 				_pageSize = value;
 			}
 		}
@@ -115,7 +117,8 @@ package com.kevincao.kafe
 
 		public function set pageScrollSize(value : Number) : void 
 		{
-			if (value >= 0) { 
+			if (value >= 0) 
+			{ 
 				_pageScrollSize = value; 
 			}
 		}
@@ -128,7 +131,8 @@ package com.kevincao.kafe
 
 		public function set lineScrollSize(value : Number) : void 
 		{
-			if (value > 0) {
+			if (value > 0) 
+			{
 				_lineScrollSize = value; 
 			}
 		}
@@ -156,10 +160,13 @@ package com.kevincao.kafe
 			super(skin);
 			
 			_direction = direction;
-			if(_direction == ScrollBarBase.HORIZONTAL) {
+			if(_direction == ScrollBarBase.HORIZONTAL) 
+			{
 				prop = "width";
 				dir = "x";
-			} else {
+			} 
+			else 
+			{
 				prop = "height";
 				dir = "y";
 			}
@@ -173,16 +180,20 @@ package com.kevincao.kafe
 			
 			upArrow = getAsset(defaultUpArrow) || getAsset(defaultLeftArrow);			downArrow = getAsset(defaultDownArrow) || getAsset(defaultRightArrow);			track = getAsset(defaultTrack);			thumb = getAsset(defaultThumb);
 			
-			if(upArrow) {
+			if(upArrow) 
+			{
 				upArrow.autoRepeat = true;
 			}
-			if(downArrow) {
+			if(downArrow) 
+			{
 				downArrow.autoRepeat = true;
 			}
-			if(track) {
+			if(track) 
+			{
 				track.autoRepeat = true;
 			}
-			if(thumb) {
+			if(thumb) 
+			{
 				// 如果没有九宫格设置，则不缩放thumb
 				scaleThumb = thumb.skin.scale9Grid != null;
 			}
@@ -190,25 +201,32 @@ package com.kevincao.kafe
 
 		protected function setupEventListeners(b : Boolean = true) : void 
 		{
-			if(upArrow) {
+			if(upArrow) 
+			{
 				b ? upArrow.addEventListener(KafeEvent.BUTTON_DOWN, scrollPressHandler, false, 0, true) : upArrow.removeEventListener(KafeEvent.BUTTON_DOWN, scrollPressHandler);
 			}
-			if(downArrow) {
+			if(downArrow) 
+			{
 				b ? downArrow.addEventListener(KafeEvent.BUTTON_DOWN, scrollPressHandler, false, 0, true) : downArrow.removeEventListener(KafeEvent.BUTTON_DOWN, scrollPressHandler);
 			}
-			if(track) {
+			if(track) 
+			{
 				b ? track.addEventListener(KafeEvent.BUTTON_DOWN, scrollPressHandler, false, 0, true) : track.removeEventListener(KafeEvent.BUTTON_DOWN, scrollPressHandler);
 			}
-			if(thumb) {
+			if(thumb) 
+			{
 				b ? thumb.skin.addEventListener(MouseEvent.MOUSE_DOWN, thumbPressHandler, false, 0, true) : thumb.skin.removeEventListener(MouseEvent.MOUSE_DOWN, thumbPressHandler);
 			}
 		}
 
 		private function getAsset(key : String) : EasyButton 
 		{
-			if(key != "" && _skin.getChildByName(key)) {
+			if(key != "" && _skin.getChildByName(key)) 
+			{
 				return new EasyButton(MovieClip(_skin.getChildByName(key)));
-			} else {
+			} 
+			else 
+			{
 				return null;
 			}
 		}
@@ -217,17 +235,22 @@ package com.kevincao.kafe
 		{
 			if(!_size) _size = skin[prop];
 			
-			if(downArrow && upArrow) {
+			if(downArrow && upArrow) 
+			{
 				upArrow[dir] = downArrow[dir] = 0;
 				downArrow[dir] = Math.max(upArrow[prop], size - downArrow[prop]);
 			}
 			
-			if(track) {
+			if(track) 
+			{
 
-				if(downArrow && upArrow) {
+				if(downArrow && upArrow) 
+				{
 					track[dir] = upArrow[prop];
 					track[prop] = Math.max(0, size - (downArrow[prop] + upArrow[prop]));
-				} else {
+				} 
+				else 
+				{
 					track[dir] = 0;
 					track[prop] = Math.max(0, size);
 				}
@@ -241,10 +264,13 @@ package com.kevincao.kafe
 			if(!track || !thumb) return;
 
 			var per : Number = _maxScrollPosition - _minScrollPosition + _pageSize;
-			if (track[prop] <= _minThumbSize || _maxScrollPosition <= _minScrollPosition || (per == 0 || isNaN(per))) {
+			if (track[prop] <= _minThumbSize || _maxScrollPosition <= _minScrollPosition || (per == 0 || isNaN(per))) 
+			{
 				if(scaleThumb) thumb[prop] = _minThumbSize;
 				thumb.visible = false;
-			} else {
+			} 
+			else 
+			{
 				if(scaleThumb) thumb[prop] = Math.round(Math.max(_minThumbSize + 1, _pageSize / per * track[prop]));
 				thumb[dir] = track[dir] + (track[prop] - thumb[prop]) * ((_scrollPosition - _minScrollPosition) / (_maxScrollPosition - _minScrollPosition));
 				thumb.visible = enabled;
@@ -253,22 +279,30 @@ package com.kevincao.kafe
 
 		protected function scrollPressHandler(event : KafeEvent) : void 
 		{
-			if (event.currentTarget == upArrow) {
+			if (event.currentTarget == upArrow) 
+			{
 				setScrollPosition(_scrollPosition - _lineScrollSize); 
-			} else if (event.currentTarget == downArrow) {
+			} else if (event.currentTarget == downArrow) 
+			{
 				setScrollPosition(_scrollPosition + _lineScrollSize);
-			} else {
+			} 
+			else 
+			{
 				var mouse : Number = _direction == ScrollBarBase.HORIZONTAL ? mouseX : mouseY;
-				var mousePosition : Number = (mouse - track[dir]) / track[prop] * (_maxScrollPosition - _minScrollPosition) + _minScrollPosition;
+				//				var mousePosition : Number = (mouse - track[dir]) / track[prop] * (_maxScrollPosition - _minScrollPosition) + _minScrollPosition;				var mousePosition : Number = NumberHelper.map(mouse - track[dir], 0, track[prop], _minScrollPosition, _maxScrollPosition);
 
 				var pgScroll : Number = pageScrollSize;
-				if (_scrollPosition < mousePosition) {
-					if(_scrollPosition + pgScroll > mousePosition) {
+				if (_scrollPosition < mousePosition) 
+				{
+					if(_scrollPosition + pgScroll > mousePosition) 
+					{
 						event.target.endPress();
 					}
 					setScrollPosition(_scrollPosition + pgScroll);
-				} else if (_scrollPosition > mousePosition) {
-					if(_scrollPosition - pgScroll < mousePosition) {
+				} else if (_scrollPosition > mousePosition) 
+				{
+					if(_scrollPosition - pgScroll < mousePosition) 
+					{
 						event.target.endPress();
 					}
 					setScrollPosition(_scrollPosition - pgScroll);
@@ -295,8 +329,8 @@ package com.kevincao.kafe
 		protected function moveHandler(event : MouseEvent) : void
 		{
 			var mouse : Number = _direction == ScrollBarBase.HORIZONTAL ? mouseX : mouseY;
-			var pos : Number = Math.max(0, Math.min(track[prop] - thumb[prop], mouse - track[dir] - thumbScrollOffset));
-			setScrollPosition(pos / (track[prop] - thumb[prop]) * (_maxScrollPosition - _minScrollPosition) + _minScrollPosition);
+			var pos : Number = NumberHelper.constrain(mouse - track[dir] - thumbScrollOffset, 0, track[prop] - thumb[prop]);
+			setScrollPosition(NumberHelper.map(pos, 0, track[prop] - thumb[prop], _minScrollPosition, _maxScrollPosition));
 		}
 
 		//----------------------------------
@@ -306,11 +340,13 @@ package com.kevincao.kafe
 		public function setScrollPosition(newScrollPosition : Number, fireEvent : Boolean = true) : void 
 		{
 			var oldPosition : Number = scrollPosition;
-			_scrollPosition = Math.max(_minScrollPosition, Math.min(_maxScrollPosition, newScrollPosition));
-			if (oldPosition == _scrollPosition) { 
+			_scrollPosition = NumberHelper.constrain(newScrollPosition, _minScrollPosition, _maxScrollPosition);
+			if (oldPosition == _scrollPosition) 
+			{ 
 				return; 
 			}
-			if (fireEvent) { 
+			if (fireEvent) 
+			{ 
 				dispatchEvent(new ScrollEvent(_direction, scrollPosition - oldPosition, scrollPosition)); 
 			}
 			
@@ -322,7 +358,8 @@ package com.kevincao.kafe
 			this.pageSize = pageSize;
 			_minScrollPosition = minScrollPosition;
 			_maxScrollPosition = maxScrollPosition;
-			if (pageScrollSize >= 0) { 
+			if (pageScrollSize >= 0) 
+			{ 
 				_pageScrollSize = pageScrollSize; 
 			}
 			enabled = (_maxScrollPosition > _minScrollPosition);
@@ -336,16 +373,20 @@ package com.kevincao.kafe
 		{
 			setupEventListeners(false);
 			
-			if(upArrow) {
+			if(upArrow) 
+			{
 				upArrow.destroy();
 			}
-			if(downArrow) {
+			if(downArrow) 
+			{
 				downArrow.destroy();
 			}
-			if(track) {
+			if(track) 
+			{
 				track.destroy();
 			}
-			if(thumb) {
+			if(thumb) 
+			{
 				thumb.destroy();
 			}
 			

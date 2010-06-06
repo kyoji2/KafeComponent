@@ -20,13 +20,7 @@ package com.kevincao.kafe
 
 		public var lockMouseDownState : Boolean = true;
 
-
-		override public function set enabled(value : Boolean) : void 
-		{
-			super.enabled = value;
-			updateState();
-		}
-
+		
 		public function get selected() : Boolean 
 		{
 			return _selected;
@@ -38,7 +32,7 @@ package com.kevincao.kafe
 			
 			_selected = value;
 			dispatchEvent(new Event(Event.CHANGE));
-			updateState();
+			invalidate();
 		}
 
 		public function get toggle() : Boolean
@@ -68,7 +62,8 @@ package com.kevincao.kafe
 			selectedUpFrame = getFrame(_skin, "selected out") - 1;
 			selectedNormalFrame = getFrame(_skin, "selected down") - 1;
 			
-			if(upFrame == -2 || normalFrame == -2 || selectedUpFrame == -2 || selectedNormalFrame == -2) {
+			if(upFrame == -2 || normalFrame == -2 || selectedUpFrame == -2 || selectedNormalFrame == -2) 
+			{
 				trace(getClassName() + " :: Skin Error : " + _skin.name);
 			}
 			
@@ -78,17 +73,24 @@ package com.kevincao.kafe
 			_skin.addFrameScript(selectedNormalFrame - 1, frameStop);
 		}
 
-		protected function updateState() : void 
+		override protected function draw() : void 
 		{
-			if(_enabled) {
-				if(_isRollOver) {
+			if(_enabled) 
+			{
+				if(_isRollOver) 
+				{
 					_skin.gotoAndStop(selected ? selectedUpFrame : upFrame);
-				} else {
+				} 
+				else 
+				{
 					_skin.gotoAndStop(selected ? "selected" : normalFrame);
 				}
-			} else {
+			} 
+			else 
+			{
 				_skin.gotoAndStop(selected ? "selected disabled" : "disabled");
 			}
+			super.draw();
 		}
 
 		override protected function rollOverHandler(event : MouseEvent) : void
@@ -114,14 +116,17 @@ package com.kevincao.kafe
 		override protected function mouseUpHandler(event : MouseEvent) : void
 		{
 			super.mouseUpHandler(event);
-			updateState();
+			draw();
 		}
 
 		override protected function clickHandler(event : MouseEvent) : void
 		{
-			if(_toggle) {
+			if(_toggle) 
+			{
 				selected = !selected;
-			} else {
+			} 
+			else 
+			{
 				goto();
 			}
 		}

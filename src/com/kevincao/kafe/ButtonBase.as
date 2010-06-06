@@ -39,21 +39,6 @@ package com.kevincao.kafe
 			return _isMouseDown;
 		}
 
-		override public function set enabled(value : Boolean) : void 
-		{
-			super.enabled = value;
-			
-			_skin.buttonMode = value;
-			_skin.mouseEnabled = value;
-			
-			// check isRollOver
-			var point : Point = new Point(_skin.mouseX, _skin.mouseY);
-			point = _skin.localToGlobal(point);
-			_isRollOver = _skin.hitTestPoint(point.x, point.y);
-			
-			setupEventListeners(value);
-		}
-
 		public function get href() : String 
 		{
 			return _href;
@@ -93,8 +78,6 @@ package com.kevincao.kafe
 			
 			pressTimer = new Timer(1, 0);
 			pressTimer.addEventListener(TimerEvent.TIMER, tick, false, 0, true);
-			
-			enabled = true;
 		}
 
 		override protected function initSkin() : void 
@@ -104,15 +87,40 @@ package com.kevincao.kafe
 			_skin.mouseChildren = false;
 			_skin.stop();
 		}
+		
+		override protected function draw() : void 
+		{
+			if(_enabled) 
+			{
+				// check isRollOver
+				var point : Point = new Point(_skin.mouseX, _skin.mouseY);
+				point = _skin.localToGlobal(point);
+				if(_skin.hitArea) {
+					_isRollOver = _skin.hitArea.hitTestPoint(point.x, point.y);
+				} else {
+					_isRollOver = _skin.hitTestPoint(point.x, point.y);
+				}
+			}
+			
+			setupEventListeners(_enabled);
+			
+			_skin.buttonMode = _enabled;
+			_skin.mouseEnabled = _enabled;
+			
+			super.draw();
+		}
 
 		private function setupEventListeners(b : Boolean = true) : void
 		{
-			if(b) {
+			if(b) 
+			{
 				addEventListener(MouseEvent.ROLL_OVER, rollOverHandler, false, 0, true);
 				addEventListener(MouseEvent.ROLL_OUT, rollOutHandler, false, 0, true);
 				addEventListener(MouseEvent.MOUSE_DOWN, mouseDownHandler, false, 0, true);
 				addEventListener(MouseEvent.CLICK, clickHandler, false, 0, true);
-			} else {
+			} 
+			else 
+			{
 				removeEventListener(MouseEvent.ROLL_OVER, rollOverHandler);
 				removeEventListener(MouseEvent.ROLL_OUT, rollOutHandler);
 				removeEventListener(MouseEvent.MOUSE_DOWN, mouseDownHandler);
@@ -151,7 +159,8 @@ package com.kevincao.kafe
 
 		protected function startPress() : void 
 		{
-			if (_autoRepeat) {
+			if (_autoRepeat) 
+			{
 				pressTimer.delay = PRESS_TIME;
 				pressTimer.start();
 			}
@@ -165,11 +174,13 @@ package com.kevincao.kafe
 
 		private function tick(event : TimerEvent) : void 
 		{
-			if (!autoRepeat) { 
+			if (!autoRepeat) 
+			{ 
 				endPress(); 
 				return; 
 			}
-			if (pressTimer.currentCount == 1) { 
+			if (pressTimer.currentCount == 1) 
+			{ 
 				pressTimer.delay = REPEAT_INTERVAL; 
 			}
 			dispatchEvent(new KafeEvent(KafeEvent.BUTTON_DOWN, true));
@@ -192,7 +203,8 @@ package com.kevincao.kafe
 			_skin.stop();
 			_skin.buttonMode = false;
 			_skin.mouseEnabled = false;
-			if(_skin.stage) {
+			if(_skin.stage) 
+			{
 				_skin.stage.removeEventListener(MouseEvent.MOUSE_UP, mouseUpHandler);
 			}
 			
@@ -205,7 +217,8 @@ package com.kevincao.kafe
 
 		public function goto() : void 
 		{
-			if(_href && _href != "") {
+			if(_href && _href != "") 
+			{
 				navigateToURL(new URLRequest(_href), _window || "_self");
 			}
 		}

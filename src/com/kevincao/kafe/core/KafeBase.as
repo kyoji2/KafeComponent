@@ -1,7 +1,10 @@
 package com.kevincao.kafe.core 
 {
+	import com.kevincao.kafe.events.KafeEvent;
+
 	import flash.display.MovieClip;
 	import flash.display.Sprite;
+	import flash.events.Event;
 	import flash.events.EventDispatcher;
 	import flash.events.MouseEvent;
 	import flash.utils.getDefinitionByName;
@@ -23,7 +26,10 @@ package com.kevincao.kafe.core
 
 		public function set enabled(value : Boolean) : void 
 		{
+			if(_enabled == value) return;
+			
 			_enabled = value;
+			invalidate();
 		}
 
 		public function get skin() : MovieClip 
@@ -143,6 +149,8 @@ package com.kevincao.kafe.core
 			_skin = getMovieClip(skin);
 			
 			initSkin();
+			
+			invalidate();
 		}
 
 		/**
@@ -151,7 +159,8 @@ package com.kevincao.kafe.core
 		protected function initSkin() : void 
 		{
 			var hitArea : Sprite = Sprite(_skin.getChildByName("_hit"));
-			if(hitArea) {
+			if(hitArea) 
+			{
 				_skin.hitArea = hitArea;
 				hitArea.visible = false;
 				hitArea.mouseEnabled = false;
@@ -161,13 +170,16 @@ package com.kevincao.kafe.core
 
 		private function setupEventListeners(b : Boolean = true) : void
 		{
-			if(b) {
+			if(b) 
+			{
 				_skin.addEventListener(MouseEvent.MOUSE_DOWN, dispatchEvent, false, 0, true);
 				_skin.addEventListener(MouseEvent.MOUSE_UP, dispatchEvent, false, 0, true);
 				_skin.addEventListener(MouseEvent.ROLL_OVER, dispatchEvent, false, 0, true);
 				_skin.addEventListener(MouseEvent.ROLL_OUT, dispatchEvent, false, 0, true);
 				_skin.addEventListener(MouseEvent.CLICK, dispatchEvent, false, 0, true);
-			} else {
+			} 
+			else 
+			{
 				_skin.removeEventListener(MouseEvent.MOUSE_DOWN, dispatchEvent);
 				_skin.removeEventListener(MouseEvent.MOUSE_UP, dispatchEvent);
 				_skin.removeEventListener(MouseEvent.ROLL_OVER, dispatchEvent);
@@ -176,12 +188,30 @@ package com.kevincao.kafe.core
 			}
 		}
 
+		protected function invalidate() : void
+		{
+			_skin.addEventListener(Event.ENTER_FRAME, onInvalidate);
+		}
+
+		protected function onInvalidate(event : Event) : void
+		{
+			_skin.removeEventListener(Event.ENTER_FRAME, onInvalidate);
+			draw();
+		}
+
+		protected function draw() : void 
+		{
+			dispatchEvent(new KafeEvent(KafeEvent.DRAW));
+		}
+
 		protected function getMovieClip(key : Object) : MovieClip 
 		{
 			var classDef : Object = null;
-			if (key is Class) { 
+			if (key is Class) 
+			{ 
 				return (new key()) as MovieClip; 
-			} else if (key is MovieClip) {
+			} else if (key is MovieClip) 
+			{
 				return key as MovieClip;
 			}
 			
@@ -192,7 +222,8 @@ package com.kevincao.kafe.core
 			{
 			}
 			
-			if (classDef == null) {
+			if (classDef == null) 
+			{
 				return null;
 			}
 			return (new classDef()) as MovieClip;
@@ -206,7 +237,9 @@ package com.kevincao.kafe.core
 		public function destroy() : void 
 		{
 			setupEventListeners(false);
-			if(_skin.parent) {
+			_skin.removeEventListener(Event.ENTER_FRAME, onInvalidate);
+			if(_skin.parent) 
+			{
 				_skin.parent.removeChild(_skin);
 			}
 			_skin = null;

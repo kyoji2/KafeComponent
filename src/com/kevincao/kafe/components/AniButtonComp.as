@@ -5,7 +5,7 @@ package com.kevincao.kafe.components
 
 	import flash.display.MovieClip;
 	
-	[IconFile("../../../../../footage/AniButton.png")]
+	[IconFile("AniButton.png")]
 
 	/**
 	 * @author Kevin Cao

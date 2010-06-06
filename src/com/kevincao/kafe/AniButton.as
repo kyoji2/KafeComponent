@@ -46,7 +46,8 @@ package com.kevincao.kafe
 			normalFrame1 = getFrame(_skin, "over") - 1;
 			normalFrame2 = getFrame(_skin, "down") - 1;
 			
-			if(normalFrame1 == -2 || normalFrame2 == -2) {
+			if(normalFrame1 == -2 || normalFrame2 == -2) 
+			{
 				trace(getClassName() + " :: Skin Error : " + _skin.name);
 			}
 			
@@ -57,7 +58,8 @@ package com.kevincao.kafe
 			_skin.addFrameScript(normalFrame1 - 2, frameInit);
 			
 			// add stop frames
-			if(!easyMode) {
+			if(!easyMode) 
+			{
 				_skin.addFrameScript(upFrame - 1, frameStop);
 				_skin.addFrameScript(normalFrame1 - 1, frameStop);
 				_skin.addFrameScript(normalFrame2 - 1, frameStop);
@@ -67,14 +69,18 @@ package com.kevincao.kafe
 			outFrame = getFrame(_skin, "outro");
 			
 			// play intro
-			if(inFrame != -1) {
+			if(inFrame != -1) 
+			{
 				_skin.gotoAndPlay(inFrame);
-			} else {
+			} 
+			else 
+			{
 				_skin.gotoAndPlay(1);
 			}
 			
 			// handle outro finished
-			if(outFrame != -1) {
+			if(outFrame != -1) 
+			{
 				_skin.addFrameScript(_skin.totalFrames - 1, frameDispatch);
 				addEventListener(Event.COMPLETE, completeHandler, false, 0, true);
 			}
@@ -84,7 +90,8 @@ package com.kevincao.kafe
 		{
 			super.rollOverHandler(event);
 			if(_isMouseDown && lockMouseDownState) return;
-			if(!easyMode) {
+			if(!easyMode) 
+			{
 				_skin.gotoAndPlay("over");
 			}
 		}
@@ -93,7 +100,8 @@ package com.kevincao.kafe
 		{
 			super.rollOutHandler(event);
 			if(_isMouseDown && lockMouseDownState) return;
-			if(!easyMode) {
+			if(!easyMode) 
+			{
 				_skin.gotoAndPlay("out");
 			}
 		}
@@ -107,13 +115,19 @@ package com.kevincao.kafe
 		override protected function mouseUpHandler(event : MouseEvent) : void
 		{
 			super.mouseUpHandler(event);
-			if(_isRollOver) {
-				if(!easyMode) {
+			if(_isRollOver) 
+			{
+				if(!easyMode) 
+				{
 					_skin.gotoAndStop(upFrame);
-				} else {
+				} 
+				else 
+				{
 					_skin.gotoAndStop(normalFrame2);
 				}
-			} else {
+			} 
+			else 
+			{
 				_skin.gotoAndStop(normalFrame1);
 			}
 		}
@@ -123,9 +137,11 @@ package com.kevincao.kafe
 			goto();
 			
 			// play outro
-			if(outFrame != -1) {
+			if(outFrame != -1) 
+			{
 				enabled = false;
-				if(easyMode) {
+				if(easyMode) 
+				{
 					_skin.removeEventListener(Event.ENTER_FRAME, tick);
 				}
 				_skin.gotoAndPlay(outFrame);
@@ -140,13 +156,19 @@ package com.kevincao.kafe
 
 		private function tick(event : Event) : void
 		{
-			if(!_isMouseDown) {
-				if(_isRollOver) {
-					if(_skin.currentFrame < normalFrame2) {
+			if(!_isMouseDown) 
+			{
+				if(_isRollOver) 
+				{
+					if(_skin.currentFrame < normalFrame2) 
+					{
 						_skin.nextFrame();
 					}
-				} else {
-					if(_skin.currentFrame > normalFrame1) {
+				} 
+				else 
+				{
+					if(_skin.currentFrame > normalFrame1) 
+					{
 						_skin.prevFrame();
 					}
 				}
@@ -166,10 +188,14 @@ package com.kevincao.kafe
 		{
 			enabled = true;
 			
-			if(easyMode) {
+			if(easyMode) 
+			{
 				_skin.addEventListener(Event.ENTER_FRAME, tick, false, 0, true);
-			} else {
-				if(_isRollOver) {
+			} 
+			else 
+			{
+				if(_isRollOver) 
+				{
 					_skin.gotoAndPlay("over");
 				}
 			}
@@ -179,14 +205,14 @@ package com.kevincao.kafe
 		{
 			dispatchEvent(new Event(Event.COMPLETE));
 		}
-
-		
 		
 		override public function destroy() : void
 		{
-			if(easyMode) {
+			if(easyMode) 
+			{
 				_skin.removeEventListener(Event.ENTER_FRAME, tick);
 			}
+			removeEventListener(Event.COMPLETE, completeHandler);
 			super.destroy();
 		}
 	}

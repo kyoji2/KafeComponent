@@ -1,10 +1,10 @@
-package com.kevincao.kafe.components
+﻿package com.kevincao.kafe.components
 {
 	import com.kevincao.kafe.EasyButton;
 
 	import flash.display.MovieClip;
 	
-	[IconFile("../../../../../footage/EasyButton.png")]
+	[IconFile("EasyButton.png")]
 	
 	/**
 	 * @author Kevin Cao

@@ -9,7 +9,7 @@ package com.kevincao.kafeui
 	import flash.events.MouseEvent;
 	import flash.geom.Rectangle;
 
-	[IconFile("../../../../footage/HoverPane.png")]
+	[IconFile("HoverPane.png")]
 
 	/**
 	 * @author Kevin Cao

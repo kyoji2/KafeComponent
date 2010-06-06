@@ -4,7 +4,7 @@ package com.kevincao.kafe.components
 
 	import flash.display.MovieClip;
 	
-	[IconFile("../../../../../footage/KafeRadioButton.png")]
+	[IconFile("KafeRadioButton.png")]
 
 	/**
 	 * @author Kevin Cao

@@ -15,7 +15,7 @@ package com.kevincao.kafe
 		override public function set enabled(value : Boolean) : void 
 		{
 			super.enabled = value;
-			updateState();
+			invalidate();
 		}
 
 		/**
@@ -35,20 +35,32 @@ package com.kevincao.kafe
 			upFrame = downFrame - 1;
 			disabledFrame = getFrame(_skin, "disabled");
 			
-			if(downFrame == -1 || disabledFrame == -1) {
+			if(downFrame == -1 || disabledFrame == -1) 
+			{
 				trace(getClassName() + " :: Skin Error : " + _skin.name);
 			}
 		}
 
-		protected function updateState() : void 
+		override protected function draw() : void 
 		{
-			if(enabled) {
-				_skin.gotoAndStop(normalFrame);
+			if(_enabled) 
+			{
+				if(_isRollOver) 
+				{
+					_skin.gotoAndStop(upFrame);
+				} 
+				else 
+				{
+					_skin.gotoAndStop(normalFrame);
+				}
 				_skin.addEventListener(Event.ENTER_FRAME, tick, false, 0, true);
-			} else {
+			} 
+			else 
+			{
 				_skin.gotoAndStop(disabledFrame);
 				_skin.removeEventListener(Event.ENTER_FRAME, tick);
 			}
+			super.draw();
 		}
 
 		override protected function mouseDownHandler(event : MouseEvent) : void
@@ -60,22 +72,31 @@ package com.kevincao.kafe
 		override protected function mouseUpHandler(event : MouseEvent) : void
 		{
 			super.mouseUpHandler(event);
-			if(_isRollOver) {
+			if(_isRollOver) 
+			{
 				_skin.gotoAndStop(upFrame);
-			} else {
+			} 
+			else 
+			{
 				_skin.gotoAndStop(normalFrame);
 			}
 		}
 
 		private function tick(event : Event) : void
 		{
-			if(!_isMouseDown) {
-				if(_isRollOver) {
-					if(_skin.currentFrame < upFrame) {
+			if(!_isMouseDown) 
+			{
+				if(_isRollOver) 
+				{
+					if(_skin.currentFrame < upFrame) 
+					{
 						_skin.nextFrame();
 					}
-				} else {
-					if(_skin.currentFrame > normalFrame) {
+				} 
+				else 
+				{
+					if(_skin.currentFrame > normalFrame) 
+					{
 						_skin.prevFrame();
 					}
 				}
