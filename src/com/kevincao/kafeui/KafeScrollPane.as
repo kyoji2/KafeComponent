@@ -4,6 +4,7 @@ package com.kevincao.kafeui
 	import com.kevincao.kafe.VScrollBar;
 	import com.kevincao.kafe.events.ScrollEvent;
 	import com.kevincao.kafe.utils.NumberHelper;
+	import com.kevincao.kafe.utils.getDisplayObjectInstance;
 	import com.kevincao.kafeui.core.KafeUIBase;
 
 	import flash.display.DisplayObject;
@@ -11,8 +12,6 @@ package com.kevincao.kafeui
 	import flash.display.Sprite;
 	import flash.events.MouseEvent;
 	import flash.geom.Rectangle;
-	import flash.utils.getDefinitionByName;
-	import flash.utils.getQualifiedClassName;
 
 	[IconFile("KafeScrollPane.png")]
 
@@ -323,12 +322,12 @@ package com.kevincao.kafeui
 		{
 			if(key is DisplayObject) 
 			{
-//				var c : Class = Class(getDefinitionByName(getQualifiedClassName(key)));				var c : Class = Class(key.constructor);
+				//				var c : Class = Class(getDefinitionByName(getQualifiedClassName(key)));				var c : Class = Class(key.constructor);
 				return MovieClip(new c());
 			} 
 			else 
 			{
-				return MovieClip(super.getDisplayObjectInstance(key));
+				return MovieClip(getDisplayObjectInstance(key));
 			}
 		}
 

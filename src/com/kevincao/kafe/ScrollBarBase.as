@@ -141,15 +141,6 @@ package com.kevincao.kafe
 		{
 			value = value && minScrollPosition < maxScrollPosition;
 			super.enabled = value;
-			
-			if(upArrow) upArrow.enabled = value;
-			if(downArrow) downArrow.enabled = value;
-			if(track) track.enabled = value;
-			if(thumb) thumb.enabled = value;
-			
-			setupEventListeners(value);
-			
-			_skin.mouseChildren = enabled;
 		}
 
 		/**
@@ -197,6 +188,20 @@ package com.kevincao.kafe
 				// 如果没有九宫格设置，则不缩放thumb
 				scaleThumb = thumb.skin.scale9Grid != null;
 			}
+		}
+		
+		override protected function draw() : void 
+		{
+			if(upArrow) upArrow.enabled = _enabled;
+			if(downArrow) downArrow.enabled = _enabled;
+			if(track) track.enabled = _enabled;
+			if(thumb) thumb.enabled = _enabled;
+			
+			setupEventListeners(_enabled);
+			
+			_skin.mouseChildren = enabled;
+			
+			super.draw();
 		}
 
 		protected function setupEventListeners(b : Boolean = true) : void 

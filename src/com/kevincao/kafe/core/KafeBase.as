@@ -1,5 +1,6 @@
 package com.kevincao.kafe.core 
 {
+	import com.kevincao.kafe.utils.getDisplayObjectInstance;
 	import com.kevincao.kafe.events.KafeEvent;
 
 	import flash.display.MovieClip;
@@ -146,7 +147,7 @@ package com.kevincao.kafe.core
 		 */
 		public function KafeBase(skin : Object)
 		{
-			_skin = getMovieClip(skin);
+			_skin = MovieClip(getDisplayObjectInstance(skin));
 			
 			initSkin();
 			
@@ -204,30 +205,6 @@ package com.kevincao.kafe.core
 			dispatchEvent(new KafeEvent(KafeEvent.DRAW));
 		}
 
-		protected function getMovieClip(key : Object) : MovieClip 
-		{
-			var classDef : Object = null;
-			if (key is Class) 
-			{ 
-				return (new key()) as MovieClip; 
-			} else if (key is MovieClip) 
-			{
-				return key as MovieClip;
-			}
-			
-			try 
-			{
-				classDef = getDefinitionByName(key.toString());
-			} catch(e : Error) 
-			{
-			}
-			
-			if (classDef == null) 
-			{
-				return null;
-			}
-			return (new classDef()) as MovieClip;
-		}
 
 		protected function getClassName() : String 
 		{

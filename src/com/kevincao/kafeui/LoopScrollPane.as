@@ -1,5 +1,6 @@
 package com.kevincao.kafeui 
 {
+	import com.kevincao.kafe.utils.getDisplayObjectInstance;
 	import com.kevincao.kafeui.core.KafeUIBase;
 
 	import flash.display.DisplayObject;
