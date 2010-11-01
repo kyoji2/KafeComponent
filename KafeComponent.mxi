@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <macromedia-extension
 	 name="Kafe Component"
-	 version="1.3.0"
+	 version="1.3.1"
 	 type="suite"
 	 requires-restart="true">
 
@@ -17,7 +17,7 @@
 	<description>
 	<![CDATA[
 	Kafe Component For Adobe Flash<br>
-Version 1.3.0<br>
+Version 1.3.1<br>
 <br>
 Author: Kevin Cao<br>
 * blog: http://kevincao.com<br>

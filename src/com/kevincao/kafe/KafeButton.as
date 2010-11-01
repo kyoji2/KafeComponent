@@ -75,6 +75,7 @@ package com.kevincao.kafe
 
 		override protected function draw() : void 
 		{
+			super.draw();
 			if(_enabled) 
 			{
 				if(_isRollOver) 
@@ -90,7 +91,6 @@ package com.kevincao.kafe
 			{
 				_skin.gotoAndStop(selected ? "selected disabled" : "disabled");
 			}
-			super.draw();
 		}
 
 		override protected function rollOverHandler(event : MouseEvent) : void
