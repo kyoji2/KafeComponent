@@ -1,7 +1,6 @@
 package com.kevincao.kafe.components
 {
-	import com.kevincao.kafe.KafeButton;
-
+	import com.kevincao.kafe.behaviors.KafeButton;
 	import flash.display.MovieClip;
 	
 	[IconFile("KafeButton.png")]

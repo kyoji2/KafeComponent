@@ -1,7 +1,7 @@
 package com.kevincao.kafe.extend 
 {
 	import com.gaiaframework.api.Gaia;
-	import com.kevincao.kafe.EasyButton;
+	import com.kevincao.kafe.behaviors.EasyButton;
 
 	/**
 	 * @author Kevin Cao

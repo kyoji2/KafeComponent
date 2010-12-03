@@ -1,16 +1,15 @@
-package com.kevincao.kafe.components 
+package com.kevincao.kafe.components
 {
-	import com.kevincao.kafe.AniButton;
-	import com.kevincao.kafe.components.ButtonBaseComp;
+	import com.kevincao.kafe.behaviors.AniButton;
 
 	import flash.display.MovieClip;
-	
+
 	[IconFile("AniButton.png")]
 
 	/**
 	 * @author Kevin Cao
 	 */
-	public class AniButtonComp extends ButtonBaseComp 
+	public class AniButtonComp extends ButtonBaseComp
 	{
 
 		public function AniButtonComp()

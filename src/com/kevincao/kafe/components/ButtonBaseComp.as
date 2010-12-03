@@ -1,7 +1,6 @@
 package com.kevincao.kafe.components 
 {
-	import com.kevincao.kafe.ButtonBase;
-	import com.kevincao.kafe.core.CompBase;
+	import com.kevincao.kafe.behaviors.ButtonBase;
 	/**
 	 * @author Kevin Cao
 	 */

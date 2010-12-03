@@ -1,7 +1,7 @@
 package com.kevincao.kafe.extend 
 {
 	import com.gaiaframework.api.Gaia;
-	import com.kevincao.kafe.KafeRadioButton;
+	import com.kevincao.kafe.behaviors.KafeRadioButton;
 
 	/**
 	 * @author Kevin Cao

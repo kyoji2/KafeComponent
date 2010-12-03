@@ -1,33 +1,34 @@
-package com.kevincao.kafe 
+package com.kevincao.kafe.behaviors
 {
+	import flash.display.MovieClip;
 	import flash.events.MouseEvent;
 
 	/**
 	 * @author Kevin Cao
 	 */
-	public class KafeRadioButton extends KafeButton 
+	public class KafeRadioButton extends KafeButton
 	{
 		protected static var buttons : Array;
 
 		protected var _groupName : String = "defaultGroupName";
 
-		public function KafeRadioButton(skin : Object)
+		public function KafeRadioButton(skin : MovieClip)
 		{
 			super(skin);
-			
+
 			KafeRadioButton.addButton(this);
 		}
 
 		protected static function addButton(rb : KafeRadioButton) : void
 		{
-			if(buttons == null) 
+			if(buttons == null)
 			{
 				buttons = [];
 			}
 			buttons.push(rb);
 		}
 
-		protected static function removeButton(rb : KafeRadioButton) : void 
+		protected static function removeButton(rb : KafeRadioButton) : void
 		{
 			buttons.splice(buttons.indexOf(rb), 1);
 		}
@@ -38,9 +39,9 @@ package com.kevincao.kafe
 		 */
 		protected static function select(rb : KafeRadioButton) : void
 		{
-			for(var i : uint = 0;i < buttons.length;i++) 
+			for(var i : uint = 0;i < buttons.length;i++)
 			{
-				if(buttons[i] != rb && buttons[i].groupName == rb.groupName) 
+				if(buttons[i] != rb && buttons[i].groupName == rb.groupName)
 				{
 					buttons[i].selected = false;
 				}
@@ -48,7 +49,7 @@ package com.kevincao.kafe
 		}
 
 		override protected function clickHandler(event : MouseEvent) : void
-		{			
+		{
 			selected = true;
 		}
 
@@ -79,15 +80,15 @@ package com.kevincao.kafe
 		override public function set selected(value : Boolean) : void
 		{
 			super.selected = value;
-			
-			if(_selected) 
+
+			if(_selected)
 			{
 				KafeRadioButton.select(this);
 			}
 		}
 
-		
-		override public function destroy() : void 
+
+		override public function destroy() : void
 		{
 			KafeRadioButton.removeButton(this);
 			super.destroy();

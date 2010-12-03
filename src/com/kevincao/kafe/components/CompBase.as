@@ -1,5 +1,6 @@
-package com.kevincao.kafe.core 
+package com.kevincao.kafe.components 
 {
+	import com.kevincao.kafe.behaviors.Behavior;
 	import flash.display.Sprite;
 
 	/**
@@ -10,9 +11,9 @@ package com.kevincao.kafe.core
 	public class CompBase extends Sprite 
 	{
 
-		private var _component : KafeBase;
+		private var _component : Behavior;
 
-		public function get component() : KafeBase 
+		public function get component() : Behavior 
 		{
 			return _component;
 		}
@@ -32,7 +33,7 @@ package com.kevincao.kafe.core
 		/**
 		 * 
 		 */
-		public function CompBase(component : KafeBase)
+		public function CompBase(component : Behavior)
 		{
 			_component = component;
 			

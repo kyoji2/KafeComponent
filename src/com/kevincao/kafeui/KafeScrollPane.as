@@ -1,12 +1,11 @@
 package com.kevincao.kafeui
 {
-	import com.kevincao.kafe.ScrollBarBase;
-	import com.kevincao.kafe.VScrollBar;
+	import com.kevincao.kafe.behaviors.ScrollBarBase;
+	import com.kevincao.kafe.behaviors.VScrollBar;
 	import com.kevincao.kafe.events.ScrollEvent;
 	import com.kevincao.kafe.utils.NumberHelper;
 	import com.kevincao.kafe.utils.getDisplayObjectInstance;
 	import com.kevincao.kafeui.core.KafeUIBase;
-
 	import flash.display.DisplayObject;
 	import flash.display.MovieClip;
 	import flash.display.Sprite;
@@ -202,8 +201,8 @@ package com.kevincao.kafeui
 				hScrollBar = new VScrollBar(getScrollBarSkin(_scrollBar));
 
 				// rotate 90
-				hScrollBar.rotation = 90;
-				hScrollBar.scaleY = -1;
+				hScrollBar.skin.rotation = 90;
+				hScrollBar.skin.scaleY = -1;
 
 				addChild(hScrollBar.skin);
 			}
@@ -251,9 +250,9 @@ package com.kevincao.kafeui
 
 			if(vScrollBar)
 			{
-				vScrollBar.visible = true;
+				vScrollBar.skin.visible = true;
 				vScrollBar.size = height;
-				vScrollBar.x = width;
+				vScrollBar.skin.x = width;
 				vScrollBar.setScrollProperties(height, 0, sourceInstance.height - height);
 				vScrollBar.lineScrollSize = height * 0.1;
 
@@ -271,16 +270,16 @@ package com.kevincao.kafeui
 					removeEventListener(MouseEvent.MOUSE_WHEEL, mouseWheelHandler);
 					if(_vertical == AUTO)
 					{
-						vScrollBar.visible = false;
+						vScrollBar.skin.visible = false;
 					}
 				}
 			}
 
 			if(hScrollBar)
 			{
-				hScrollBar.visible = true;
+				hScrollBar.skin.visible = true;
 				hScrollBar.size = width;
-				hScrollBar.y = height;
+				hScrollBar.skin.y = height;
 				hScrollBar.setScrollProperties(width, 0, sourceInstance.width - width);
 				hScrollBar.lineScrollSize = width * 0.1;
 
@@ -296,7 +295,7 @@ package com.kevincao.kafeui
 					hScrollBar.removeEventListener(ScrollEvent.SCROLL, hScrollHandler);
 					if(_horizontal == AUTO)
 					{
-						hScrollBar.visible = false;
+						hScrollBar.skin.visible = false;
 					}
 				}
 			}

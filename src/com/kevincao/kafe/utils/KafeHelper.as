@@ -1,7 +1,6 @@
 package com.kevincao.kafe.utils 
 {
-	import com.kevincao.kafe.core.CompBase;
-
+	import com.kevincao.kafe.components.CompBase;
 	import flash.display.DisplayObject;
 	import flash.display.MovieClip;
 
