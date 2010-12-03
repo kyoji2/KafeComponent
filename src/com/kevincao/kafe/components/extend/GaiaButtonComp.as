@@ -1,7 +1,7 @@
 package com.kevincao.kafe.components.extend 
 {
 	import com.kevincao.kafe.components.ButtonBaseComp;
-	import com.kevincao.kafe.extend.GaiaButton;
+	import com.kevincao.kafe.extend.GaiaKafeButton;
 
 	import flash.display.MovieClip;
 
@@ -17,41 +17,41 @@ package com.kevincao.kafe.components.extend
 
 		public function get toggle() : Boolean
 		{
-			return GaiaButton(component).toggle;
+			return GaiaKafeButton(component).toggle;
 		}
 
 		public function set toggle(value : Boolean) : void
 		{
-			GaiaButton(component).toggle = value;
+			GaiaKafeButton(component).toggle = value;
 		}
 
 		[Inspectable(defaultValue=false)]
 
 		public function get selected() : Boolean 
 		{
-			return GaiaButton(component).selected;
+			return GaiaKafeButton(component).selected;
 		}
 
 		public function set selected(value : Boolean) : void 
 		{
-			GaiaButton(component).selected = value;
+			GaiaKafeButton(component).selected = value;
 		}
 
 		[Inspectable(defaultValue="", type="String")]
 
 		public function get branch() : String
 		{
-			return GaiaButton(component).branch;
+			return GaiaKafeButton(component).branch;
 		}
 
 		public function set branch(value : String) : void
 		{
-			GaiaButton(component).branch = value;
+			GaiaKafeButton(component).branch = value;
 		}
 
 		public function GaiaButtonComp()
 		{
-			super(new GaiaButton(MovieClip(parent)));
+			super(new GaiaKafeButton(MovieClip(parent)));
 		}
 	}
 }

@@ -1,6 +1,7 @@
 package com.kevincao.kafe.behaviors
 {
 	import com.kevincao.kafe.events.KafeEvent;
+	import com.kevincao.kafe.events.KafeUIEvent;
 
 	import flash.display.MovieClip;
 	import flash.events.MouseEvent;
@@ -14,7 +15,7 @@ package com.kevincao.kafe.behaviors
 	/**
 	 * @author Kevin Cao
 	 */
-	public class ButtonBase extends Behavior
+	public class ButtonBase extends Behavior implements IButton
 	{
 
 		public static var PRESS_TIME : Number = 500;
@@ -28,16 +29,6 @@ package com.kevincao.kafe.behaviors
 		protected var _window : String;
 
 		private var pressTimer : Timer;
-
-		public function get isRollOver() : Boolean
-		{
-			return _isRollOver;
-		}
-
-		public function get isMouseDown() : Boolean
-		{
-			return _isMouseDown;
-		}
 
 		public function get href() : String
 		{
@@ -68,8 +59,8 @@ package com.kevincao.kafe.behaviors
 		{
 			_autoRepeat = value;
 		}
-		
-		
+
+
 		override public function set skin(skin : MovieClip) : void
 		{
 			super.skin = skin;
@@ -99,11 +90,11 @@ package com.kevincao.kafe.behaviors
 
 			setupEventListeners();
 		}
-		
+
 		override protected function draw() : void
 		{
 			super.draw();
-			
+
 			_skin.buttonMode = _enabled;
 			_skin.mouseEnabled = _enabled;
 		}
@@ -166,7 +157,7 @@ package com.kevincao.kafe.behaviors
 				pressTimer.delay = PRESS_TIME;
 				pressTimer.start();
 			}
-			dispatchEvent(new KafeEvent(KafeEvent.BUTTON_DOWN, true));
+			dispatchEvent(new KafeUIEvent(KafeEvent.BUTTON_DOWN, true));
 		}
 
 		internal function endPress() : void
@@ -185,7 +176,7 @@ package com.kevincao.kafe.behaviors
 			{
 				pressTimer.delay = REPEAT_INTERVAL;
 			}
-			dispatchEvent(new KafeEvent(KafeEvent.BUTTON_DOWN, true));
+			dispatchEvent(new KafeUIEvent(KafeEvent.BUTTON_DOWN, true));
 		}
 
 		// ----------------------------------

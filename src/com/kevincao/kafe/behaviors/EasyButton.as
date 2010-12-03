@@ -13,7 +13,7 @@ package com.kevincao.kafe.behaviors
 	public class EasyButton extends ButtonBase
 	{
 
-		private var upFrame : int;
+		private var overCompleteFrame : int;
 		private var normalFrame : int;
 		private var downFrame : int;
 		private var disabledFrame : int;
@@ -33,7 +33,7 @@ package com.kevincao.kafe.behaviors
 
 			normalFrame = 1;
 			downFrame = getFrame(_skin, "down");
-			upFrame = downFrame - 1;
+			overCompleteFrame = downFrame - 1;
 			disabledFrame = getFrame(_skin, "disabled");
 			downCompleteFrame = disabledFrame - 1;
 
@@ -48,10 +48,10 @@ package com.kevincao.kafe.behaviors
 		override protected function draw() : void
 		{
 			super.draw();
-			
+
 			if(_enabled)
 			{
-				_skin.gotoAndStop(_isRollOver ? upFrame : normalFrame);
+				_skin.gotoAndStop(_isRollOver ? overCompleteFrame : normalFrame);
 				_skin.addEventListener(Event.ENTER_FRAME, tick, false, 0, true);
 			}
 			else
@@ -79,7 +79,7 @@ package com.kevincao.kafe.behaviors
 			{
 				if(_isRollOver)
 				{
-					if(_skin.currentFrame < upFrame)
+					if(_skin.currentFrame < overCompleteFrame)
 					{
 						_skin.nextFrame();
 					}

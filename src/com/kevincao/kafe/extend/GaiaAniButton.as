@@ -1,14 +1,14 @@
 package com.kevincao.kafe.extend
 {
 	import com.gaiaframework.api.Gaia;
-	import com.kevincao.kafe.behaviors.EasyButton;
+	import com.kevincao.kafe.behaviors.AniButton;
 
 	import flash.display.MovieClip;
 
 	/**
 	 * @author Kevin Cao
 	 */
-	public class GaiaEasyButton extends EasyButton implements IGaiaButton
+	public class GaiaAniButton extends AniButton implements IGaiaButton
 	{
 
 		private var _branch : String;
@@ -23,7 +23,7 @@ package com.kevincao.kafe.extend
 			_branch = value;
 		}
 
-		public function GaiaEasyButton(skin : MovieClip)
+		public function GaiaAniButton(skin : MovieClip)
 		{
 			super(skin);
 		}

@@ -3,6 +3,7 @@ package com.kevincao.kafe.behaviors
 	import com.kevincao.kafe.events.KafeEvent;
 	import com.kevincao.kafe.events.ScrollEvent;
 	import com.kevincao.kafe.utils.NumberHelper;
+
 	import flash.display.MovieClip;
 	import flash.events.MouseEvent;
 

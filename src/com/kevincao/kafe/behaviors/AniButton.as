@@ -9,9 +9,9 @@ package com.kevincao.kafe.behaviors
 	import flash.events.MouseEvent;
 
 	[Event(name="intro_start", type="com.kevincao.kafe.events.AnimationEvent")]
-	[Event(name="intro_start", type="com.kevincao.kafe.events.AnimationEvent")]
-	[Event(name="intro_start", type="com.kevincao.kafe.events.AnimationEvent")]
-	[Event(name="intro_start", type="com.kevincao.kafe.events.AnimationEvent")]
+	[Event(name="intro_complete", type="com.kevincao.kafe.events.AnimationEvent")]
+	[Event(name="outro_start", type="com.kevincao.kafe.events.AnimationEvent")]
+	[Event(name="outro_complete", type="com.kevincao.kafe.events.AnimationEvent")]
 
 	/**
 	 * @author Kevin Cao
@@ -19,18 +19,19 @@ package com.kevincao.kafe.behaviors
 	public class AniButton extends ButtonBase
 	{
 
-		private var upFrame : int;
-		private var normalFrame1 : int;
-		private var normalFrame2 : int;
-		private var outFrame : int;
-		private var outCompleteFrame : int;
-		private var inFrame : int;
+		private var normalFrame : int;
+		private var overCompleteFrame : int;
+		private var outroFrame : int;
+		private var outroCompleteFrame : int;
+		private var introFrame : int;
 		private var downCompleteFrame : int;
 		private var disabledFrame : int;
+		private var downFrame : int;
 
 		private var easyMode : Boolean;
 
 		private var _locked : Boolean;
+		private var outCompleteFrame : int;
 
 
 		protected function get locked() : Boolean
@@ -41,7 +42,7 @@ package com.kevincao.kafe.behaviors
 		protected function set locked(locked : Boolean) : void
 		{
 			_locked = locked;
-			drawNow();
+			draw();
 		}
 
 		public var lockMouseDownState : Boolean = true;
@@ -57,49 +58,58 @@ package com.kevincao.kafe.behaviors
 		override protected function initSkin() : void
 		{
 			super.initSkin();
-
-			_locked = true;
-
-			upFrame = getFrame(_skin, "out") - 1;
-			normalFrame1 = getFrame(_skin, "over") - 1;
-			normalFrame2 = getFrame(_skin, "down") - 1;
-			inFrame = getFrame(_skin, "intro");
-			outFrame = getFrame(_skin, "outro");
+			
+			normalFrame = getFrame(_skin, "over") - 1;
+			downFrame = getFrame(_skin, "down");
+			introFrame = getFrame(_skin, "intro");
 			disabledFrame = getFrame(_skin, "disabled");
-			downCompleteFrame = outFrame - 1;
-			outCompleteFrame = disabledFrame - 1;
-
-			if(normalFrame1 == -2 || normalFrame2 == -2 || inFrame == -1)
+			
+			if(normalFrame == -2 || downFrame == -1 || introFrame == -1 || disabledFrame == -1)
 			{
 				trace(getClassName() + " :: Skin Error : " + _skin.name);
 			}
 
-			setupEventListeners();
-
+			overCompleteFrame = getFrame(_skin, "out") - 1;
+			
 			// easyMode means there is no "out" label
-			easyMode = upFrame == -2;
-
-			_skin.addFrameScript(normalFrame1 - 2, frameDispatchIntroComplete);
+			if(overCompleteFrame == -2)
+			{
+				easyMode = true;
+				overCompleteFrame = downFrame - 1;
+			}
+			else
+			{
+				outCompleteFrame = downFrame - 1;
+			}
+			
+			outroFrame = getFrame(_skin, "outro");
+			
+			downCompleteFrame = outroFrame == -1 ? disabledFrame - 1 : outroFrame - 1;
+			
+			_skin.addFrameScript(introFrame - 1, frameDispatchIntroStart);
+			_skin.addFrameScript(normalFrame - 2, frameDispatchIntroComplete);
 			_skin.addFrameScript(downCompleteFrame - 1, frameStop);
 
 			// add stop frames
 			if(!easyMode)
 			{
-				_skin.addFrameScript(upFrame - 1, frameStop);
-				_skin.addFrameScript(normalFrame1 - 1, frameStop);
-				_skin.addFrameScript(normalFrame2 - 1, frameStop);
+				_skin.addFrameScript(normalFrame - 1, frameStop);
+				_skin.addFrameScript(overCompleteFrame - 1, frameStop);
+				_skin.addFrameScript(outCompleteFrame - 1, frameStop);
 			}
-
-			// auto play intro
-			_skin.addFrameScript(inFrame - 1, frameDispatchIntroStart);
-			_skin.gotoAndPlay(inFrame);
 
 			// outro is optional
-			if(outFrame != -1)
+			if(outroFrame != -1)
 			{
-				_skin.addFrameScript(outFrame - 1, frameDispatchOutroStart);
-				_skin.addFrameScript(outCompleteFrame - 1, frameDispatchOutroComplete);
+				outroCompleteFrame = disabledFrame - 1;
+				_skin.addFrameScript(outroFrame - 1, frameDispatchOutroStart);
+				_skin.addFrameScript(outroCompleteFrame - 1, frameDispatchOutroComplete);
 			}
+			
+			setupEventListeners();
+			
+			// auto play intro
+			_skin.gotoAndPlay(introFrame);
 		}
 
 		override protected function draw() : void
@@ -111,14 +121,10 @@ package com.kevincao.kafe.behaviors
 			{
 				if(_enabled)
 				{
+					_skin.gotoAndStop(_isRollOver ? overCompleteFrame : normalFrame);
 					if(easyMode)
 					{
-						_skin.gotoAndStop(_isRollOver ? normalFrame2 : normalFrame1);
 						_skin.addEventListener(Event.ENTER_FRAME, tick, false, 0, true);
-					}
-					else
-					{
-						_skin.gotoAndStop(_isRollOver ? upFrame : normalFrame1);
 					}
 				}
 				else
@@ -159,7 +165,7 @@ package com.kevincao.kafe.behaviors
 		override protected function mouseDownHandler(event : MouseEvent) : void
 		{
 			super.mouseDownHandler(event);
-			_skin.gotoAndPlay("down");
+			_skin.gotoAndPlay(downFrame);
 		}
 
 		override protected function mouseUpHandler(event : MouseEvent) : void
@@ -173,9 +179,9 @@ package com.kevincao.kafe.behaviors
 			goto();
 
 			// auto play outro
-			if(outFrame != -1)
+			if(outroFrame != -1)
 			{
-				_skin.gotoAndPlay(outFrame);
+				_skin.gotoAndPlay(outroFrame);
 			}
 		}
 
@@ -185,14 +191,14 @@ package com.kevincao.kafe.behaviors
 			{
 				if(_isRollOver)
 				{
-					if(_skin.currentFrame < normalFrame2)
+					if(_skin.currentFrame < overCompleteFrame)
 					{
 						_skin.nextFrame();
 					}
 				}
 				else
 				{
-					if(_skin.currentFrame > normalFrame1)
+					if(_skin.currentFrame > normalFrame)
 					{
 						_skin.prevFrame();
 					}
@@ -224,36 +230,35 @@ package com.kevincao.kafe.behaviors
 
 		private function introStartHandler(event : AnimationEvent) : void
 		{
-			locked = true;
-
 			dispatchEvent(event);
+			
+			locked = true;
 		}
 
 		private function introCompleteHandler(event : AnimationEvent) : void
 		{
-			locked = false;
-
 			dispatchEvent(event);
+			
+			locked = false;
 		}
 
 		private function outroStartHandler(event : AnimationEvent) : void
 		{
+			dispatchEvent(event);
+			
 			locked = true;
 
 			if(easyMode)
 			{
 				_skin.removeEventListener(Event.ENTER_FRAME, tick);
 			}
-
-			dispatchEvent(event);
 		}
 
 		private function outroCompleteHandler(event : AnimationEvent) : void
 		{
+			dispatchEvent(event);
 			// auto destroy when outro complete
 			destroy();
-
-			dispatchEvent(event);
 		}
 
 
@@ -290,6 +295,7 @@ package com.kevincao.kafe.behaviors
 
 		private function frameDispatchOutroComplete() : void
 		{
+			_skin.stop();
 			_skin.dispatchEvent(new AnimationEvent(AnimationEvent.OUTRO_COMPLETE));
 		}
 	}

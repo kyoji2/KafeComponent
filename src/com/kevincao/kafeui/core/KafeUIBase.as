@@ -1,12 +1,10 @@
-package com.kevincao.kafeui.core 
+package com.kevincao.kafeui.core
 {
-	import com.kevincao.kafe.events.KafeEvent;
+	import com.kevincao.kafe.events.KafeUIEvent;
 
-	import flash.display.DisplayObject;
 	import flash.display.Sprite;
 	import flash.events.Event;
 	import flash.utils.Dictionary;
-	import flash.utils.getDefinitionByName;
 
 	[Event(name="draw", type="com.kevincao.kafe.events.KafeEvent")]
 
@@ -17,7 +15,7 @@ package com.kevincao.kafeui.core
 	 * 可视化组件
 	 * @author Kevin Cao
 	 */
-	public class KafeUIBase extends Sprite 
+	public class KafeUIBase extends Sprite
 	{
 
 		protected var avatarWidth : Number;
@@ -84,52 +82,53 @@ package com.kevincao.kafeui.core
 			_width = avatarWidth = Math.round(super.width);
 			_height = avatarHeight = Math.round(super.height);
 			// default size
-			if(_width == 0) _width = 200;			if(_height == 0) _height = 200;
+			if(_width == 0) _width = 200;
+			if(_height == 0) _height = 200;
 			scaleX = scaleY = 1;
 			rotation = 0;
 			x = Math.round(x);
 			y = Math.round(y);
 			// remove avatar
-			if(numChildren) removeChildAt(0);			
+			if(numChildren) removeChildAt(0);
 		}
 
 		/**
 		 * override
 		 */
-		protected function addChildren() : void 
+		protected function addChildren() : void
 		{
 		}
 
 		/**
 		 * override
 		 */
-		protected function removeChildren() : void 
+		protected function removeChildren() : void
 		{
 		}
 
-		protected function validateChildren() : void 
+		protected function validateChildren() : void
 		{
 			removeChildren();
 			addChildren();
 			delete invalidateDic["children"];
-			dispatchEvent(new KafeEvent(KafeEvent.CREATE));
+			dispatchEvent(new KafeUIEvent(KafeUIEvent.CREATE));
 		}
 
-		protected function validateSize() : void 
+		protected function validateSize() : void
 		{
 			delete invalidateDic["size"];
-			dispatchEvent(new KafeEvent(KafeEvent.RESIZE));
+			dispatchEvent(new KafeUIEvent(KafeUIEvent.RESIZE));
 		}
 
-		protected function validateProp() : void 
+		protected function validateProp() : void
 		{
 			delete invalidateDic["prop"];
-			dispatchEvent(new KafeEvent(KafeEvent.CHANGE));
+			dispatchEvent(new KafeUIEvent(KafeUIEvent.CHANGE));
 		}
 
 		protected function invalidateChildren() : void
 		{
-			if(!invalidateDic["children"]) 
+			if(!invalidateDic["children"])
 			{
 				invalidateDic["children"] = validateChildren;
 				invalidate();
@@ -138,7 +137,7 @@ package com.kevincao.kafeui.core
 
 		protected function invalidateSize() : void
 		{
-			if(!invalidateDic["size"]) 
+			if(!invalidateDic["size"])
 			{
 				invalidateDic["size"] = validateSize;
 				invalidate();
@@ -147,14 +146,14 @@ package com.kevincao.kafeui.core
 
 		protected function invalidateProp() : void
 		{
-			if(!invalidateDic["prop"]) 
+			if(!invalidateDic["prop"])
 			{
 				invalidateDic["prop"] = validateProp;
 				invalidate();
 			}
 		}
 
-		protected function invalidateAll() : void 
+		protected function invalidateAll() : void
 		{
 			invalidateChildren();
 			invalidateProp();
@@ -173,11 +172,11 @@ package com.kevincao.kafeui.core
 			draw();
 		}
 
-		
-		//----------------------------------
-		//  public functions
-		//----------------------------------
-		
+
+		// ----------------------------------
+		// public functions
+		// ----------------------------------
+
 
 		/**
 		 * Moves the component to the specified position.
@@ -207,17 +206,17 @@ package com.kevincao.kafeui.core
 		 */
 		public function draw() : void
 		{
-			for (var key : String in invalidateDic) 
+			for(var key : String in invalidateDic)
 			{
 				invalidateDic[key].call();
 			}
-			dispatchEvent(new KafeEvent(KafeEvent.DRAW));
+			dispatchEvent(new KafeUIEvent(KafeUIEvent.DRAW));
 		}
 
 		/**
 		 * Abstract destroy function.
 		 */
-		public function destroy() : void 
+		public function destroy() : void
 		{
 			invalidateDic = null;
 		}
