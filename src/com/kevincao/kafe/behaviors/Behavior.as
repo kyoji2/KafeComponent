@@ -84,11 +84,6 @@
 		{
 		}
 
-		protected function invalidate() : void
-		{
-			_skin.addEventListener(Event.ENTER_FRAME, onInvalidate, false, 0, true);
-		}
-
 		protected function onInvalidate(event : Event) : void
 		{
 			drawNow();
@@ -97,6 +92,14 @@
 		// ----------------------------------
 		// public functions
 		// ----------------------------------
+		
+		/**
+		 * 下一帧重绘
+		 */
+		public function invalidate() : void
+		{
+			_skin.addEventListener(Event.ENTER_FRAME, onInvalidate, false, 0, true);
+		}
 
 		/**
 		 * 立即重绘，无需等待下一帧

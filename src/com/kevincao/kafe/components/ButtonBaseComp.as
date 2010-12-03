@@ -1,40 +1,41 @@
-package com.kevincao.kafe.components 
+package com.kevincao.kafe.components
 {
-	import com.kevincao.kafe.behaviors.ButtonBase;
+	import com.kevincao.kafe.behaviors.IButton;
+
 	/**
 	 * @author Kevin Cao
 	 */
-	public class ButtonBaseComp extends CompBase 
+	public class ButtonBaseComp extends CompBase
 	{
 
 		[Inspectable(type="String", defaultValue="")]
 
-		public function get href() : String 
-		{ 
-			return ButtonBase(component).href; 
+		public function get href() : String
+		{
+			return IButton(behavior).href;
 		}
 
-		public function set href( value : String ) : void 
-		{ 
-			ButtonBase(component).href = value; 
+		public function set href(value : String) : void
+		{
+			IButton(behavior).href = value;
 		}
 
 		[Inspectable(type="String", defaultValue="_blank")]
 
-		public function get window() : String 
-		{ 
-			return ButtonBase(component).window; 
+		public function get window() : String
+		{
+			return IButton(behavior).window;
 		}
 
-		public function set window( value : String ) : void 
-		{ 
-			ButtonBase(component).window = value; 
+		public function set window(value : String) : void
+		{
+			IButton(behavior).window = value;
 		}
-		
+
 		/**
 		 * 
 		 */
-		public function ButtonBaseComp(component : ButtonBase)
+		public function ButtonBaseComp(component : IButton)
 		{
 			super(component);
 		}

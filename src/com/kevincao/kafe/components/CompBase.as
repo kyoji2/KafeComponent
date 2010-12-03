@@ -5,38 +5,38 @@ package com.kevincao.kafe.components
 	import flash.display.Sprite;
 
 	/**
-	 * Kafe
+	 * CompBase
 	 * 用复合方式构建的组件
 	 * @author Kevin Cao
 	 */
-	public class CompBase extends Sprite
+	public class CompBase extends Sprite implements IComponent
 	{
 
-		private var _component : IBehavior;
+		private var _behavior : IBehavior;
 
-		public function get component() : IBehavior
+		public function get behavior() : IBehavior
 		{
-			return _component;
+			return _behavior;
 		}
 
 		[Inspectable(defaultValue=true, verbose=1)]
 
 		public function get enabled() : Boolean
 		{
-			return _component.enabled;
+			return _behavior.enabled;
 		}
 
 		public function set enabled(value : Boolean) : void
 		{
-			_component.enabled = value;
+			_behavior.enabled = value;
 		}
 
 		/**
 		 * 
 		 */
-		public function CompBase(component : IBehavior)
+		public function CompBase(behavior : IBehavior)
 		{
-			_component = component;
+			_behavior = behavior;
 
 			init();
 		}
@@ -50,13 +50,13 @@ package com.kevincao.kafe.components
 			mouseChildren = false;
 			visible = false;
 
-			_component.enabled = _component.enabled;
+//			_behavior.enabled = _behavior.enabled;
 		}
 
 		public function destroy() : void
 		{
-			_component.destroy();
-			_component = null;
+			_behavior.destroy();
+			_behavior = null;
 		}
 	}
 }

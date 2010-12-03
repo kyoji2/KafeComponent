@@ -10,7 +10,7 @@ package com.kevincao.kafe.behaviors
 	/**
 	 * @author Kevin Cao
 	 */
-	public interface IButton
+	public interface IButton extends IBehavior
 	{
 		function get href() : String;
 

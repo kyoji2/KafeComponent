@@ -1,38 +1,40 @@
-package com.kevincao.kafe.components 
+package com.kevincao.kafe.components
 {
+	import com.kevincao.kafe.behaviors.IKafeButton;
 	import com.kevincao.kafe.behaviors.KafeRadioButton;
+
 	import flash.display.MovieClip;
-	
+
 	[IconFile("KafeRadioButton.png")]
 
 	/**
 	 * @author Kevin Cao
 	 */
-	public class KafeRadioButtonComp extends ButtonBaseComp 
+	public class KafeRadioButtonComp extends ButtonBaseComp
 	{
 
 		[Inspectable(defaultValue=false)]
 
-		public function get selected() : Boolean 
+		public function get selected() : Boolean
 		{
-			return KafeRadioButton(component).selected;
+			return IKafeButton(behavior).selected;
 		}
 
-		public function set selected(value : Boolean) : void 
+		public function set selected(value : Boolean) : void
 		{
-			KafeRadioButton(component).selected = value;
+			IKafeButton(behavior).selected = value;
 		}
 
 		[Inspectable(defaultValue="defaultGroupName")]
 
-		public function get groupName() : String 
+		public function get groupName() : String
 		{
-			return KafeRadioButton(component).groupName;
+			return KafeRadioButton(behavior).groupName;
 		}
 
-		public function set groupName(value : String) : void 
+		public function set groupName(value : String) : void
 		{
-			KafeRadioButton(component).groupName = value;
+			KafeRadioButton(behavior).groupName = value;
 		}
 
 		/**
