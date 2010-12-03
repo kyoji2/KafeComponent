@@ -1,45 +1,59 @@
-package com.kevincao.kafe.utils 
+package com.kevincao.kafe.utils
 {
-	import com.kevincao.kafe.components.CompBase;
+	import com.kevincao.kafe.components.IComponent;
+
 	import flash.display.DisplayObject;
 	import flash.display.MovieClip;
 
 	/**
 	 * @author Kevin Cao
 	 */
-	public class KafeHelper 
+	public class KafeHelper
 	{
 		/**
 		 * find kafe component in movieclip
 		 * 
 		 * @param mc:	movieclip that contain component
 		 */
-		public static function getComponent(mc : MovieClip) : CompBase 
+		public static function getComponent(mc : MovieClip) : IComponent
 		{
 			var numChildren : int = mc.numChildren;
-			for (var i : int = 0;i < numChildren;i++) 
+			for(var i : int = 0;i < numChildren;i++)
 			{
 				var child : DisplayObject = mc.getChildAt(i);
-				if (child is CompBase) 
+				if(child is IComponent)
 				{
 					// assume that we have only one component
-					return CompBase(child);
+					return IComponent(child);
 				}
 			}
 			return null;
 		}
 
 		/**
-		 * helper to destroy component
+		 * helper to destroy components
 		 * 
-		 * @param mc:	movieclip that contain component
+		 * @param mc :		movieclip that contain component
+		 * @param recurse :	递归查找子级下的component	
 		 */
-		public static function destroyComponent(mc : MovieClip) : void 
+		public static function destroyComponent(mc : MovieClip, recurse : Boolean = false) : void
 		{
-			var comp : CompBase = getComponent(mc);
-			if(comp) 
+			var comp : IComponent = getComponent(mc);
+			if(comp)
 			{
 				comp.destroy();
+			}
+			if(recurse)
+			{
+				var numChildren : int = mc.numChildren;
+				for(var i : int = 0;i < numChildren;i++)
+				{
+					var child : DisplayObject = mc.getChildAt(i);
+					if(child is MovieClip)
+					{
+						destroyComponent(MovieClip(child), true);
+					}
+				}
 			}
 		}
 	}

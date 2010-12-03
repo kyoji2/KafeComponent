@@ -1,7 +1,6 @@
 package com.kevincao.kafe.behaviors
 {
 	import com.kevincao.kafe.events.KafeEvent;
-	import com.kevincao.kafe.events.KafeUIEvent;
 
 	import flash.display.MovieClip;
 	import flash.events.MouseEvent;
@@ -157,7 +156,7 @@ package com.kevincao.kafe.behaviors
 				pressTimer.delay = PRESS_TIME;
 				pressTimer.start();
 			}
-			dispatchEvent(new KafeUIEvent(KafeEvent.BUTTON_DOWN, true));
+			dispatchEvent(new KafeEvent(KafeEvent.BUTTON_DOWN, true));
 		}
 
 		internal function endPress() : void
@@ -176,7 +175,7 @@ package com.kevincao.kafe.behaviors
 			{
 				pressTimer.delay = REPEAT_INTERVAL;
 			}
-			dispatchEvent(new KafeUIEvent(KafeEvent.BUTTON_DOWN, true));
+			dispatchEvent(new KafeEvent(KafeEvent.BUTTON_DOWN, true));
 		}
 
 		// ----------------------------------

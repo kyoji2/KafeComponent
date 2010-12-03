@@ -12,7 +12,7 @@ package com.kevincao.kafe.behaviors
 	/**
 	 * @author Kevin Cao
 	 */
-	public class ScrollBarBase extends Behavior
+	public class ScrollBarBase extends Behavior implements IScrollBar
 	{
 		static public const HORIZONTAL : String = "horizontal";
 		static public const VERTICAL : String = "vertical";
@@ -35,10 +35,10 @@ package com.kevincao.kafe.behaviors
 		private var thumbScrollOffset : Number;
 		private var inDrag : Boolean = false;
 
-		protected var upArrow : EasyButton;
-		protected var downArrow : EasyButton;
-		protected var thumb : EasyButton;
-		protected var track : EasyButton;
+		protected var upArrow : IButton;
+		protected var downArrow : IButton;
+		protected var thumb : IButton;
+		protected var track : IButton;
 
 		/**
 		 * 
@@ -256,8 +256,8 @@ package com.kevincao.kafe.behaviors
 
 			if(downArrow && upArrow)
 			{
-				upArrow[dir] = downArrow[dir] = 0;
-				downArrow[dir] = Math.max(upArrow[prop], size - downArrow[prop]);
+				upArrow.skin[dir] = downArrow.skin[dir] = 0;
+				downArrow.skin[dir] = Math.max(upArrow.skin[prop], size - downArrow.skin[prop]);
 			}
 
 			if(track)
@@ -265,13 +265,13 @@ package com.kevincao.kafe.behaviors
 
 				if(downArrow && upArrow)
 				{
-					track[dir] = upArrow[prop];
-					track[prop] = Math.max(0, size - (downArrow[prop] + upArrow[prop]));
+					track.skin[dir] = upArrow.skin[prop];
+					track.skin[prop] = Math.max(0, size - (downArrow.skin[prop] + upArrow.skin[prop]));
 				}
 				else
 				{
-					track[dir] = 0;
-					track[prop] = Math.max(0, size);
+					track.skin[dir] = 0;
+					track.skin[prop] = Math.max(0, size);
 				}
 			}
 
@@ -283,15 +283,15 @@ package com.kevincao.kafe.behaviors
 			if(!track || !thumb) return;
 
 			var per : Number = _maxScrollPosition - _minScrollPosition + _pageSize;
-			if(track[prop] <= _minThumbSize || _maxScrollPosition <= _minScrollPosition || (per == 0 || isNaN(per)))
+			if(track.skin[prop] <= _minThumbSize || _maxScrollPosition <= _minScrollPosition || (per == 0 || isNaN(per)))
 			{
-				if(scaleThumb) thumb[prop] = _minThumbSize;
+				if(scaleThumb) thumb.skin[prop] = _minThumbSize;
 				thumb.skin.visible = false;
 			}
 			else
 			{
-				if(scaleThumb) thumb[prop] = Math.round(Math.max(_minThumbSize + 1, _pageSize / per * track[prop]));
-				thumb[dir] = track[dir] + (track[prop] - thumb[prop]) * ((_scrollPosition - _minScrollPosition) / (_maxScrollPosition - _minScrollPosition));
+				if(scaleThumb) thumb.skin[prop] = Math.round(Math.max(_minThumbSize + 1, _pageSize / per * track.skin[prop]));
+				thumb.skin[dir] = track.skin[dir] + (track.skin[prop] - thumb.skin[prop]) * ((_scrollPosition - _minScrollPosition) / (_maxScrollPosition - _minScrollPosition));
 				thumb.skin.visible = enabled;
 			}
 		}
@@ -310,7 +310,7 @@ package com.kevincao.kafe.behaviors
 			{
 				var mouse : Number = _direction == ScrollBarBase.HORIZONTAL ? _skin.mouseX : _skin.mouseY;
 				// var mousePosition : Number = (mouse - track[dir]) / track[prop] * (_maxScrollPosition - _minScrollPosition) + _minScrollPosition;
-				var mousePosition : Number = NumberHelper.map(mouse - track[dir], 0, track[prop], _minScrollPosition, _maxScrollPosition);
+				var mousePosition : Number = NumberHelper.map(mouse - track.skin[dir], 0, track.skin[prop], _minScrollPosition, _maxScrollPosition);
 
 				var pgScroll : Number = pageScrollSize;
 				if(_scrollPosition < mousePosition)
@@ -336,7 +336,7 @@ package com.kevincao.kafe.behaviors
 		{
 			inDrag = true;
 			var mouse : Number = _direction == ScrollBarBase.HORIZONTAL ? _skin.mouseX : _skin.mouseY;
-			thumbScrollOffset = mouse - thumb[dir];
+			thumbScrollOffset = mouse - thumb.skin[dir];
 			_skin.stage.addEventListener(MouseEvent.MOUSE_MOVE, moveHandler, false, 0, true);
 			_skin.stage.addEventListener(MouseEvent.MOUSE_UP, upHandler, false, 0, true);
 		}
@@ -351,8 +351,8 @@ package com.kevincao.kafe.behaviors
 		protected function moveHandler(event : MouseEvent) : void
 		{
 			var mouse : Number = _direction == ScrollBarBase.HORIZONTAL ? _skin.mouseX : _skin.mouseY;
-			var pos : Number = NumberHelper.constrain(mouse - track[dir] - thumbScrollOffset, 0, track[prop] - thumb[prop]);
-			setScrollPosition(NumberHelper.map(pos, 0, track[prop] - thumb[prop], _minScrollPosition, _maxScrollPosition));
+			var pos : Number = NumberHelper.constrain(mouse - track.skin[dir] - thumbScrollOffset, 0, track.skin[prop] - thumb.skin[prop]);
+			setScrollPosition(NumberHelper.map(pos, 0, track.skin[prop] - thumb.skin[prop], _minScrollPosition, _maxScrollPosition));
 		}
 
 		// ----------------------------------
