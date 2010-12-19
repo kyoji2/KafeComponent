@@ -67,6 +67,14 @@ package com.kevincao.kafe.behaviors
 			pressTimer = new Timer(1, 0);
 			pressTimer.addEventListener(TimerEvent.TIMER, tick, false, 0, true);
 		}
+		
+		override public function set enabled(value : Boolean) : void
+		{
+			super.enabled = value;
+			
+			_skin.buttonMode = _enabled;
+			_skin.mouseEnabled = _enabled;
+		}
 
 		/**
 		 * 
@@ -90,13 +98,6 @@ package com.kevincao.kafe.behaviors
 			setupEventListeners();
 		}
 
-		override protected function draw() : void
-		{
-			super.draw();
-
-			_skin.buttonMode = _enabled;
-			_skin.mouseEnabled = _enabled;
-		}
 
 		// ----------------------------------
 		// handlers

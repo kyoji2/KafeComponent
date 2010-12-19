@@ -95,16 +95,16 @@ package com.kevincao.kafe.behaviors
 			{
 				if(_isRollOver)
 				{
-					_skin.gotoAndStop(selected ? selectedOverCompleteFrame : overCompleteFrame);
+					_skin.gotoAndStop(_selected ? selectedOverCompleteFrame : overCompleteFrame);
 				}
 				else
 				{
-					_skin.gotoAndStop(selected ? "selected" : outCompleteFrame);
+					_skin.gotoAndStop(_selected ? "selected" : outCompleteFrame);
 				}
 			}
 			else
 			{
-				_skin.gotoAndStop(selected ? "selected disabled" : "disabled");
+				_skin.gotoAndStop(_selected ? "selected disabled" : "disabled");
 			}
 		}
 
@@ -116,7 +116,7 @@ package com.kevincao.kafe.behaviors
 		{
 			super.rollOverHandler(event);
 			if(_isMouseDown && lockMouseDownState) return;
-			_skin.gotoAndPlay(selected ? "selected over" : "over");
+			_skin.gotoAndPlay(_selected ? "selected over" : "over");
 		}
 
 		override protected function rollOutHandler(event : MouseEvent) : void
@@ -124,17 +124,17 @@ package com.kevincao.kafe.behaviors
 			super.rollOutHandler(event);
 			if(_isMouseDown && lockMouseDownState) return;
 			
-			// 在这里要排除因mouseEnabled=false而产生的rollOver事件
+			// 在这里要排除因mouseEnabled=false而产生的rollOut事件
 			if(_enabled)
 			{
-				_skin.gotoAndPlay(selected ? "selected out" : "out");
+				_skin.gotoAndPlay(_selected ? "selected out" : "out");
 			}
 		}
 
 		override protected function mouseDownHandler(event : MouseEvent) : void
 		{
 			super.mouseDownHandler(event);
-			_skin.gotoAndPlay(selected ? "selected down" : "down");
+			_skin.gotoAndPlay(_selected ? "selected down" : "down");
 		}
 
 		override protected function mouseUpHandler(event : MouseEvent) : void

@@ -60,6 +60,8 @@
 		public function Behavior(skin : MovieClip)
 		{
 			this.skin = skin;
+			
+			enabled = true;
 		}
 
 		/**
