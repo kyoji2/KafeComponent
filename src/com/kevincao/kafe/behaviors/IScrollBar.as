@@ -12,10 +12,6 @@ package com.kevincao.kafe.behaviors
 	 */
 	public interface IScrollBar extends IBehavior
 	{
-		function get size() : Number;
-
-		function set size(value : Number) : void;
-
 		function get scrollPosition() : Number;
 
 		function set scrollPosition(newScrollPosition : Number) : void;
@@ -44,6 +40,6 @@ package com.kevincao.kafe.behaviors
 
 		function setScrollProperties(pageSize : Number, minScrollPosition : Number, maxScrollPosition : Number, pageScrollSize : Number = 0) : void;
 
-
+		function setSkinSize(size : Number) : void;
 	}
 }

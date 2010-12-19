@@ -26,7 +26,6 @@ package com.kevincao.kafe.behaviors
 		private var _minThumbSize : Number = 12;
 
 		private var _direction : String;
-		private var _size : Number;
 
 		private var scaleThumb : Boolean;
 
@@ -39,20 +38,6 @@ package com.kevincao.kafe.behaviors
 		protected var downArrow : IButton;
 		protected var thumb : IButton;
 		protected var track : IButton;
-
-		/**
-		 * 
-		 */
-		public function get size() : Number
-		{
-			return _size;
-		}
-
-		public function set size(value : Number) : void
-		{
-			_size = value;
-			drawLayout();
-		}
 
 		/**
 		 * 
@@ -105,10 +90,8 @@ package com.kevincao.kafe.behaviors
 
 		public function set pageSize(value : Number) : void
 		{
-			if(value > 0)
-			{
-				_pageSize = value;
-			}
+			// This uses setScrollProperties because it needs to update thumb.
+			setScrollProperties(value, _minScrollPosition, _maxScrollPosition);
 		}
 
 		/**
@@ -170,8 +153,6 @@ package com.kevincao.kafe.behaviors
 				prop = "height";
 				dir = "y";
 			}
-
-			drawLayout();
 		}
 
 		override protected function initSkin() : void
@@ -238,7 +219,7 @@ package com.kevincao.kafe.behaviors
 			}
 		}
 
-		private function getAsset(key : String) : EasyButton
+		protected function getAsset(key : String) : IButton
 		{
 			if(key != "" && _skin.getChildByName(key))
 			{
@@ -249,34 +230,7 @@ package com.kevincao.kafe.behaviors
 				return null;
 			}
 		}
-
-		protected function drawLayout() : void
-		{
-			if(!_size) _size = _skin[prop];
-
-			if(downArrow && upArrow)
-			{
-				upArrow.skin[dir] = downArrow.skin[dir] = 0;
-				downArrow.skin[dir] = Math.max(upArrow.skin[prop], size - downArrow.skin[prop]);
-			}
-
-			if(track)
-			{
-
-				if(downArrow && upArrow)
-				{
-					track.skin[dir] = upArrow.skin[prop];
-					track.skin[prop] = Math.max(0, size - (downArrow.skin[prop] + upArrow.skin[prop]));
-				}
-				else
-				{
-					track.skin[dir] = 0;
-					track.skin[prop] = Math.max(0, size);
-				}
-			}
-
-			updateThumb();
-		}
+		
 
 		protected function updateThumb() : void
 		{
@@ -358,7 +312,10 @@ package com.kevincao.kafe.behaviors
 		// ----------------------------------
 		// public functions
 		// ----------------------------------
-
+		
+		/**
+		 * 
+		 */
 		public function setScrollPosition(newScrollPosition : Number, fireEvent : Boolean = true) : void
 		{
 			var oldPosition : Number = scrollPosition;
@@ -374,10 +331,16 @@ package com.kevincao.kafe.behaviors
 
 			updateThumb();
 		}
-
+		
+		/**
+		 * 
+		 */
 		public function setScrollProperties(pageSize : Number, minScrollPosition : Number, maxScrollPosition : Number, pageScrollSize : Number = 0) : void
 		{
-			this.pageSize = pageSize;
+			if(pageSize > 0)
+			{
+				_pageSize = pageSize;
+			}
 			_minScrollPosition = minScrollPosition;
 			_maxScrollPosition = maxScrollPosition;
 			if(pageScrollSize >= 0)
@@ -387,6 +350,34 @@ package com.kevincao.kafe.behaviors
 			enabled = (_maxScrollPosition > _minScrollPosition);
 			// ensure our scroll position is still in range:
 			setScrollPosition(_scrollPosition, false);
+
+			updateThumb();
+		}
+		
+		/**
+		 * @param size :	按照给定的大小重绘滚动条的各个元件
+		 */
+		public function setSkinSize(size : Number) : void
+		{
+			if(downArrow && upArrow)
+			{
+				upArrow.skin[dir] = downArrow.skin[dir] = 0;
+				downArrow.skin[dir] = Math.max(upArrow.skin[prop], size - downArrow.skin[prop]);
+			}
+
+			if(track)
+			{
+				if(downArrow && upArrow)
+				{
+					track.skin[dir] = upArrow.skin[prop];
+					track.skin[prop] = Math.max(0, size - (downArrow.skin[prop] + upArrow.skin[prop]));
+				}
+				else
+				{
+					track.skin[dir] = 0;
+					track.skin[prop] = Math.max(0, size);
+				}
+			}
 
 			updateThumb();
 		}

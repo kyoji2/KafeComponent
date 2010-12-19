@@ -17,8 +17,8 @@ package com.kevincao.kafe.utils
 		 */
 		public static function getComponent(mc : MovieClip) : IComponent
 		{
-			var numChildren : int = mc.numChildren;
-			for(var i : int = 0;i < numChildren;i++)
+			var n : int = mc.numChildren;
+			for(var i : int = 0; i < n; i++)
 			{
 				var child : DisplayObject = mc.getChildAt(i);
 				if(child is IComponent)
@@ -45,8 +45,8 @@ package com.kevincao.kafe.utils
 			}
 			if(recurse)
 			{
-				var numChildren : int = mc.numChildren;
-				for(var i : int = 0;i < numChildren;i++)
+				var n : int = mc.numChildren;
+				for(var i : int = 0; i < n; i++)
 				{
 					var child : DisplayObject = mc.getChildAt(i);
 					if(child is MovieClip)

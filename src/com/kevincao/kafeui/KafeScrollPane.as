@@ -1,11 +1,12 @@
 package com.kevincao.kafeui
 {
-	import com.kevincao.kafe.behaviors.ScrollBarBase;
+	import com.kevincao.kafe.behaviors.IScrollBar;
 	import com.kevincao.kafe.behaviors.VScrollBar;
 	import com.kevincao.kafe.events.ScrollEvent;
 	import com.kevincao.kafe.utils.NumberHelper;
 	import com.kevincao.kafe.utils.getDisplayObjectInstance;
 	import com.kevincao.kafeui.core.KafeUIBase;
+
 	import flash.display.DisplayObject;
 	import flash.display.MovieClip;
 	import flash.display.Sprite;
@@ -20,20 +21,16 @@ package com.kevincao.kafeui
 	public class KafeScrollPane extends KafeUIBase
 	{
 
-		public static const AUTO : String = "auto";
-		public static const ALWAYS : String = "always";
-		public static const HIDE : String = "hide";
-
-		protected var vScrollBar : VScrollBar;
-		protected var hScrollBar : VScrollBar;
+		protected var vScrollBar : IScrollBar;
+		protected var hScrollBar : IScrollBar;
 
 		protected var canvas : Sprite;
 		protected var sourceInstance : DisplayObject;
 
 		protected var _scrollBar : Object = "ScrollBarSkin";
 		protected var _source : Object;
-		protected var _horizontal : String = AUTO;
-		protected var _vertical : String = AUTO;
+		protected var _horizontal : String = ScrollPolicy.AUTO;
+		protected var _vertical : String = ScrollPolicy.AUTO;
 		protected var _roundProp : Boolean = true;
 		protected var _hScrollPosition : Number = 0;
 		protected var _vScrollPosition : Number = 0;
@@ -72,7 +69,7 @@ package com.kevincao.kafeui
 		}
 
 
-		[Inspectable(defaultValue="auto", type="List", enumeration="auto,always,hide")]
+		[Inspectable(defaultValue="auto", type="List", enumeration="auto,on,off")]
 
 		public function get horizontal() : String
 		{
@@ -89,7 +86,7 @@ package com.kevincao.kafeui
 		}
 
 
-		[Inspectable(defaultValue="auto", type="List", enumeration="auto,always,hide")]
+		[Inspectable(defaultValue="auto", type="List", enumeration="auto,on,off")]
 
 		public function get vertical() : String
 		{
@@ -189,14 +186,14 @@ package com.kevincao.kafeui
 			sourceInstance.x = sourceInstance.y = 0;
 			canvas.addChild(sourceInstance);
 
-			if(_vertical == ALWAYS || _vertical == AUTO)
+			if(_vertical == ScrollPolicy.ON || _vertical == ScrollPolicy.AUTO)
 			{
 				vScrollBar = new VScrollBar(getScrollBarSkin(_scrollBar));
 
 				addChild(vScrollBar.skin);
 			}
 
-			if(_horizontal == ALWAYS || _horizontal == AUTO)
+			if(_horizontal == ScrollPolicy.ON || _horizontal == ScrollPolicy.AUTO)
 			{
 				hScrollBar = new VScrollBar(getScrollBarSkin(_scrollBar));
 
@@ -251,8 +248,8 @@ package com.kevincao.kafeui
 			if(vScrollBar)
 			{
 				vScrollBar.skin.visible = true;
-				vScrollBar.size = height;
 				vScrollBar.skin.x = width;
+				vScrollBar.setSkinSize(height);
 				vScrollBar.setScrollProperties(height, 0, sourceInstance.height - height);
 				vScrollBar.lineScrollSize = height * 0.1;
 
@@ -268,7 +265,7 @@ package com.kevincao.kafeui
 				{
 					vScrollBar.removeEventListener(ScrollEvent.SCROLL, vScrollHandler);
 					removeEventListener(MouseEvent.MOUSE_WHEEL, mouseWheelHandler);
-					if(_vertical == AUTO)
+					if(_vertical == ScrollPolicy.AUTO)
 					{
 						vScrollBar.skin.visible = false;
 					}
@@ -278,8 +275,8 @@ package com.kevincao.kafeui
 			if(hScrollBar)
 			{
 				hScrollBar.skin.visible = true;
-				hScrollBar.size = width;
 				hScrollBar.skin.y = height;
+				hScrollBar.setSkinSize(width);
 				hScrollBar.setScrollProperties(width, 0, sourceInstance.width - width);
 				hScrollBar.lineScrollSize = width * 0.1;
 
@@ -293,7 +290,7 @@ package com.kevincao.kafeui
 				else
 				{
 					hScrollBar.removeEventListener(ScrollEvent.SCROLL, hScrollHandler);
-					if(_horizontal == AUTO)
+					if(_horizontal == ScrollPolicy.AUTO)
 					{
 						hScrollBar.skin.visible = false;
 					}
@@ -346,7 +343,6 @@ package com.kevincao.kafeui
 		{
 			if(key is DisplayObject)
 			{
-				// var c : Class = Class(getDefinitionByName(getQualifiedClassName(key)));
 				var c : Class = Class(key.constructor);
 				return MovieClip(new c());
 			}
@@ -356,7 +352,7 @@ package com.kevincao.kafeui
 			}
 		}
 
-		protected function destroyScrollBar(scrollBar : ScrollBarBase) : void
+		protected function destroyScrollBar(scrollBar : IScrollBar) : void
 		{
 			scrollBar.removeEventListener(ScrollEvent.SCROLL, vScrollHandler);
 			scrollBar.destroy();
