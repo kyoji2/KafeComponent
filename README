@@ -21,7 +21,6 @@ KafeUI:
 Extras:
 
 * jsfl commands for quickly setting up
-* KafeTemplate.fla
 
 
 - AUTHOR:
@@ -31,6 +30,8 @@ Kevin Cao ( http://kevincao.com )
 
 - CHANGELOG:
 
+v1.3.1: refactor
+		AniButton now support disabled state
 v1.3.0: rewrite KafeUI, now support more specific invalidation
 		add HLoopScrollPane and VLoopScrollPane
 v1.2.6:	add KafeHelper

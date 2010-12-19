@@ -28,7 +28,6 @@ Author: Kevin Cao<br>
 	<ui-access>
 	<![CDATA[
 	Window > Components
-	Window > Common Libraries > KafeTemplate
 	Command > Kafe
 	]]>
 	</ui-access>
@@ -52,9 +51,7 @@ Author: Kevin Cao<br>
 		<file source="jsfl/AniButton Easy Mode Setup.jsfl" destination="$flash/Commands/Kafe" />
 		<file source="jsfl/AniButton Setup.jsfl" destination="$flash/Commands/Kafe" />
 		<file source="jsfl/EasyButton Setup.jsfl" destination="$flash/Commands/Kafe" />
-		<file source="jsfl/KafeButton Setup.jsfl" destination="$flash/Commands/Kafe" />
-		
-		<file source="fla/template/KafeTemplate.fla" destination="$flash/Libraries" />		
+		<file source="jsfl/KafeButton Setup.jsfl" destination="$flash/Commands/Kafe" />	
 	</files>
 
 </macromedia-extension>
