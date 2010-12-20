@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<project name="KafeComponent" basedir="." default="compile">
+	<!-- set up a prefix for all environment variables -->
+	<property environment="env."/>
+	
+	<!-- System environment must contain FLEX_HOME variable that points to Flex SDK -->
+	<property name="FLEX_HOME" location="${env.FLEX_HOME}"/>
+	
+	<!-- identify properties file -->
+	<property file="build.properties"/>
+	
+	<!-- Compile Release SWC -->
+	<target name="compile" description="compile swc">
+		<echo>[compile] Compiling release SWC</echo>
+		<echo>[compile] Using Flex SDK at: ${FLEX_HOME}</echo>
+		<java jar="${compc}" dir="${FLEX_HOME}/frameworks" fork="true" failonerror="true">
+			<arg value="-output=${bin.loc}/${project.name.versioned}.swc"/>
+			<arg value="-source-path=${main.src.loc}/"/>
+			<arg value="-include-sources=${main.src.loc}/"/>
+			<arg value="-external-library-path+=${lib.loc}"/>
+			<arg value="-debug=true"/>
+		</java>
+		<echo>[compile] Release SWC ${project.name.versioned}.swc created successfully</echo>
+	</target>
+</project>
