@@ -9,10 +9,12 @@ package com.kevincao.kafe.components
 {
 	import com.kevincao.kafe.behaviors.IBehavior;
 
+	import flash.events.IEventDispatcher;
+
 	/**
 	 * @author Kevin Cao
 	 */
-	public interface IComponent
+	public interface IComponent extends IEventDispatcher
 	{
 		function get behavior() : IBehavior;
 
