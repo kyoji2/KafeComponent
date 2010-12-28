@@ -12,7 +12,7 @@ package com.kevincao.kafe.behaviors
 	/**
 	 * @author Kevin Cao
 	 */
-	public class KafeButton extends ButtonBase implements IKafeButton
+	public class KafeButton extends ButtonBase implements ISelectableButton
 	{
 
 		protected var _selected : Boolean;

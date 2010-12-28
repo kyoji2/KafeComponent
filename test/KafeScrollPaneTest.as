@@ -16,7 +16,7 @@ package
 
 	public class KafeScrollPaneTest extends Sprite 
 	{
-		private var ksp : KafeScrollPane;
+		private var ksp : KUIScrollPane;
 
 		public function KafeScrollPaneTest()
 		{
@@ -27,7 +27,7 @@ package
 			//			ksp.source = "content";
 			//			addChild(ksp);
 
-			ksp = KafeScrollPane(getChildByName("_ksp"));
+			ksp = KUIScrollPane(getChildByName("_ksp"));
 			
 			var hbox : HBox = new HBox(this, 10, 10);
 			new PushButton(hbox, 0, 0, "setSize", clickHandler);

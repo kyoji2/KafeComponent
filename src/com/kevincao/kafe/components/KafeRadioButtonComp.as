@@ -1,6 +1,6 @@
 package com.kevincao.kafe.components
 {
-	import com.kevincao.kafe.behaviors.IKafeButton;
+	import com.kevincao.kafe.behaviors.ISelectableButton;
 	import com.kevincao.kafe.behaviors.KafeRadioButton;
 
 	import flash.display.MovieClip;
@@ -17,12 +17,12 @@ package com.kevincao.kafe.components
 
 		public function get selected() : Boolean
 		{
-			return IKafeButton(behavior).selected;
+			return ISelectableButton(behavior).selected;
 		}
 
 		public function set selected(value : Boolean) : void
 		{
-			IKafeButton(behavior).selected = value;
+			ISelectableButton(behavior).selected = value;
 		}
 
 		[Inspectable(defaultValue="defaultGroupName")]

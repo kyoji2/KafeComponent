@@ -13,14 +13,14 @@ package
 
 	public class LoopScrollPaneTest extends Sprite 
 	{
-		private var lsp : LoopScrollPane;
+		private var lsp : KUILoopScrollPane;
 
 		public function LoopScrollPaneTest()
 		{
 			stage.align = StageAlign.TOP_LEFT;
 			stage.scaleMode = StageScaleMode.NO_SCALE;
 			
-//			lsp = new HLoopScrollPane();			lsp = new VLoopScrollPane();
+//			lsp = new HLoopScrollPane();			lsp = new KUIVLoopScrollPane();
 			lsp.setSize(1000, 700);
 			lsp.source = "content";
 			addChild(lsp);

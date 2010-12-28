@@ -1,6 +1,6 @@
 package com.kevincao.kafe.components
 {
-	import com.kevincao.kafe.behaviors.IKafeButton;
+	import com.kevincao.kafe.behaviors.ISelectableButton;
 	import com.kevincao.kafe.behaviors.KafeButton;
 
 	import flash.display.MovieClip;
@@ -17,12 +17,12 @@ package com.kevincao.kafe.components
 
 		public function get toggle() : Boolean
 		{
-			return IKafeButton(behavior).toggle;
+			return ISelectableButton(behavior).toggle;
 		}
 
 		public function set toggle(value : Boolean) : void
 		{
-			IKafeButton(behavior).toggle = value;
+			ISelectableButton(behavior).toggle = value;
 		}
 
 
@@ -30,12 +30,12 @@ package com.kevincao.kafe.components
 
 		public function get selected() : Boolean
 		{
-			return IKafeButton(behavior).selected;
+			return ISelectableButton(behavior).selected;
 		}
 
 		public function set selected(value : Boolean) : void
 		{
-			IKafeButton(behavior).selected = value;
+			ISelectableButton(behavior).selected = value;
 		}
 
 		/**

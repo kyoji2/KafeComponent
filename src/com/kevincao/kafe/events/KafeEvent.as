@@ -1,5 +1,6 @@
 package com.kevincao.kafe.events 
 {
+	import com.kevincao.kafeui.events.KUIEvent;
 	import flash.events.Event;
 
 	/**
@@ -16,7 +17,7 @@ package com.kevincao.kafe.events
 
 		public override function clone() : Event 
 		{
-			return new KafeUIEvent(type, bubbles, cancelable);
+			return new KUIEvent(type, bubbles, cancelable);
 		}
 
 		public override function toString() : String 

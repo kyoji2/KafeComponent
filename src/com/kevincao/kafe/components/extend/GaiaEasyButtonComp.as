@@ -1,10 +1,10 @@
 package com.kevincao.kafe.components.extend
 {
+	import com.kevincao.kafe.behaviors.extend.GaiaEasyButton;
+	import com.kevincao.kafe.behaviors.extend.IGaiaButton;
 	import com.kevincao.kafe.components.ButtonBaseComp;
-	import com.kevincao.kafe.extend.GaiaEasyButton;
-	import com.kevincao.kafe.extend.IGaiaButton;
-
 	import flash.display.MovieClip;
+
 
 	[IconFile("GaiaEasyButton.png")]
 

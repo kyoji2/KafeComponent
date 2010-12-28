@@ -15,14 +15,14 @@
 
 	public class EaseScrollPaneTest extends Sprite 
 	{
-		private var esp : EaseScrollPane;
+		private var esp : KUIEaseScrollPane;
 
 		public function EaseScrollPaneTest()
 		{
 			stage.align = StageAlign.TOP_LEFT;
 			stage.scaleMode = StageScaleMode.NO_SCALE;
 
-			esp = EaseScrollPane(getChildByName("_esp"));
+			esp = KUIEaseScrollPane(getChildByName("_esp"));
 			
 			var hbox : HBox = new HBox(this, 10, 10);
 			new PushButton(hbox, 0, 0, "setSize", clickHandler);

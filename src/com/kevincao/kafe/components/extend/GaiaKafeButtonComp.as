@@ -1,11 +1,11 @@
 package com.kevincao.kafe.components.extend
 {
-	import com.kevincao.kafe.extend.IGaiaButton;
-	import com.kevincao.kafe.behaviors.IKafeButton;
+	import com.kevincao.kafe.behaviors.ISelectableButton;
+	import com.kevincao.kafe.behaviors.extend.GaiaKafeButton;
+	import com.kevincao.kafe.behaviors.extend.IGaiaButton;
 	import com.kevincao.kafe.components.ButtonBaseComp;
-	import com.kevincao.kafe.extend.GaiaKafeButton;
-
 	import flash.display.MovieClip;
+
 
 	[IconFile("GaiaKafeButton.png")]
 
@@ -19,24 +19,24 @@ package com.kevincao.kafe.components.extend
 
 		public function get toggle() : Boolean
 		{
-			return IKafeButton(behavior).toggle;
+			return ISelectableButton(behavior).toggle;
 		}
 
 		public function set toggle(value : Boolean) : void
 		{
-			IKafeButton(behavior).toggle = value;
+			ISelectableButton(behavior).toggle = value;
 		}
 
 		[Inspectable(defaultValue=false)]
 
 		public function get selected() : Boolean
 		{
-			return IKafeButton(behavior).selected;
+			return ISelectableButton(behavior).selected;
 		}
 
 		public function set selected(value : Boolean) : void
 		{
-			IKafeButton(behavior).selected = value;
+			ISelectableButton(behavior).selected = value;
 		}
 
 		[Inspectable(defaultValue="", type="String")]
