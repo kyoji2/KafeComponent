@@ -5,7 +5,7 @@
  * 2010.1.14
  */
 
-fl.getDocumentDOM().getTimeline().insertFrames(49);
+fl.getDocumentDOM().getTimeline().insertFrames(59);
 
 fl.getDocumentDOM().getTimeline().addNewLayer('_hit');
 fl.getDocumentDOM().getTimeline().setSelectedFrames([]);
@@ -28,6 +28,8 @@ fl.getDocumentDOM().getTimeline().insertKeyframe(29);
 fl.getDocumentDOM().getTimeline().setFrameProperty('name', 'down');
 fl.getDocumentDOM().getTimeline().insertKeyframe(39);
 fl.getDocumentDOM().getTimeline().setFrameProperty('name', 'outro');
+fl.getDocumentDOM().getTimeline().insertKeyframe(49);
+fl.getDocumentDOM().getTimeline().setFrameProperty('name', 'disabled');
 
 // Select the first frame of default layer
 fl.getDocumentDOM().getTimeline().setSelectedFrames([layerIndex + 3, 0, 1]);
