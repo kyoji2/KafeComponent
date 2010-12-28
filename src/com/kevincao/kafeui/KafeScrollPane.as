@@ -224,13 +224,15 @@ package com.kevincao.kafeui
 			if(vScrollBar)
 			{
 				removeChild(vScrollBar.skin);
-				destroyScrollBar(vScrollBar);
+				vScrollBar.removeEventListener(ScrollEvent.SCROLL, vScrollHandler);
+				vScrollBar.destroy();
 				removeEventListener(MouseEvent.MOUSE_WHEEL, mouseWheelHandler);
 			}
 			if(hScrollBar)
 			{
 				removeChild(hScrollBar.skin);
-				destroyScrollBar(hScrollBar);
+				hScrollBar.removeEventListener(ScrollEvent.SCROLL, hScrollHandler);
+				hScrollBar.destroy();
 			}
 		}
 
@@ -352,13 +354,6 @@ package com.kevincao.kafeui
 			}
 		}
 
-		protected function destroyScrollBar(scrollBar : IScrollBar) : void
-		{
-			scrollBar.removeEventListener(ScrollEvent.SCROLL, vScrollHandler);
-			scrollBar.destroy();
-		}
-
-
 		// ----------------------------------
 		// destroy
 		// ----------------------------------
@@ -367,13 +362,15 @@ package com.kevincao.kafeui
 		{
 			if(vScrollBar)
 			{
-				destroyScrollBar(vScrollBar);
+				vScrollBar.removeEventListener(ScrollEvent.SCROLL, vScrollHandler);
+				vScrollBar.destroy();
 				removeEventListener(MouseEvent.MOUSE_WHEEL, mouseWheelHandler);
 				vScrollBar = null;
 			}
 			if(hScrollBar)
 			{
-				destroyScrollBar(hScrollBar);
+				hScrollBar.removeEventListener(ScrollEvent.SCROLL, hScrollHandler);
+				hScrollBar.destroy();
 				hScrollBar = null;
 			}
 
