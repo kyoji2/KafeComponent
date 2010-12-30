@@ -10,7 +10,7 @@ package com.kevincao.kafe.behaviors
 
 		public function HScrollBar(skin : MovieClip)
 		{
-			super(skin, HORIZONTAL);
+			super(skin, ScrollBarDirection.HORIZONTAL);
 		}
 	}
 }

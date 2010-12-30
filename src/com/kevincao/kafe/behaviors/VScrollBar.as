@@ -10,7 +10,7 @@ package com.kevincao.kafe.behaviors
 
 		public function VScrollBar(skin : MovieClip)
 		{
-			super(skin, VERTICAL);
+			super(skin, ScrollBarDirection.VERTICAL);
 		}
 	}
 }

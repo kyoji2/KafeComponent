@@ -1,4 +1,4 @@
-package com.kevincao.kafeui 
+package com.kevincao.kafeui
 {
 	import com.kevincao.kafe.utils.NumberHelper;
 	import com.kevincao.kafe.utils.getDisplayObjectInstance;
@@ -15,18 +15,23 @@ package com.kevincao.kafeui
 	/**
 	 * @author Kevin Cao
 	 */
-	public class KUIHoverPane extends KUIBase 
+	public class KUIHoverPane extends KUIBase
 	{
 
 		protected var canvas : Sprite;
 		protected var sourceInstance : DisplayObject;
 
-		private var isRollOver : Boolean;
-		private var tx : Number = 0;
-		private var ty : Number = 0;
+		protected var isRollOver : Boolean;
+		protected var tx : Number = 0;
+		protected var ty : Number = 0;
 
-		private var _source : Object;
-		private var _edgeRange : Number = 0.1;
+		protected var _source : Object;
+		protected var _edgeRange : Number = 0.1;
+
+		protected var _hScrollPosition : Number = 0;
+		protected var _vScrollPosition : Number = 0;
+
+		protected var _roundProp : Boolean = true;
 
 		[Inspectable(defaultValue=0.2)]
 		public var ease : Number = 0.2;
@@ -50,17 +55,79 @@ package com.kevincao.kafeui
 
 		[Inspectable(defaultValue="", type="String")]
 
-		public function get source() : Object 
+		public function get source() : Object
 		{
 			return _source;
 		}
 
-		public function set source(value : Object) : void 
+		public function set source(value : Object) : void
 		{
 			if(_source == value) return;
-			
+
 			_source = value;
 			invalidateAll();
+		}
+
+		[Inspectable(defaultValue="0", type="Number")]
+
+		/**
+		 * 
+		 * @return	0~1
+		 */
+		public function get vScrollPosition() : Number
+		{
+			return _vScrollPosition;
+		}
+
+		/**
+		 * 
+		 * @param value:	0~1
+		 */
+		public function set vScrollPosition(value : Number) : void
+		{
+			if(_vScrollPosition == value)
+				return;
+
+			_vScrollPosition = value;
+			invalidateProp();
+
+		}
+
+
+		[Inspectable(defaultValue="0", type="Number")]
+
+		/**
+		 * 
+		 * @return	0~1
+		 */
+		public function get hScrollPosition() : Number
+		{
+			return _hScrollPosition;
+		}
+
+		/**
+		 * 
+		 * @param value:	0~1
+		 */
+		public function set hScrollPosition(value : Number) : void
+		{
+			if(_hScrollPosition == value)
+				return;
+
+			_hScrollPosition = value;
+			invalidateProp();
+		}
+
+		[Inspectable(defaultValue=true)]
+
+		public function get roundProp() : Boolean
+		{
+			return _roundProp;
+		}
+
+		public function set roundProp(value : Boolean) : void
+		{
+			_roundProp = value;
 		}
 
 		/**
@@ -71,58 +138,91 @@ package com.kevincao.kafeui
 			super();
 		}
 
-		override protected function addChildren() : void
+
+		// ----------------------------------
+		// override method
+		// ----------------------------------
+
+		override protected function init() : void
 		{
-			if(source == null || source == "") return;			
-			
+			super.init();
+
+			canvas = new Sprite();
+			addChild(canvas);
+		}
+
+		override protected function validateChildren() : void
+		{
+			if(source == null || source == "") return;
+
+			if(sourceInstance)
+			{
+				canvas.removeChild(sourceInstance);
+			}
+
 			sourceInstance = getDisplayObjectInstance(_source);
+			if(!sourceInstance)
+			{
+				throw new Error(this + " :: can't find source!");
+			}
 			sourceInstance.x = tx;
 			sourceInstance.y = ty;
 			tx = ty = 0;
-			
-			canvas = new Sprite();
-			addChild(canvas);
+
 			canvas.scrollRect = new Rectangle(0, 0, width, height);
 			canvas.addChild(sourceInstance);
+
+			invalidateSizeFlag = true;
+			invalidatePropFlag = true;
+
+			super.validateChildren();
 		}
 
-		
-		override protected function removeChildren() : void 
+		override protected function validateSize() : void
 		{
-			if(canvas) 
-			{
-				if(canvas.parent) 
-				{
-					canvas.parent.removeChild(canvas);
-				}
-				if(sourceInstance) 
-				{
-					canvas.removeChild(sourceInstance);
-				}
-			}
-		}
+			canvas.scrollRect = new Rectangle(0, 0, width, height);
+			canvas.graphics.clear();
+			canvas.graphics.beginFill(0, 0);
+			canvas.graphics.drawRect(0, 0, width, height);
+			canvas.graphics.endFill();
 
-		
-		override protected function validateSize() : void 
-		{
-			if(sourceInstance) 
+			if(sourceInstance)
 			{
-				if(width < sourceInstance.width || height < sourceInstance.height) 
+				if(width < sourceInstance.width || height < sourceInstance.height)
 				{
 					setupEventListeners(true);
-				} 
-				else 
+				}
+				else
 				{
 					setupEventListeners(false);
 				}
 			}
-			
+
 			super.validateSize();
 		}
 
-		//----------------------------------
-		//  handlers
-		//----------------------------------
+
+		override protected function validateProp() : void
+		{
+			if(sourceInstance)
+			{
+				if(width < sourceInstance.width)
+				{
+					tx = NumberHelper.interpolate(_hScrollPosition, 0, width - sourceInstance.width);
+				}
+				if(height < sourceInstance.height)
+				{
+					ty = NumberHelper.interpolate(_vScrollPosition, 0, height - sourceInstance.height);
+				}
+			}
+
+			super.validateProp();
+		}
+
+
+		// ----------------------------------
+		// handlers
+		// ----------------------------------
 
 		private function rollOverHandler(event : MouseEvent) : void
 		{
@@ -134,38 +234,47 @@ package com.kevincao.kafeui
 			isRollOver = false;
 		}
 
-		protected function tick(event : Event) : void 
+		protected function tick(event : Event) : void
 		{
 			var mx : Number = width - sourceInstance.width;
 			var my : Number = height - sourceInstance.height;
-			
-			if(isRollOver) 
+
+			if(isRollOver)
 			{
-				tx = NumberHelper.map(mouseX, width * edgeRange, width * (1 - edgeRange), 0, mx);				ty = NumberHelper.map(mouseY, height * edgeRange, height * (1 - edgeRange), 0, my);
+				tx = NumberHelper.map(mouseX, width * edgeRange, width * (1 - edgeRange), 0, mx);
+				ty = NumberHelper.map(mouseY, height * edgeRange, height * (1 - edgeRange), 0, my);
+				_hScrollPosition = NumberHelper.normalize(tx, 0, width - sourceInstance.width);
+				_vScrollPosition = NumberHelper.normalize(ty, 0, height - sourceInstance.height);
 			}
-			
-			if(mx < 0) 
+
+			if(mx < 0)
 			{
 				sourceInstance.x += (tx - sourceInstance.x) * ease;
 				sourceInstance.x = NumberHelper.constrain(sourceInstance.x, 0, mx);
 			}
-			
-			if(my < 0) 
+
+			if(my < 0)
 			{
 				sourceInstance.y += (ty - sourceInstance.y) * ease;
 				sourceInstance.y = NumberHelper.constrain(sourceInstance.y, 0, my);
+			}
+
+			if(_roundProp)
+			{
+				sourceInstance.x = Math.round(sourceInstance.x);
+				sourceInstance.y = Math.round(sourceInstance.y);
 			}
 		}
 
 		private function setupEventListeners(b : Boolean = true) : void
 		{
-			if(b) 
+			if(b)
 			{
 				canvas.addEventListener(MouseEvent.ROLL_OVER, rollOverHandler, false, 0, true);
 				canvas.addEventListener(MouseEvent.ROLL_OUT, rollOutHandler, false, 0, true);
 				canvas.addEventListener(Event.ENTER_FRAME, tick, false, 0, true);
-			} 
-			else 
+			}
+			else
 			{
 				canvas.removeEventListener(MouseEvent.ROLL_OVER, rollOverHandler);
 				canvas.removeEventListener(MouseEvent.ROLL_OUT, rollOutHandler);
@@ -173,9 +282,10 @@ package com.kevincao.kafeui
 			}
 		}
 
-		//----------------------------------
-		//  destroy
-		//----------------------------------
+
+		// ----------------------------------
+		// destroy
+		// ----------------------------------
 
 		override public function destroy() : void
 		{

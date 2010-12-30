@@ -1,18 +1,17 @@
 package com.kevincao.kafeui.core
 {
 	import com.kevincao.kafeui.events.KUIEvent;
+
 	import flash.display.Sprite;
 	import flash.events.Event;
-	import flash.utils.Dictionary;
 
+	[Event(name="draw", type="com.kevincao.kafeui.events.KUIEvent")]
 
-	[Event(name="draw", type="com.kevincao.kafe.events.KafeEvent")]
+	[Event(name="change", type="com.kevincao.kafeui.events.KUIEvent")]
 
-	[Event(name="resize", type="com.kevincao.kafe.events.KafeEvent")]
+	[Event(name="resize", type="com.kevincao.kafeui.events.KUIEvent")]
 
 	/**
-	 * KafeUI
-	 * 可视化组件
 	 * @author Kevin Cao
 	 */
 	public class KUIBase extends Sprite
@@ -21,15 +20,24 @@ package com.kevincao.kafeui.core
 		protected var avatarWidth : Number;
 		protected var avatarHeight : Number;
 
+		protected var _x : Number;
+		protected var _y : Number;
+
 		protected var _width : Number = 0;
 		protected var _height : Number = 0;
 
-		protected var invalidateDic : Dictionary;
+		protected var invalidateSizeFlag : Boolean;
+		protected var invalidateChildrenFlag : Boolean;
+		protected var invalidatePropFlag : Boolean;
 
-		override public function set width(w : Number) : void
+		/**
+		 * Sets/gets the width of the component.
+		 */
+		override public function set width(value : Number) : void
 		{
-			_width = w;
-			invalidateSize();
+			if(_width == value) return;
+			_width = value;
+			setSize(value, _height);
 		}
 
 		override public function get width() : Number
@@ -40,10 +48,11 @@ package com.kevincao.kafeui.core
 		/**
 		 * Sets/gets the height of the component.
 		 */
-		override public function set height(h : Number) : void
+		override public function set height(value : Number) : void
 		{
-			_height = h;
-			invalidateSize();
+			if(_height == value) return;
+			_height = value;
+			setSize(_width, value);
 		}
 
 		override public function get height() : Number
@@ -52,19 +61,31 @@ package com.kevincao.kafeui.core
 		}
 
 		/**
-		 * Overrides the setter for x to always place the component on a whole pixel.
+		 * Sets/gets the x of the component.
 		 */
 		override public function set x(value : Number) : void
 		{
-			super.x = Math.round(value);
+			if(_x == value) return;
+			move(value, _y);
+		}
+
+		override public function get x() : Number
+		{
+			return (isNaN(_x)) ? super.x : _x;
 		}
 
 		/**
-		 * Overrides the setter for y to always place the component on a whole pixel.
+		 * Sets/gets the y of the component.
 		 */
 		override public function set y(value : Number) : void
 		{
-			super.y = Math.round(value);
+			if(_y == value) return;
+			move(_x, value);
+		}
+
+		override public function get y() : Number
+		{
+			return (isNaN(_y)) ? super.y : _y;
 		}
 
 		/**
@@ -78,98 +99,94 @@ package com.kevincao.kafeui.core
 
 		protected function init() : void
 		{
-			invalidateDic = new Dictionary(true);
-			_width = avatarWidth = Math.round(super.width);
-			_height = avatarHeight = Math.round(super.height);
-			// default size
-			if(_width == 0) _width = 200;
-			if(_height == 0) _height = 200;
-			scaleX = scaleY = 1;
+			var r : Number = rotation;
 			rotation = 0;
-			x = Math.round(x);
-			y = Math.round(y);
+
+			avatarWidth = Math.round(super.width);
+			avatarHeight = Math.round(super.height);
+			// default size
+			if(avatarWidth == 0) avatarWidth = 200;
+			if(avatarHeight == 0) avatarHeight = 200;
+			setSize(avatarWidth, avatarHeight);
+
+			move(super.x, super.y);
+
+			rotation = r;
+			
+			scaleX = scaleY = 1;
+
 			// remove avatar
-			if(numChildren) removeChildAt(0);
-		}
-
-		/**
-		 * override
-		 */
-		protected function addChildren() : void
-		{
-		}
-
-		/**
-		 * override
-		 */
-		protected function removeChildren() : void
-		{
+			while(numChildren) removeChildAt(0);
 		}
 
 		protected function validateChildren() : void
 		{
-			removeChildren();
-			addChildren();
-			delete invalidateDic["children"];
-			dispatchEvent(new KUIEvent(KUIEvent.CREATE));
+			invalidateChildrenFlag = false;
+			dispatchEvent(new KUIEvent(KUIEvent.DRAW));
 		}
 
 		protected function validateSize() : void
 		{
-			delete invalidateDic["size"];
+			invalidateSizeFlag = false;
 			dispatchEvent(new KUIEvent(KUIEvent.RESIZE));
 		}
 
 		protected function validateProp() : void
 		{
-			delete invalidateDic["prop"];
+			invalidatePropFlag = false;
 			dispatchEvent(new KUIEvent(KUIEvent.CHANGE));
 		}
 
 		protected function invalidateChildren() : void
 		{
-			if(!invalidateDic["children"])
-			{
-				invalidateDic["children"] = validateChildren;
-				invalidate();
-			}
+			invalidateChildrenFlag = true;
+			invalidate();
 		}
 
 		protected function invalidateSize() : void
 		{
-			if(!invalidateDic["size"])
-			{
-				invalidateDic["size"] = validateSize;
-				invalidate();
-			}
+			invalidateSizeFlag = true;
+			invalidate();
 		}
 
 		protected function invalidateProp() : void
 		{
-			if(!invalidateDic["prop"])
-			{
-				invalidateDic["prop"] = validateProp;
-				invalidate();
-			}
+			invalidatePropFlag = true;
+			invalidate();
 		}
 
 		protected function invalidateAll() : void
 		{
 			invalidateChildren();
-			invalidateProp();
 			invalidateSize();
-			invalidate();
+			invalidateProp();
 		}
 
 		protected function invalidate() : void
 		{
-			addEventListener(Event.ENTER_FRAME, onInvalidate);
+			addEventListener(Event.ENTER_FRAME, onInvalidate, false, 0, true);
 		}
 
 		protected function onInvalidate(event : Event) : void
 		{
 			removeEventListener(Event.ENTER_FRAME, onInvalidate);
 			draw();
+		}
+
+		protected function draw() : void
+		{
+			if(invalidateChildrenFlag)
+			{
+				validateChildren();
+			}
+			if(invalidateSizeFlag)
+			{
+				validateSize();
+			}
+			if(invalidatePropFlag)
+			{
+				validateProp();
+			}
 		}
 
 
@@ -180,37 +197,45 @@ package com.kevincao.kafeui.core
 
 		/**
 		 * Moves the component to the specified position.
-		 * @param xpos the x position to move the component
-		 * @param ypos the y position to move the component
+		 * @param x: the x position to move the component
+		 * @param y: the y position to move the component
 		 */
-		public function move(xpos : Number, ypos : Number) : void
+		public function move(x : Number, y : Number) : void
 		{
-			x = Math.round(xpos);
-			y = Math.round(ypos);
+			_x = x;
+			_y = y;
+			super.x = Math.round(x);
+			super.y = Math.round(y);
+			dispatchEvent(new KUIEvent(KUIEvent.MOVE));
 		}
 
 		/**
 		 * Sets the size of the component.
-		 * @param w The width of the component.
-		 * @param h The height of the component.
+		 * @param width: The width of the component.
+		 * @param height: The height of the component.
 		 */
-		public function setSize(w : Number, h : Number) : void
+		public function setSize(width : Number, height : Number) : void
 		{
-			_width = w;
-			_height = h;
+			_width = width;
+			_height = height;
 			invalidateSize();
 		}
 
 		/**
-		 * Abstract draw function.
+		 * 
 		 */
-		public function draw() : void
+		public function validateNow() : void
 		{
-			for(var key : String in invalidateDic)
-			{
-				invalidateDic[key].call();
-			}
-			dispatchEvent(new KUIEvent(KUIEvent.DRAW));
+			invalidateAll();
+			drawNow();
+		}
+
+		/**
+		 * 
+		 */
+		public function drawNow() : void
+		{
+			onInvalidate(null);
 		}
 
 		/**
@@ -218,7 +243,7 @@ package com.kevincao.kafeui.core
 		 */
 		public function destroy() : void
 		{
-			invalidateDic = null;
+			removeEventListener(Event.ENTER_FRAME, onInvalidate);
 		}
 	}
 }

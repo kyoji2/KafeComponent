@@ -1,4 +1,4 @@
-package com.kevincao.kafeui 
+package com.kevincao.kafeui
 {
 	import com.kevincao.kafe.events.ScrollEvent;
 	import com.kevincao.kafe.utils.NumberHelper;
@@ -10,7 +10,7 @@ package com.kevincao.kafeui
 	/**
 	 * @author Kevin Cao
 	 */
-	public class KUIEaseScrollPane extends KUIScrollPane 
+	public class KUIEaseScrollPane extends KUIScrollPane
 	{
 
 		private var tx : Number = 0;
@@ -22,57 +22,64 @@ package com.kevincao.kafeui
 		/**
 		 * 
 		 */
-		public function KUIEaseScrollPane() 
+		public function KUIEaseScrollPane()
 		{
 			super();
 		}
 
-		override protected function removeChildren() : void 
+		// ----------------------------------
+		// override method
+		// ----------------------------------
+
+		override protected function validateChildren() : void
 		{
-			super.removeChildren();
+			super.validateChildren();
+
 			tx = ty = 0;
 		}
 
-		override protected function validateSize() : void 
+		override protected function validateSize() : void
 		{
 			super.validateSize();
-			
-			if((vScrollBar && vScrollBar.enabled) || (hScrollBar && hScrollBar.enabled)) 			{
+
+			if((vScrollBar && vScrollBar.enabled) || (hScrollBar && hScrollBar.enabled))
+			{
 				addEventListener(Event.ENTER_FRAME, tick, false, 0, true);
-			} 
-			else 
+			}
+			else
 			{
 				removeEventListener(Event.ENTER_FRAME, tick);
 			}
 		}
 
-		//----------------------------------
-		//  helpers
-		//----------------------------------
+		// ----------------------------------
+		// handlers
+		// ----------------------------------
 
 		private function tick(event : Event) : void
 		{
 			var dx : Number = tx - sourceInstance.x;
 			var dy : Number = ty - sourceInstance.y;
-			if(Math.abs(dx) < 0.1) 
+			if(Math.abs(dx) < 0.1)
 			{
 				sourceInstance.x = tx;
-			} 
-			else 
+			}
+			else
 			{
 				sourceInstance.x += (tx - sourceInstance.x) * ease;
 			}
-			if(Math.abs(dy) < 0.1) 
+			if(Math.abs(dy) < 0.1)
 			{
 				sourceInstance.y = ty;
-			} 
-			else 
+			}
+			else
 			{
 				sourceInstance.y += (ty - sourceInstance.y) * ease;
 			}
-			if(_roundProp) 
+			if(_roundProp)
 			{
-				sourceInstance.x = Math.round(sourceInstance.x);				sourceInstance.y = Math.round(sourceInstance.y);
+				sourceInstance.x = Math.round(sourceInstance.x);
+				sourceInstance.y = Math.round(sourceInstance.y);
 			}
 		}
 
@@ -87,6 +94,10 @@ package com.kevincao.kafeui
 			tx = -event.position;
 			_hScrollPosition = NumberHelper.normalize(event.position, hScrollBar.minScrollPosition, hScrollBar.maxScrollPosition);
 		}
+
+		// ----------------------------------
+		// destroy
+		// ----------------------------------
 
 		override public function destroy() : void
 		{

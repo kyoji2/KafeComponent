@@ -25,7 +25,6 @@ package com.kevincao.kafe.utils
 		}
 		catch(e : Error)
 		{
-			// Nothing
 		}
 
 		return null;

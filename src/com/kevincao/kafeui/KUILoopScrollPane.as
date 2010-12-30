@@ -1,4 +1,4 @@
-package com.kevincao.kafeui 
+package com.kevincao.kafeui
 {
 	import com.kevincao.kafe.utils.getDisplayObjectInstance;
 	import com.kevincao.kafeui.core.KUIBase;
@@ -26,17 +26,17 @@ package com.kevincao.kafeui
 
 		[Inspectable(defaultValue="", type="String")]
 
-		public function get source() : Object 
+		public function get source() : Object
 		{
 			return _source;
 		}
 
-		public function set source(value : Object) : void 
+		public function set source(value : Object) : void
 		{
 			if(_source == value) return;
-			
+
 			_source = value;
-			invalidateAll();
+			invalidateChildren();
 		}
 
 		[Inspectable(defaultValue=0, type="Number")]
@@ -46,70 +46,88 @@ package com.kevincao.kafeui
 			return _scroll;
 		}
 
-		public function set scroll(distance : Number) : void 
+		public function set scroll(distance : Number) : void
 		{
 			_scroll = distance;
-			
+
 			tiles[0][dir] = _scroll % tileSize;
-			
-			for (var i : int = 1;i < numTiles;i++)
+
+			for(var i : int = 1;i < numTiles;i++)
 			{
 				tiles[i][dir] = i * tileSize + tiles[0][dir];
 			}
-			
-			if(tiles[0][dir] > 0) 
+
+			if(tiles[0][dir] > 0)
 			{
 				tiles[numTiles - 1][dir] = tiles[0][dir] - tileSize;
 			}
 		}
 
-		public function KUILoopScrollPane(direction : String = "vertical") 
+		public function KUILoopScrollPane(direction : String = "vertical")
 		{
 			dir = direction == VERTICAL ? "y" : "x";
 			prop = direction = VERTICAL ? "height" : "width";
 			super();
 		}
 
-		override public function setSize(w : Number, h : Number) : void 
+		// ----------------------------------
+		// override method
+		// ----------------------------------
+
+		override public function setSize(w : Number, h : Number) : void
 		{
 			super.setSize(w, h);
-			
+
 			scrollRect = new Rectangle(0, 0, w, h);
-			
-			invalidateAll();
+
+			invalidateChildren();
 		}
 
-		override protected function addChildren() : void 
+		override protected function validateChildren() : void
 		{
 			if(_source == null || _source == "")
 				return;
-			
+
+			while(numChildren)
+			{
+				removeChildAt(0);
+			}
+			tiles = [];
+
 			var tile : DisplayObject = getDisplayObjectInstance(_source);
 			
+			if(!tile)
+			{
+				throw new Error(this + " :: can't find source!");
+			}
+
 			tileSize = tile[prop];
-			
+
 			numTiles = Math.ceil(_width / tileSize) + 1;
-			
-//			trace('numTiles: ' + (numTiles));
-			
+
 			tiles[0] = tile;
 			addChild(tile);
-			
-			for (var i : int = 1;i < numTiles;i++)
+
+			for(var i : int = 1;i < numTiles;i++)
 			{
 				tiles[i] = tile = getDisplayObjectInstance(_source);
 				tile[dir] = i * tileSize;
 				addChild(tile);
 			}
+
+			super.validateChildren();
 		}
 
-		override protected function removeChildren() : void 
+
+		// ----------------------------------
+		// destroy
+		// ----------------------------------
+
+		override public function destroy() : void
 		{
-			while(numChildren) 
-			{
-				removeChildAt(0);
-			}
 			tiles = [];
+			super.destroy();
 		}
+
 	}
 }

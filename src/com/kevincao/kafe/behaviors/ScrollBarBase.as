@@ -14,25 +14,23 @@ package com.kevincao.kafe.behaviors
 	 */
 	public class ScrollBarBase extends Behavior implements IScrollBar
 	{
-		static public const HORIZONTAL : String = "horizontal";
-		static public const VERTICAL : String = "vertical";
 
-		private var _pageSize : Number = 10;
-		private var _pageScrollSize : Number = 0;
-		private var _lineScrollSize : Number = 1;
-		private var _minScrollPosition : Number = 0;
-		private var _maxScrollPosition : Number = 0;
-		private var _scrollPosition : Number = 0;
-		private var _minThumbSize : Number = 12;
+		protected var _pageSize : Number = 10;
+		protected var _pageScrollSize : Number = 0;
+		protected var _lineScrollSize : Number = 1;
+		protected var _minScrollPosition : Number = 0;
+		protected var _maxScrollPosition : Number = 0;
+		protected var _scrollPosition : Number = 0;
+		protected var _minThumbSize : Number = 12;
 
-		private var _direction : String;
+		protected var _direction : String;
 
-		private var scaleThumb : Boolean;
+		protected var scaleThumb : Boolean;
 
-		private var prop : String;
-		private var dir : String;
-		private var thumbScrollOffset : Number;
-		private var inDrag : Boolean = false;
+		protected var prop : String;
+		protected var dir : String;
+		protected var thumbScrollOffset : Number;
+		protected var inDrag : Boolean = false;
 
 		protected var upArrow : IButton;
 		protected var downArrow : IButton;
@@ -143,7 +141,7 @@ package com.kevincao.kafe.behaviors
 			super(skin);
 
 			_direction = direction;
-			if(_direction == ScrollBarBase.HORIZONTAL)
+			if(_direction == ScrollBarDirection.HORIZONTAL)
 			{
 				prop = "width";
 				dir = "x";
@@ -161,10 +159,10 @@ package com.kevincao.kafe.behaviors
 
 			_skin.mouseEnabled = false;
 
-			upArrow = getAsset("upArrow") || getAsset("leftArrow");
-			downArrow = getAsset("downArrow") || getAsset("rightArrow");
-			track = getAsset("track");
-			thumb = getAsset("thumb");
+			upArrow = getSkinPart("upArrow") || getSkinPart("leftArrow");
+			downArrow = getSkinPart("downArrow") || getSkinPart("rightArrow");
+			track = getSkinPart("track");
+			thumb = getSkinPart("thumb");
 
 			if(upArrow)
 			{
@@ -203,15 +201,15 @@ package com.kevincao.kafe.behaviors
 		{
 			if(upArrow)
 			{
-				b ? upArrow.addEventListener(KafeEvent.BUTTON_DOWN, scrollPressHandler, false, 0, true) : upArrow.removeEventListener(KafeEvent.BUTTON_DOWN, scrollPressHandler);
+				b ? upArrow.addEventListener(KafeEvent.BUTTON_DOWN, arrowPressHandler, false, 0, true) : upArrow.removeEventListener(KafeEvent.BUTTON_DOWN, arrowPressHandler);
 			}
 			if(downArrow)
 			{
-				b ? downArrow.addEventListener(KafeEvent.BUTTON_DOWN, scrollPressHandler, false, 0, true) : downArrow.removeEventListener(KafeEvent.BUTTON_DOWN, scrollPressHandler);
+				b ? downArrow.addEventListener(KafeEvent.BUTTON_DOWN, arrowPressHandler, false, 0, true) : downArrow.removeEventListener(KafeEvent.BUTTON_DOWN, arrowPressHandler);
 			}
 			if(track)
 			{
-				b ? track.addEventListener(KafeEvent.BUTTON_DOWN, scrollPressHandler, false, 0, true) : track.removeEventListener(KafeEvent.BUTTON_DOWN, scrollPressHandler);
+				b ? track.addEventListener(KafeEvent.BUTTON_DOWN, trackPressHandler, false, 0, true) : track.removeEventListener(KafeEvent.BUTTON_DOWN, trackPressHandler);
 			}
 			if(thumb)
 			{
@@ -219,7 +217,7 @@ package com.kevincao.kafe.behaviors
 			}
 		}
 
-		protected function getAsset(key : String) : IButton
+		protected function getSkinPart(key : String) : IButton
 		{
 			if(key != "" && _skin.getChildByName(key))
 			{
@@ -230,7 +228,7 @@ package com.kevincao.kafe.behaviors
 				return null;
 			}
 		}
-		
+
 
 		protected function updateThumb() : void
 		{
@@ -250,7 +248,7 @@ package com.kevincao.kafe.behaviors
 			}
 		}
 
-		protected function scrollPressHandler(event : KafeEvent) : void
+		protected function arrowPressHandler(event : KafeEvent) : void
 		{
 			if(event.currentTarget == upArrow)
 			{
@@ -260,36 +258,37 @@ package com.kevincao.kafe.behaviors
 			{
 				setScrollPosition(_scrollPosition + _lineScrollSize);
 			}
-			else
-			{
-				var mouse : Number = _direction == ScrollBarBase.HORIZONTAL ? _skin.mouseX : _skin.mouseY;
-				// var mousePosition : Number = (mouse - track[dir]) / track[prop] * (_maxScrollPosition - _minScrollPosition) + _minScrollPosition;
-				var mousePosition : Number = NumberHelper.map(mouse - track.skin[dir], 0, track.skin[prop], _minScrollPosition, _maxScrollPosition);
+		}
 
-				var pgScroll : Number = pageScrollSize;
-				if(_scrollPosition < mousePosition)
+		protected function trackPressHandler(event : KafeEvent) : void
+		{
+			var mouse : Number = _direction == ScrollBarDirection.HORIZONTAL ? _skin.mouseX : _skin.mouseY;
+
+			var mousePosition : Number = NumberHelper.map(mouse - track.skin[dir], 0, track.skin[prop], _minScrollPosition, _maxScrollPosition);
+
+			var pgScroll : Number = pageScrollSize;
+			if(_scrollPosition < mousePosition)
+			{
+				if(_scrollPosition + pgScroll > mousePosition)
 				{
-					if(_scrollPosition + pgScroll > mousePosition)
-					{
-						event.target.endPress();
-					}
-					setScrollPosition(_scrollPosition + pgScroll);
+					event.target.endPress();
 				}
-				else if(_scrollPosition > mousePosition)
+				setScrollPosition(_scrollPosition + pgScroll);
+			}
+			else if(_scrollPosition > mousePosition)
+			{
+				if(_scrollPosition - pgScroll < mousePosition)
 				{
-					if(_scrollPosition - pgScroll < mousePosition)
-					{
-						event.target.endPress();
-					}
-					setScrollPosition(_scrollPosition - pgScroll);
+					event.target.endPress();
 				}
+				setScrollPosition(_scrollPosition - pgScroll);
 			}
 		}
 
 		protected function thumbPressHandler(event : MouseEvent) : void
 		{
 			inDrag = true;
-			var mouse : Number = _direction == ScrollBarBase.HORIZONTAL ? _skin.mouseX : _skin.mouseY;
+			var mouse : Number = _direction == ScrollBarDirection.HORIZONTAL ? _skin.mouseX : _skin.mouseY;
 			thumbScrollOffset = mouse - thumb.skin[dir];
 			_skin.stage.addEventListener(MouseEvent.MOUSE_MOVE, moveHandler, false, 0, true);
 			_skin.stage.addEventListener(MouseEvent.MOUSE_UP, upHandler, false, 0, true);
@@ -304,7 +303,7 @@ package com.kevincao.kafe.behaviors
 
 		protected function moveHandler(event : MouseEvent) : void
 		{
-			var mouse : Number = _direction == ScrollBarBase.HORIZONTAL ? _skin.mouseX : _skin.mouseY;
+			var mouse : Number = _direction == ScrollBarDirection.HORIZONTAL ? _skin.mouseX : _skin.mouseY;
 			var pos : Number = NumberHelper.constrain(mouse - track.skin[dir] - thumbScrollOffset, 0, track.skin[prop] - thumb.skin[prop]);
 			setScrollPosition(NumberHelper.map(pos, 0, track.skin[prop] - thumb.skin[prop], _minScrollPosition, _maxScrollPosition));
 		}
@@ -312,7 +311,7 @@ package com.kevincao.kafe.behaviors
 		// ----------------------------------
 		// public functions
 		// ----------------------------------
-		
+
 		/**
 		 * 
 		 */
@@ -331,7 +330,7 @@ package com.kevincao.kafe.behaviors
 
 			updateThumb();
 		}
-		
+
 		/**
 		 * 
 		 */
@@ -353,7 +352,7 @@ package com.kevincao.kafe.behaviors
 
 			updateThumb();
 		}
-		
+
 		/**
 		 * @param size :	按照给定的大小重绘滚动条的各个元件
 		 */

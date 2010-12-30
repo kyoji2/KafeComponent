@@ -7,7 +7,7 @@ package com.kevincao.kafe.components.extend
 	import flash.display.MovieClip;
 
 
-	[IconFile("GaiaRadioButton.png")]
+	[IconFile("GaiaKafeRadioButton.png")]
 
 	/**
 	 * @author Kevin Cao

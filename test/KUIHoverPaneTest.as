@@ -14,20 +14,21 @@ package
 	 * @author Kevin Cao
 	 */
 
-	public class KafeScrollPaneTest extends Sprite 
+	public class KUIHoverPaneTest extends Sprite 
 	{
-		private var ksp : KUIScrollPane;
+		private var khp : KUIHoverPane;
 
-		public function KafeScrollPaneTest()
+		public function KUIHoverPaneTest()
 		{
 			stage.align = StageAlign.TOP_LEFT;
 			stage.scaleMode = StageScaleMode.NO_SCALE;
-						//			ksp = new KafeScrollPane();
-			//			ksp.setSize(1000, 700);
-			//			ksp.source = "content";
-			//			addChild(ksp);
-
-			ksp = KUIScrollPane(getChildByName("_ksp"));
+						khp = new KUIHoverPane();
+			khp.move(100, 100);
+			khp.setSize(200, 200);
+			khp.source = "content";
+			khp.hScrollPosition = .5;
+			khp.vScrollPosition = .5;
+			addChild(khp);
 			
 			var hbox : HBox = new HBox(this, 10, 10);
 			new PushButton(hbox, 0, 0, "setSize", clickHandler);
@@ -40,16 +41,16 @@ package
 			switch(event.target.label)
 			{
 				case "setSize":
-					ksp.setSize(120, 120);
+					khp.setSize(120, 120);
 					break;
 				case "source":
-					ksp.source = "content2";
+					khp.source = "content2";
 					break;
 				case "vscroll":
-					ksp.vScrollPosition = .5;
+					khp.vScrollPosition = .5;
 					break;
 				case "hscroll":
-					ksp.hScrollPosition = 1;
+					khp.hScrollPosition = 1;
 					break;
 			}
 		}

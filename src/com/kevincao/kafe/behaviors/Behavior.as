@@ -40,6 +40,11 @@
 
 		public function set skin(skin : MovieClip) : void
 		{
+			if(!skin)
+			{
+				throw new Error(this + " :: skin can't be null.");
+			}
+
 			if(_skin)
 			{
 				destroy();
@@ -60,7 +65,7 @@
 		public function Behavior(skin : MovieClip)
 		{
 			this.skin = skin;
-			
+
 			enabled = true;
 		}
 
@@ -88,13 +93,14 @@
 
 		protected function onInvalidate(event : Event) : void
 		{
-			drawNow();
+			_skin.removeEventListener(Event.ENTER_FRAME, onInvalidate);
+			draw();
 		}
 
 		// ----------------------------------
 		// public functions
 		// ----------------------------------
-		
+
 		/**
 		 * 下一帧重绘
 		 */
@@ -108,9 +114,13 @@
 		 */
 		public function drawNow() : void
 		{
-			_skin.removeEventListener(Event.ENTER_FRAME, onInvalidate);
-			draw();
+			onInvalidate(null);
 		}
+
+
+		// ----------------------------------
+		// destroy
+		// ----------------------------------
 
 		public function destroy() : void
 		{

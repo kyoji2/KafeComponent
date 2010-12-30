@@ -10,7 +10,7 @@ package com.kevincao.kafeui.events
 		public static const DRAW : String = "draw";
 		public static const RESIZE : String = "resize";
 		public static const CHANGE : String = "change";
-		public static const CREATE : String = "create";
+		public static const MOVE : String = "move";
 
 		public function KUIEvent(type : String, bubbles : Boolean = false, cancelable : Boolean = false)
 		{
