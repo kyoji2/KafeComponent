@@ -5,9 +5,9 @@
  * @email	 	kevin@kevincao.com
  * 
  */
-package com.kevincao.kafe.behaviors.extend
+package com.kevincao.kafe.behaviors.display.extend
 {
-	import com.kevincao.kafe.behaviors.IButton;
+	import com.kevincao.kafe.behaviors.display.IButton;
 
 	/**
 	 * @author Kevin Cao

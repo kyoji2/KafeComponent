@@ -1,8 +1,8 @@
 package com.kevincao.kafe.components.extend
 {
-	import com.kevincao.kafe.behaviors.ISelectableButton;
-	import com.kevincao.kafe.behaviors.extend.GaiaKafeButton;
-	import com.kevincao.kafe.behaviors.extend.IGaiaButton;
+	import com.kevincao.kafe.behaviors.display.ISelectableButton;
+	import com.kevincao.kafe.behaviors.display.extend.GaiaKafeButton;
+	import com.kevincao.kafe.behaviors.display.extend.IGaiaButton;
 	import com.kevincao.kafe.components.ButtonBaseComp;
 	import flash.display.MovieClip;
 

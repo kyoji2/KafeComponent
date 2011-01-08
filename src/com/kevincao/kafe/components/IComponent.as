@@ -18,10 +18,6 @@ package com.kevincao.kafe.components
 	{
 		function get behavior() : IBehavior;
 
-		function get enabled() : Boolean;
-
-		function set enabled(value : Boolean) : void;
-
 		function destroy() : void;
 	}
 }

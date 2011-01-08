@@ -5,7 +5,7 @@
  * @email	 	kevin@kevincao.com
  * 
  */
-package com.kevincao.kafe.behaviors
+package com.kevincao.kafe.behaviors.display
 {
 	/**
 	 * @author Kevin Cao

@@ -1,12 +1,23 @@
 package com.kevincao.kafe.components
 {
-	import com.kevincao.kafe.behaviors.IButton;
+	import com.kevincao.kafe.behaviors.display.IButton;
 
 	/**
 	 * @author Kevin Cao
 	 */
 	public class ButtonBaseComp extends CompBase
 	{
+		[Inspectable(defaultValue=true, verbose=1)]
+
+		public function get enabled() : Boolean
+		{
+			return IButton(behavior).enabled;
+		}
+
+		public function set enabled(value : Boolean) : void
+		{
+			IButton(behavior).enabled = value;
+		}
 
 		[Inspectable(type="String", defaultValue="")]
 

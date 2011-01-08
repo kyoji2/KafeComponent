@@ -30,6 +30,7 @@ Kevin Cao ( http://kevincao.com )
 
 - CHANGELOG:
 
+v1.3.6: bugs fixed
 v1.3.1: refactor
 		AniButton now support disabled state
 v1.3.0: rewrite KafeUI, now support more specific invalidation

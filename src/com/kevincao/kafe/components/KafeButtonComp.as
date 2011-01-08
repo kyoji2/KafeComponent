@@ -1,9 +1,9 @@
 package com.kevincao.kafe.components
 {
-	import com.kevincao.kafe.behaviors.ISelectableButton;
-	import com.kevincao.kafe.behaviors.KafeButton;
-
+	import com.kevincao.kafe.behaviors.display.ISelectableButton;
+	import com.kevincao.kafe.behaviors.display.KafeButton;
 	import flash.display.MovieClip;
+
 
 	[IconFile("KafeButton.png")]
 

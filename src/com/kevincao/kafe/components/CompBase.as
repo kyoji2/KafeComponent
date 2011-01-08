@@ -19,18 +19,6 @@ package com.kevincao.kafe.components
 			return _behavior;
 		}
 
-		[Inspectable(defaultValue=true, verbose=1)]
-
-		public function get enabled() : Boolean
-		{
-			return _behavior.enabled;
-		}
-
-		public function set enabled(value : Boolean) : void
-		{
-			_behavior.enabled = value;
-		}
-
 		/**
 		 * 
 		 */
@@ -49,8 +37,6 @@ package com.kevincao.kafe.components
 			mouseEnabled = false;
 			mouseChildren = false;
 			visible = false;
-
-//			_behavior.enabled = _behavior.enabled;
 		}
 
 		public function destroy() : void

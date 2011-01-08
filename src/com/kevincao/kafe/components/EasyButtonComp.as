@@ -1,8 +1,8 @@
 ﻿package com.kevincao.kafe.components
 {
-	import com.kevincao.kafe.behaviors.EasyButton;
-
+	import com.kevincao.kafe.behaviors.display.EasyButton;
 	import flash.display.MovieClip;
+
 
 	[IconFile("EasyButton.png")]
 

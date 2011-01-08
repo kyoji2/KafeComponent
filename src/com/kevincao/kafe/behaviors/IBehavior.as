@@ -7,7 +7,6 @@
  */
 package com.kevincao.kafe.behaviors
 {
-	import flash.display.MovieClip;
 	import flash.events.IEventDispatcher;
 
 	/**
@@ -15,13 +14,7 @@ package com.kevincao.kafe.behaviors
 	 */
 	public interface IBehavior extends IEventDispatcher
 	{
-		function get enabled() : Boolean;
-
-		function set enabled(value : Boolean) : void;
-
-		function get skin() : MovieClip;
-
-		function set skin(skin : MovieClip) : void;
+		function get target() : Object;
 
 		function destroy() : void;
 	}
