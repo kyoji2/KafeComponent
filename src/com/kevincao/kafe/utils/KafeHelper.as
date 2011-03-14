@@ -1,5 +1,6 @@
 package com.kevincao.kafe.utils
 {
+	import com.kevincao.kafe.behaviors.IBehavior;
 	import com.kevincao.kafe.components.IComponent;
 
 	import flash.display.DisplayObject;
@@ -28,6 +29,17 @@ package com.kevincao.kafe.utils
 				}
 			}
 			return null;
+		}
+		
+		/**
+		 * find kafe component's behavior in movieclip
+		 * 
+		 * @param mc:	movieclip that contain component
+		 */
+		public static function getBehavior(mc : MovieClip) : IBehavior
+		{
+			var comp : IComponent = getComponent(mc);
+			return comp ? comp.behavior : null;
 		}
 
 		/**
