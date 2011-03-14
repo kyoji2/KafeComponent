@@ -18,6 +18,12 @@ package com.kevincao.kafe.events
 		public static const ANIMATION_IN_COMPLETE : String = "animationInComplete";
 		public static const ANIMATION_OUT : String = "animationOut";
 		public static const ANIMATION_OUT_COMPLETE : String = "animationOutComplete";
+		public static const OVER : String = "over";
+		public static const OVER_COMPLETE : String = "overComplete";
+		public static const OUT : String = "out";
+		public static const OUT_COMPLETE : String = "outComplete";
+		public static const DOWN : String = "down";
+		public static const DOWN_COMPLETE : String = "downComplete";
 
 		public function AnimationEvent(type : String)
 		{

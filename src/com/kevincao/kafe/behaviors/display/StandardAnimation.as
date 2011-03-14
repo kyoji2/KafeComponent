@@ -112,14 +112,14 @@ package com.kevincao.kafe.behaviors.display
 			{
 				_skin.addEventListener(AnimationEvent.ANIMATION_IN, animationInHandler, false, 0, true);
 				_skin.addEventListener(AnimationEvent.ANIMATION_IN_COMPLETE, animationInCompleteHandler, false, 0, true);
-				_skin.addEventListener(AnimationEvent.ANIMATION_OUT, animationOut, false, 0, true);
+				_skin.addEventListener(AnimationEvent.ANIMATION_OUT, animationOutHandler, false, 0, true);
 				_skin.addEventListener(AnimationEvent.ANIMATION_OUT_COMPLETE, animationOutCompleteHandler, false, 0, true);
 			}
 			else
 			{
 				_skin.removeEventListener(AnimationEvent.ANIMATION_IN, animationInHandler);
 				_skin.removeEventListener(AnimationEvent.ANIMATION_IN_COMPLETE, animationInCompleteHandler);
-				_skin.removeEventListener(AnimationEvent.ANIMATION_OUT, animationOut);
+				_skin.removeEventListener(AnimationEvent.ANIMATION_OUT, animationOutHandler);
 				_skin.removeEventListener(AnimationEvent.ANIMATION_OUT_COMPLETE, animationOutCompleteHandler);
 			}
 		}

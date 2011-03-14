@@ -1,11 +1,19 @@
 package com.kevincao.kafe.behaviors.display
 {
+	import com.kevincao.kafe.events.AnimationEvent;
 	import com.kevincao.kafe.utils.getClassName;
 	import com.kevincao.kafe.utils.getFrame;
 
 	import flash.display.MovieClip;
 	import flash.events.Event;
 	import flash.events.MouseEvent;
+	
+	[Event(name="over", type="com.kevincao.kafe.events.AnimationEvent")]
+	[Event(name="overComplete", type="com.kevincao.kafe.events.AnimationEvent")]
+	[Event(name="out", type="com.kevincao.kafe.events.AnimationEvent")]
+	[Event(name="outComplete", type="com.kevincao.kafe.events.AnimationEvent")]
+	[Event(name="down", type="com.kevincao.kafe.events.AnimationEvent")]
+	[Event(name="downComplete", type="com.kevincao.kafe.events.AnimationEvent")]
 
 	/**
 	 * @author Kevin Cao
@@ -18,6 +26,7 @@ package com.kevincao.kafe.behaviors.display
 		private var downFrame : int;
 		private var disabledFrame : int;
 		private var downCompleteFrame : int;
+		private var overFrame : int;
 
 		/**
 		 * 
@@ -33,24 +42,33 @@ package com.kevincao.kafe.behaviors.display
 
 			normalFrame = 1;
 			downFrame = getFrame(_skin, "down");
+			overFrame = normalFrame + 1;
 			overCompleteFrame = downFrame - 1;
 			disabledFrame = getFrame(_skin, "disabled");
 			downCompleteFrame = disabledFrame - 1;
 
-			if(downFrame == -1 || disabledFrame == -1)
+			// check required frames
+			if (downFrame == -1 || disabledFrame == -1)
 			{
 				trace(getClassName() + " :: Skin Error : " + _skin.name);
 			}
-			
-			// note : addFrameScript() use zero base
-			_skin.addFrameScript(downCompleteFrame - 1, frameStop);
+
+			_skin.addFrameScript(downFrame - 1, function() : void
+			{
+				dispatchEvent(new AnimationEvent(AnimationEvent.DOWN));
+			});
+			_skin.addFrameScript(downCompleteFrame - 1, function() : void
+			{
+				_skin.stop();
+				dispatchEvent(new AnimationEvent(AnimationEvent.DOWN_COMPLETE));
+			});
 		}
 
 		override protected function draw() : void
 		{
 			super.draw();
 
-			if(_enabled)
+			if (_enabled)
 			{
 				_skin.gotoAndStop(_isRollOver ? overCompleteFrame : normalFrame);
 				_skin.addEventListener(Event.ENTER_FRAME, tick, false, 0, true);
@@ -76,18 +94,34 @@ package com.kevincao.kafe.behaviors.display
 
 		private function tick(event : Event) : void
 		{
-			if(!_isMouseDown)
+			if (!_isMouseDown)
 			{
-				if(_isRollOver)
+				if (_isRollOver)
 				{
-					if(_skin.currentFrame < overCompleteFrame)
+					if (_skin.currentFrame == overFrame)
+					{
+						dispatchEvent(new AnimationEvent(AnimationEvent.OVER));
+					}
+					else if (_skin.currentFrame == overCompleteFrame - 1)
+					{
+						dispatchEvent(new AnimationEvent(AnimationEvent.OVER_COMPLETE));
+					}
+					if (_skin.currentFrame < overCompleteFrame)
 					{
 						_skin.nextFrame();
 					}
 				}
 				else
 				{
-					if(_skin.currentFrame > normalFrame)
+					if (_skin.currentFrame == overFrame)
+					{
+						dispatchEvent(new AnimationEvent(AnimationEvent.OUT_COMPLETE));
+					}
+					else if (_skin.currentFrame == overCompleteFrame - 1)
+					{
+						dispatchEvent(new AnimationEvent(AnimationEvent.OUT));
+					}
+					if (_skin.currentFrame > normalFrame)
 					{
 						_skin.prevFrame();
 					}

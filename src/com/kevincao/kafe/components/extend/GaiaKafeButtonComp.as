@@ -38,6 +38,18 @@ package com.kevincao.kafe.components.extend
 		{
 			ISelectableButton(behavior).selected = value;
 		}
+		
+		[Inspectable(defaultValue=false)]
+
+		public function get mirror() : Boolean
+		{
+			return GaiaKafeButton(behavior).mirror;
+		}
+
+		public function set mirror(value : Boolean) : void
+		{
+			GaiaKafeButton(behavior).mirror = value;
+		}
 
 		[Inspectable(defaultValue="", type="String")]
 
