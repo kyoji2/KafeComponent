@@ -41,7 +41,8 @@ package com.kevincao.kafe.behaviors.display
 			{
 				trace(getClassName() + " :: Skin Error : " + _skin.name);
 			}
-
+			
+			// note : addFrameScript() use zero base
 			_skin.addFrameScript(downCompleteFrame - 1, frameStop);
 		}
 

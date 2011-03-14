@@ -37,6 +37,18 @@ package com.kevincao.kafe.components
 		{
 			ISelectableButton(behavior).selected = value;
 		}
+		
+		[Inspectable(defaultValue=false)]
+
+		public function get mirror() : Boolean
+		{
+			return KafeButton(behavior).mirror;
+		}
+
+		public function set mirror(value : Boolean) : void
+		{
+			KafeButton(behavior).mirror = value;
+		}
 
 		/**
 		 * 

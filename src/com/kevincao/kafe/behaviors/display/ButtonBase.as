@@ -1,5 +1,7 @@
 package com.kevincao.kafe.behaviors.display
 {
+	import flash.external.ExternalInterface;
+
 	import com.kevincao.kafe.events.KafeEvent;
 
 	import flash.display.MovieClip;
@@ -37,7 +39,7 @@ package com.kevincao.kafe.behaviors.display
 
 		public function set enabled(value : Boolean) : void
 		{
-			if(_enabled == value) return;
+			if (_enabled == value) return;
 
 			_enabled = value;
 
@@ -112,7 +114,7 @@ package com.kevincao.kafe.behaviors.display
 
 		private function setupEventListeners(b : Boolean = true) : void
 		{
-			if(b)
+			if (b)
 			{
 				_skin.addEventListener(MouseEvent.ROLL_OVER, rollOverHandler, false, 0, true);
 				_skin.addEventListener(MouseEvent.ROLL_OUT, rollOutHandler, false, 0, true);
@@ -159,7 +161,7 @@ package com.kevincao.kafe.behaviors.display
 
 		protected function startPress() : void
 		{
-			if(_autoRepeat)
+			if (_autoRepeat)
 			{
 				pressTimer.delay = PRESS_TIME;
 				pressTimer.start();
@@ -174,12 +176,12 @@ package com.kevincao.kafe.behaviors.display
 
 		private function tick(event : TimerEvent) : void
 		{
-			if(!autoRepeat)
+			if (!autoRepeat)
 			{
 				endPress();
 				return;
 			}
-			if(pressTimer.currentCount == 1)
+			if (pressTimer.currentCount == 1)
 			{
 				pressTimer.delay = REPEAT_INTERVAL;
 			}
@@ -195,7 +197,7 @@ package com.kevincao.kafe.behaviors.display
 			_skin.stop();
 			_skin.buttonMode = false;
 			_skin.mouseEnabled = false;
-			if(_skin.stage)
+			if (_skin.stage)
 			{
 				_skin.stage.removeEventListener(MouseEvent.MOUSE_UP, mouseUpHandler);
 			}
@@ -210,9 +212,27 @@ package com.kevincao.kafe.behaviors.display
 
 		public function goto() : void
 		{
-			if(_href && _href != "")
+			if (_href && _href != "")
 			{
-				navigateToURL(new URLRequest(_href), _window || "_self");
+				if (_href.indexOf("javascript:") != -1)
+				{
+					if (ExternalInterface.available)
+					{
+						try
+						{
+							ExternalInterface.call(_href);
+						}
+						catch(error : Error)
+						{
+							trace(this, error);
+						}
+
+					}
+				}
+				else
+				{
+					navigateToURL(new URLRequest(_href), _window || "_self");
+				}
 			}
 		}
 

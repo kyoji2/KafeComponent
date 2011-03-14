@@ -92,6 +92,7 @@
 		override public function destroy() : void
 		{
 			_skin.removeEventListener(Event.ENTER_FRAME, onInvalidate);
+			_skin.stop();
 			_skin = null;
 
 			super.destroy();

@@ -13,64 +13,93 @@ package com.kevincao.kafe.behaviors.display
 
 	import flash.display.MovieClip;
 
-	[Event(name="intro_start", type="com.kevincao.kafe.events.AnimationEvent")]
-	[Event(name="intro_complete", type="com.kevincao.kafe.events.AnimationEvent")]
-	[Event(name="outro_start", type="com.kevincao.kafe.events.AnimationEvent")]
-	[Event(name="outro_complete", type="com.kevincao.kafe.events.AnimationEvent")]
+	[Event(name="animationIn", type="com.kevincao.kafe.events.AnimationEvent")]
+	[Event(name="animationInComplete", type="com.kevincao.kafe.events.AnimationEvent")]
+	[Event(name="animationOut", type="com.kevincao.kafe.events.AnimationEvent")]
+	[Event(name="animationOutComplete", type="com.kevincao.kafe.events.AnimationEvent")]
 
 	/**
 	 * @author Kevin Cao
 	 */
-	public class StandardAnimation extends MovieClipSkinBehavior
+	public class StandardAnimation extends MovieClipSkinBehavior implements IStandardAnimation
 	{
-		private var introFrame : int;
-		private var outroFrame : int;
-		private var introCompleteFrame : int;
-		private var outroCompleteFrame : int;
+		private var inFrame : int;
+		private var outFrame : int;
+		private var inCompleteFrame : int;
+		private var outCompleteFrame : int;
 
+		private var autoPlay : Boolean;
 		private var autoLock : Boolean;
+		private var autoDestroy : Boolean;
 
 		/**
-		 * @param autoLock :	在intro和outro播放的时候是否允许鼠标交互
+		 * @param autoLock :	
 		 */
-		public function StandardAnimation(target : MovieClip, autoLock : Boolean = true)
+		public function StandardAnimation(target : MovieClip, autoPlay : Boolean = true, autoLock : Boolean = true, autoDestroy : Boolean = true)
 		{
-			super(target);
-
+			this.autoPlay = autoPlay;
 			this.autoLock = autoLock;
+			this.autoDestroy = autoDestroy;
+			
+			super(target);
 		}
 
 		override protected function initSkin() : void
 		{
 			super.initSkin();
 
-			introFrame = getFrame(_skin, "intro");
-			outroFrame = getFrame(_skin, "outro");
-			introCompleteFrame = getFrame(_skin, "intro complete");
-			outroCompleteFrame = getFrame(_skin, "outro complete");
+			inFrame = getFrame(_skin, "animationIn");
+			outFrame = getFrame(_skin, "animationOut");
+			inCompleteFrame = getFrame(_skin, "animationInComplete");
+			outCompleteFrame = getFrame(_skin, "animationOutComplete");
 
-			if(introFrame == -1 || introCompleteFrame == -1)
+			if (inFrame == -1 || inCompleteFrame == -1)
 			{
 				trace(getClassName() + " :: Skin Error : " + _skin.name);
 			}
 
-			_skin.addFrameScript(introFrame - 1, frameDispatchIntroStart);
-			_skin.addFrameScript(introCompleteFrame - 1, frameDispatchOutroStart);
-			
-			if(outroFrame != -1)
+			_skin.addFrameScript(inFrame - 1, frameDispatchAnimationIn);
+			_skin.addFrameScript(inCompleteFrame - 1, frameDispatchAnimationInComplete);
+
+			if (outFrame != -1)
 			{
-				_skin.addFrameScript(outroFrame - 1, frameDispatchIntroComplete);
+				_skin.addFrameScript(outFrame - 1, frameDispatchAnimationOut);
 			}
 
-			if(outroCompleteFrame != -1)
+			if (outCompleteFrame != -1)
 			{
-				_skin.addFrameScript(outroCompleteFrame - 1, frameDispatchOutroComplete);
+				_skin.addFrameScript(outCompleteFrame - 1, frameDispatchAnimationOutComplete);
 			}
 
 			setupEventListeners();
 
-			// auto play intro
-			_skin.gotoAndPlay(introFrame);
+			if (autoPlay)
+			{
+				animationIn();
+			}
+			else
+			{
+				_skin.stop();
+			}
+		}
+
+		override public function destroy() : void
+		{
+			setupEventListeners(false);
+			super.destroy();
+		}
+
+		public function animationIn() : void
+		{
+			_skin.gotoAndPlay(inFrame);
+		}
+
+		public function animationOut() : void
+		{
+			if (outFrame != -1)
+			{
+				_skin.gotoAndPlay(outFrame);
+			}
 		}
 
 		// ----------------------------------
@@ -79,25 +108,25 @@ package com.kevincao.kafe.behaviors.display
 
 		private function setupEventListeners(b : Boolean = true) : void
 		{
-			if(b)
+			if (b)
 			{
-				_skin.addEventListener(AnimationEvent.INTRO_START, introStartHandler, false, 0, true);
-				_skin.addEventListener(AnimationEvent.INTRO_COMPLETE, introCompleteHandler, false, 0, true);
-				_skin.addEventListener(AnimationEvent.OUTRO_START, outroStartHandler, false, 0, true);
-				_skin.addEventListener(AnimationEvent.OUTRO_COMPLETE, outroCompleteHandler, false, 0, true);
+				_skin.addEventListener(AnimationEvent.ANIMATION_IN, animationInHandler, false, 0, true);
+				_skin.addEventListener(AnimationEvent.ANIMATION_IN_COMPLETE, animationInCompleteHandler, false, 0, true);
+				_skin.addEventListener(AnimationEvent.ANIMATION_OUT, animationOut, false, 0, true);
+				_skin.addEventListener(AnimationEvent.ANIMATION_OUT_COMPLETE, animationOutCompleteHandler, false, 0, true);
 			}
 			else
 			{
-				_skin.removeEventListener(AnimationEvent.INTRO_START, introStartHandler);
-				_skin.removeEventListener(AnimationEvent.INTRO_COMPLETE, introCompleteHandler);
-				_skin.removeEventListener(AnimationEvent.OUTRO_START, outroStartHandler);
-				_skin.removeEventListener(AnimationEvent.OUTRO_COMPLETE, outroCompleteHandler);
+				_skin.removeEventListener(AnimationEvent.ANIMATION_IN, animationInHandler);
+				_skin.removeEventListener(AnimationEvent.ANIMATION_IN_COMPLETE, animationInCompleteHandler);
+				_skin.removeEventListener(AnimationEvent.ANIMATION_OUT, animationOut);
+				_skin.removeEventListener(AnimationEvent.ANIMATION_OUT_COMPLETE, animationOutCompleteHandler);
 			}
 		}
 
-		private function introStartHandler(event : AnimationEvent) : void
+		private function animationInHandler(event : AnimationEvent) : void
 		{
-			if(autoLock)
+			if (autoLock)
 			{
 				_skin.mouseEnabled = false;
 				_skin.mouseChildren = false;
@@ -106,20 +135,22 @@ package com.kevincao.kafe.behaviors.display
 			dispatchEvent(event);
 		}
 
-		private function introCompleteHandler(event : AnimationEvent) : void
+		private function animationInCompleteHandler(event : AnimationEvent) : void
 		{
-			if(autoLock)
+			if (autoLock)
 			{
 				_skin.mouseEnabled = true;
 				_skin.mouseChildren = true;
 			}
 
+			_skin.stop();
+
 			dispatchEvent(event);
 		}
 
-		private function outroStartHandler(event : AnimationEvent) : void
+		private function animationOutHandler(event : AnimationEvent) : void
 		{
-			if(autoLock)
+			if (autoLock)
 			{
 				_skin.mouseEnabled = false;
 				_skin.mouseChildren = false;
@@ -128,37 +159,39 @@ package com.kevincao.kafe.behaviors.display
 			dispatchEvent(event);
 		}
 
-		private function outroCompleteHandler(event : AnimationEvent) : void
+		private function animationOutCompleteHandler(event : AnimationEvent) : void
 		{
+			_skin.stop();
+
 			dispatchEvent(event);
-			// auto destroy when outro complete
-			destroy();
+
+			if (autoDestroy)
+				destroy();
 		}
 
 		// ----------------------------------
 		// frame scripts
 		// ----------------------------------
 
-		private function frameDispatchIntroStart() : void
+		private function frameDispatchAnimationIn() : void
 		{
-			_skin.dispatchEvent(new AnimationEvent(AnimationEvent.INTRO_START));
+			_skin.dispatchEvent(new AnimationEvent(AnimationEvent.ANIMATION_IN));
 		}
 
-		private function frameDispatchIntroComplete() : void
+		private function frameDispatchAnimationInComplete() : void
 		{
-			_skin.dispatchEvent(new AnimationEvent(AnimationEvent.INTRO_COMPLETE));
+			_skin.dispatchEvent(new AnimationEvent(AnimationEvent.ANIMATION_IN_COMPLETE));
 		}
 
-		private function frameDispatchOutroStart() : void
+		private function frameDispatchAnimationOut() : void
 		{
-			_skin.dispatchEvent(new AnimationEvent(AnimationEvent.OUTRO_START));
+			_skin.dispatchEvent(new AnimationEvent(AnimationEvent.ANIMATION_OUT));
 		}
 
-		private function frameDispatchOutroComplete() : void
+		private function frameDispatchAnimationOutComplete() : void
 		{
-			_skin.dispatchEvent(new AnimationEvent(AnimationEvent.OUTRO_COMPLETE));
+			_skin.dispatchEvent(new AnimationEvent(AnimationEvent.ANIMATION_OUT_COMPLETE));
 		}
-
 
 	}
 }

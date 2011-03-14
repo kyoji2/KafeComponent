@@ -14,10 +14,10 @@ package com.kevincao.kafe.events
 	 */
 	public class AnimationEvent extends Event
 	{
-		public static const INTRO_START : String = "intro_start";
-		public static const INTRO_COMPLETE : String = "intro_complete";
-		public static const OUTRO_START : String = "outro_start";
-		public static const OUTRO_COMPLETE : String = "outro_complete";
+		public static const ANIMATION_IN : String = "animationIn";
+		public static const ANIMATION_IN_COMPLETE : String = "animationInComplete";
+		public static const ANIMATION_OUT : String = "animationOut";
+		public static const ANIMATION_OUT_COMPLETE : String = "animationOutComplete";
 
 		public function AnimationEvent(type : String)
 		{

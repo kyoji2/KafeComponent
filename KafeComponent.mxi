@@ -52,6 +52,7 @@ Author: Kevin Cao<br>
 		<file source="jsfl/AniButton Setup.jsfl" destination="$flash/Commands/Kafe" />
 		<file source="jsfl/EasyButton Setup.jsfl" destination="$flash/Commands/Kafe" />
 		<file source="jsfl/KafeButton Setup.jsfl" destination="$flash/Commands/Kafe" />	
+		<file source="jsfl/StandardAnimation Setup.jsfl" destination="$flash/Commands/Kafe" />
 	</files>
 
 </macromedia-extension>
