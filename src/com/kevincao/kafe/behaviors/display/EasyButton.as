@@ -7,7 +7,7 @@ package com.kevincao.kafe.behaviors.display
 	import flash.display.MovieClip;
 	import flash.events.Event;
 	import flash.events.MouseEvent;
-	
+
 	[Event(name="over", type="com.kevincao.kafe.events.AnimationEvent")]
 	[Event(name="overComplete", type="com.kevincao.kafe.events.AnimationEvent")]
 	[Event(name="out", type="com.kevincao.kafe.events.AnimationEvent")]
@@ -53,15 +53,7 @@ package com.kevincao.kafe.behaviors.display
 				trace(getClassName() + " :: Skin Error : " + _skin.name);
 			}
 
-			_skin.addFrameScript(downFrame - 1, function() : void
-			{
-				dispatchEvent(new AnimationEvent(AnimationEvent.DOWN));
-			});
-			_skin.addFrameScript(downCompleteFrame - 1, function() : void
-			{
-				_skin.stop();
-				dispatchEvent(new AnimationEvent(AnimationEvent.DOWN_COMPLETE));
-			});
+			initFrameScript();
 		}
 
 		override protected function draw() : void
@@ -133,6 +125,20 @@ package com.kevincao.kafe.behaviors.display
 		{
 			_skin.removeEventListener(Event.ENTER_FRAME, tick);
 			super.destroy();
+		}
+
+		private function initFrameScript() : void
+		{
+			// note : addFrameScript() use zero base
+			_skin.addFrameScript(downFrame - 1, function() : void
+			{
+				dispatchEvent(new AnimationEvent(AnimationEvent.DOWN));
+			});
+			_skin.addFrameScript(downCompleteFrame - 1, function() : void
+			{
+				_skin.stop();
+				dispatchEvent(new AnimationEvent(AnimationEvent.DOWN_COMPLETE));
+			});
 		}
 	}
 }

@@ -44,7 +44,7 @@ package com.kevincao.kafeui
 
 			if((vScrollBar && vScrollBar.enabled) || (hScrollBar && hScrollBar.enabled))
 			{
-				addEventListener(Event.ENTER_FRAME, tick, false, 0, true);
+//				addEventListener(Event.ENTER_FRAME, tick, false, 0, true);
 			}
 			else
 			{
@@ -81,18 +81,30 @@ package com.kevincao.kafeui
 				sourceInstance.x = Math.round(sourceInstance.x);
 				sourceInstance.y = Math.round(sourceInstance.y);
 			}
+			if(sourceInstance.x == tx && sourceInstance.y == ty)
+			{
+				removeEventListener(Event.ENTER_FRAME, tick);
+			}
 		}
 
 		override protected function vScrollHandler(event : ScrollEvent) : void
 		{
 			ty = -event.position;
 			_vScrollPosition = NumberHelper.normalize(event.position, vScrollBar.minScrollPosition, vScrollBar.maxScrollPosition);
+			
+			addEventListener(Event.ENTER_FRAME, tick);
+			
+			dispatchEvent(event);
 		}
 
 		override protected function hScrollHandler(event : ScrollEvent) : void
 		{
 			tx = -event.position;
 			_hScrollPosition = NumberHelper.normalize(event.position, hScrollBar.minScrollPosition, hScrollBar.maxScrollPosition);
+			
+			addEventListener(Event.ENTER_FRAME, tick);
+			
+			dispatchEvent(event);
 		}
 
 		// ----------------------------------
