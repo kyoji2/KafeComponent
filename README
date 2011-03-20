@@ -29,6 +29,8 @@ Kevin Cao ( http://kevincao.com )
 
 - CHANGELOG:
 
+v1.4.1: update KafeButton's label structure
+		fix KafeButton's bug
 v1.4.0:	remove AniButton
 		add StandardAnimation class and jsfl
 		KafeButton and EasyButton now dispatch AnimationEvent

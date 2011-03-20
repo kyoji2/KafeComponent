@@ -133,7 +133,7 @@ package com.kevincao.kafe.behaviors.display
 				}
 				else
 				{
-					_skin.gotoAndStop(_selected ? "selected" : outCompleteFrame);
+					_skin.gotoAndStop(_selected ? "selected" : "normal");
 				}
 			}
 			else
@@ -156,14 +156,14 @@ package com.kevincao.kafe.behaviors.display
 			{
 				if(!_selected)
 				{
-					if(_skin.currentFrame > outFrame && _skin.currentFrame < outCompleteFrame)
+					if(_skin.currentFrame >= outFrame && _skin.currentFrame < outCompleteFrame)
 					{
 						offset = outCompleteFrame - _skin.currentFrame;
 					}
 				}
 				else
 				{
-					if(_skin.currentFrame > selectedOutFrame && _skin.currentFrame < selectedOutCompleteFrame)
+					if(_skin.currentFrame >= selectedOutFrame && _skin.currentFrame < selectedOutCompleteFrame)
 					{
 						offset = selectedOutCompleteFrame - _skin.currentFrame;
 					}
@@ -187,14 +187,14 @@ package com.kevincao.kafe.behaviors.display
 				{
 					if(!_selected)
 					{
-						if(_skin.currentFrame > overFrame && _skin.currentFrame < overCompleteFrame)
+						if(_skin.currentFrame >= overFrame && _skin.currentFrame < overCompleteFrame)
 						{
 							offset = overCompleteFrame - _skin.currentFrame;
 						}
 					}
 					else
 					{
-						if(_skin.currentFrame > selectedOverFrame && _skin.currentFrame < selectedOverCompleteFrame)
+						if(_skin.currentFrame >= selectedOverFrame && _skin.currentFrame < selectedOverCompleteFrame)
 						{
 							offset = selectedOverCompleteFrame - _skin.currentFrame;
 						}
@@ -236,55 +236,55 @@ package com.kevincao.kafe.behaviors.display
 			{
 				dispatchEvent(new AnimationEvent(AnimationEvent.OVER));
 			});
-			_skin.addFrameScript(overCompleteFrame - 2, function() : void
+			_skin.addFrameScript(overCompleteFrame - 1, function() : void
 			{
-				_skin.stop();
 				dispatchEvent(new AnimationEvent(AnimationEvent.OVER_COMPLETE));
+				_skin.stop();
 			});
 			_skin.addFrameScript(outFrame, function() : void
 			{
 				dispatchEvent(new AnimationEvent(AnimationEvent.OUT));
 			});
-			_skin.addFrameScript(outCompleteFrame - 2, function() : void
+			_skin.addFrameScript(outCompleteFrame - 1, function() : void
 			{
-				_skin.stop();
 				dispatchEvent(new AnimationEvent(AnimationEvent.OUT_COMPLETE));
+				_skin.gotoAndStop("normal");
 			});
-			_skin.addFrameScript(downFrame, function() : void
+			_skin.addFrameScript(downFrame - 1, function() : void
 			{
 				dispatchEvent(new AnimationEvent(AnimationEvent.DOWN));
 			});
-			_skin.addFrameScript(downCompleteFrame - 2, function() : void
+			_skin.addFrameScript(downCompleteFrame - 1, function() : void
 			{
-				_skin.stop();
 				dispatchEvent(new AnimationEvent(AnimationEvent.DOWN_COMPLETE));
+				_skin.stop();
 			});
 			_skin.addFrameScript(selectedOverFrame, function() : void
 			{
 				dispatchEvent(new AnimationEvent(AnimationEvent.OVER));
 			});
-			_skin.addFrameScript(selectedOverCompleteFrame - 2, function() : void
+			_skin.addFrameScript(selectedOverCompleteFrame - 1, function() : void
 			{
-				_skin.stop();
 				dispatchEvent(new AnimationEvent(AnimationEvent.OVER_COMPLETE));
+				_skin.stop();
 			});
 			_skin.addFrameScript(selectedOutFrame, function() : void
 			{
 				dispatchEvent(new AnimationEvent(AnimationEvent.OUT));
 			});
-			_skin.addFrameScript(selectedOutCompleteFrame - 2, function() : void
+			_skin.addFrameScript(selectedOutCompleteFrame - 1, function() : void
 			{
-				_skin.stop();
 				dispatchEvent(new AnimationEvent(AnimationEvent.OUT_COMPLETE));
+				_skin.gotoAndStop("selected");
 			});
-			_skin.addFrameScript(selectedDownFrame, function() : void
+			_skin.addFrameScript(selectedDownFrame - 1, function() : void
 			{
 				dispatchEvent(new AnimationEvent(AnimationEvent.DOWN));
 			});
-			_skin.addFrameScript(selectedDownCompleteFrame - 2, function() : void
+			_skin.addFrameScript(selectedDownCompleteFrame - 1, function() : void
 			{
-				_skin.stop();
 				dispatchEvent(new AnimationEvent(AnimationEvent.DOWN_COMPLETE));
+				_skin.stop();
 			});
 		}
 	}
